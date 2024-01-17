@@ -1,7 +1,8 @@
-module.exports={
+module.exports = {
+
     HOST:"localhost",
     USER:"root",
-    PASSWORD:"1234",
+    PASSWORD:"rootpass",
     DB:"practica",
     dialect:"mysql",
     pool:{
@@ -10,4 +11,5 @@ module.exports={
         acquire:30000,
         idle:10000
     }
+    
 }

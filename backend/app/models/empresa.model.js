@@ -1,5 +1,7 @@
 module.exports = (sequelize, Sequelize) =>{
+
   const empresa = sequelize.define('empresa', {
+
     rutEmpresa: {
       type: Sequelize.INTEGER,
       primaryKey: true
@@ -29,5 +31,7 @@ module.exports = (sequelize, Sequelize) =>{
     tableName: 'empresa',
     freezeTableName: true,
   });
+
   return empresa;
+  
 };

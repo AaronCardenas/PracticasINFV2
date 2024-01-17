@@ -10,10 +10,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
+    console.log("Actualización de base de datos lista.");
 });
 
-require('./app/routes/conversion.routes')(app)
+app.get("/", (req, res) => {
+  res.json({ message: "Aplicacion funcionando." });
+});
+
+// Importacion de Router principal
+require('./app/routes/main.router')(app)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

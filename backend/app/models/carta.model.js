@@ -1,5 +1,7 @@
 module.exports = (sequelize, Sequelize) =>{
+
     const carta = sequelize.define('carta de aceptacion', {
+
         idAceptacion: {
             type: Sequelize.INTEGER,
             primaryKey: true
@@ -33,5 +35,7 @@ module.exports = (sequelize, Sequelize) =>{
       tableName: 'carta de aceptacion',
       freezeTableName: true,
     });
+
     return carta;
+    
 };

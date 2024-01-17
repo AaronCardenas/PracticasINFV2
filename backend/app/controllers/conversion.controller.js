@@ -1,11 +1,11 @@
-const db=require("../models");
-const puppeteer=require("puppeteer");
-const convertHTMLtoPDF =require('../helpers/conversion.helpers.js');
-const Op= db.Sequelize.Op;
+const db = require("../models");
+const puppeteer = require("puppeteer");
+const convertHTMLtoPDF = require('../helpers/conversion.helpers.js');
+const Op = db.Sequelize.Op;
 
-exports.conversion=async (req,res)=>{
-    const datos=req.body;
-    const html=`<html style="display: flex;size:Letter;margin-left:12.5%;width: 612px; height: 792px;justify-content: center;">
+exports.conversion = async (req,res) => {
+    const datos = req.body;
+    const html = `<html style="display: flex;size:Letter;margin-left:12.5%;width: 612px; height: 792px;justify-content: center;">
     <head>
        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
        <meta http-equiv="Content-Style-Type" content="text/css" />
@@ -65,7 +65,8 @@ exports.conversion=async (req,res)=>{
        </div>
     </body>
   </html>`;
-    const pdf= await convertHTMLtoPDF(html,datos);
+  
+    const pdf = await convertHTMLtoPDF(html, datos);
     res.contentType('application/pdf');
     res.send(pdf);
 }
