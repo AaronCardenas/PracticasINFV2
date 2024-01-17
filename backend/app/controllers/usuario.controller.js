@@ -1,6 +1,6 @@
 const db = require("../models");
 const jwt = require('jsonwebtoken');
-const key = "secretKey@123";
+const key = require('../config/const.js').JWT_SECRET;
 
 
 const validarUsuario = async (req,res,next) => {

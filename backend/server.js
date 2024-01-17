@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const db = require("./app/models");
 const app = express();
+const values = require('./app/config/const.js');
 
 app.use(cors())
 
@@ -20,7 +21,7 @@ app.get("/", (req, res) => {
 // Importacion de Router principal
 require('./app/routes/main.router')(app)
 
-const PORT = process.env.PORT || 8080;
+const PORT = values.RUN_PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
