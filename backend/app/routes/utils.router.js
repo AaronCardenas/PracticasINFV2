@@ -8,8 +8,7 @@ router.get("/",(req,res)=>{
     res.json({message:"Ruta de /utils/ funcionando"});
 });
 
-// Ruta de conversion
-router.post("/conversion",conversion);
+// Ruta de conversion                               // DATOS JSON:
+router.post("/conversion",conversion);              // {count, razonSocial, direccion, region, rut, semestre, horas, numeroPractica, nombre1, nombre2, apellido1, apellido2}
 
 module.exports = router;
-

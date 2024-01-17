@@ -1,15 +1,15 @@
 const db = require("../models");
 const jwt = require('jsonwebtoken');
 const key = require('../config/const.js').JWT_SECRET;
+const bcrypt = require('bcrypt');
 
 
 const validarUsuario = async (req,res,next) => {
 
     const {rut, password} = req.body;
-    console.log(req.body);
-    console.log(rut);
-    console.log(password);
+
     const usuario = await db.usuario.findOne({where:{rut:rut}});
+    
     // No existe usuario
     if(!usuario){
 
@@ -22,7 +22,7 @@ const validarUsuario = async (req,res,next) => {
         if(usuario.password === password){
 
             // Generacion del token
-            const token = jwt.sign({rut:rut, tipoUsuario:usuario.tipoUsuario}, key, {expiresIn:'1h'});
+            const token = jwt.sign({rut: rut, tipoUsuario: usuario.tipoUsuario}, key, {expiresIn: '1h' });
             
             // Envio de respuesta
             res.status(200).json({
@@ -40,14 +40,50 @@ const validarUsuario = async (req,res,next) => {
     }
 };
 
-// Pendiente. Funcion dummy
+// Por ahora para cualquiera, coordinadores, supervisores y jefe de carrera. se definiran despues. Solo para estudiantes.
 const crearUsuario = async (req,res) => {
     
-        const {rut,nombre,correo,telefono,contrasena} = req.body;
-        const usuario = await db.usuario.create({rut:rut,nombre:nombre,correo:correo,telefono:telefono,contrasena:contrasena});
-        res.status(200).json({message:"Usuario creado exitosamente",usuario:usuario});
+    const {rut, password, telefono, correo, direccion, planEstudio, ingreso, tipoUsuario, nombre1, nombre2, apellido1, apellido2, } = req.body;
+
+    const usuarioCheck = await db.usuario.findOne({where:{rut:rut}});
+
+    if(usuarioCheck){
+        return res.status(400).json({
+            message:"El usuario ya existe."
+        });
+    }
+
+    try{
+
+        const usuario = await db.usuario.create({
+            rut: rut,
+            password: password,
+            telefono: telefono,
+            correo: correo,
+            direccion: direccion,
+            planEstudio: planEstudio,
+            ingreso: ingreso,
+            tipoUsuario: tipoUsuario,
+            nombre1: nombre1,
+            nombre2: nombre2,
+            apellido1: apellido1,
+            apellido2: apellido2,
+        });
+
+        return res.status(200).json({
+            message:"Usuario creado exitosamente.",
+            usuario:usuario
+        });
+    }
+    catch(err){
+        return res.status(500).json({
+            message:"Error al crear usuario.",
+            error:err
+        });
+    }
     
 };
+
 
 module.exports = {
     validarUsuario,

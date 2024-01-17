@@ -12,7 +12,19 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: true
       },
-      nombreCompleto: {
+      nombre1: {
+        type: Sequelize.STRING(45),
+        allowNull: true
+      },
+      nombre2: {
+        type: Sequelize.STRING(45),
+        allowNull: true
+      },
+      apellido1: {
+        type: Sequelize.STRING(45),
+        allowNull: true
+      },
+      apellido2: {
         type: Sequelize.STRING(45),
         allowNull: true
       },
