@@ -1025,6 +1025,7 @@
     width:100%;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 .boxe221soli{
     display: flex;

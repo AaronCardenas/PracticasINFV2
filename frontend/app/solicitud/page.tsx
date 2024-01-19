@@ -7,7 +7,11 @@ import styles from "../../styles/styleop.module.css";
 import { motion } from "framer-motion";
 import Listar from "../../components/Tablas/tabla";
 import Datosest from "../../components/Tablas/datosest";
+
+const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
+
 export default function Soli() {
+
   const [value, setValue] = React.useState("");
 
   const handleSelectionChange = (e) => {
@@ -122,9 +126,9 @@ export default function Soli() {
   };
   const dataempresa = [
     {
-      id: 1222222,
-      nombre: "JuanMaestro",
-      rurbo: "Industria",
+      id: 969608006,
+      nombre: "GasValpo",
+      rurbo: "Awa",
     },
     {
       id: 1111111,
@@ -179,6 +183,44 @@ export default function Soli() {
       carrera: "Ingenieria Civil Informatica",
     },
   ];
+
+  const funcionlogin = async () => {
+
+    // Configurar los datos para la solicitud a la API
+    const userData = {
+      rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
+      rutEmpresa: rutEmpresa.raw,
+      //usertype: userType, // despues
+    };
+    // Realiza la solicitud a la API
+
+    try {
+
+      const response = await fetch(`${backendUrl}/utils/unirDatos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+      
+      console.log("response", response);
+        
+      } else {
+        // Maneja el caso de credenciales incorrectas
+        alert("Error al recibir respuesta.");
+      }
+    } catch (error) {
+      // Maneja errores de red o de servidor
+      console.error("No funciono fetch:", error);
+      alert(
+        "Error."
+      );
+    }
+  };
+
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
@@ -339,6 +381,7 @@ export default function Soli() {
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
                     <Button className={styles.buttomSoli}>Guardar</Button>
+                    <Button className={styles.buttomSoli} onClick={}>Solicitar</Button>
                   </div>
                 </div>
               </div>

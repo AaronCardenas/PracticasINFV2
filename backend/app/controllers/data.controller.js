@@ -8,6 +8,8 @@ exports.unirDatos = async (req,res) => {
     const { rutUsuario, rutEmpresa } = req.body;
     const usuario = await db.usuario.findOne({where:{rut:rutUsuario}});
     const empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+    console.log(usuario);
+    console.log(empresa);
 
     const datosFormatoJSON = {
           count: 3,
