@@ -1,16 +1,18 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Image,
-} from "@nextui-org/react";
-import NextLink from "next/link";
-import { useRouter } from "next/router"; // Importa el router de Next.js
-import styles from "../../styles/styleop.module.css";
-import { motion } from "framer-motion";
-import Listar from "../../components/Tablas/tabla";
+import { Button, Image } from '@nextui-org/react';
+import NextLink from 'next/link';
+// import { useRouter } from 'next/router'; // Importa el router de Next.js
+import styles from '../../styles/styleop.module.css';
+import { motion } from 'framer-motion';
+import Listar from '../../components/Tablas/tabla';
 import Datosest from '../../components/Tablas/datosest';
+import { useRouter, useSearchParams } from 'next/navigation';
 export default function Est() {
+  const searchParams = useSearchParams(); 
+  const router= useRouter();
+  const Token = searchParams.get('token');
+  console.log(Token);
   //ejemplo de los datos
   const dataSoli = [
     {
@@ -142,22 +144,39 @@ export default function Est() {
     },
   ];
   const columnsempresa = {
-      id: 'Rut',
-      nombre: 'Razon Social',
-      rurbo: 'Rubro',
+    id: 'Rut',
+    nombre: 'Razon Social',
+    rurbo: 'Rubro',
   };
   //ejemplo de los datos
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
-      <NextLink href="https://informatica.uv.cl/" className={styles.boxe13}><Image radius="none" src='../UV.svg' alt="Descripción del SVG" width={'100%'} height={"100%"} /></NextLink>
+        <NextLink href='https://informatica.uv.cl/' className={styles.boxe13}>
+          <Image
+            radius='none'
+            src='../UV.svg'
+            alt='Descripción del SVG'
+            width={'100%'}
+            height={'100%'}
+          />
+        </NextLink>
         <div className={styles.boxe11}>Icono Plataforma</div>
         <div className={styles.boxe12}>
-          <NextLink className={styles.nextEst} href='/solicitud'>
-            <Button className={styles.botNextEst} variant='light'>Nueva Solicitud</Button>
+          <NextLink
+            className={styles.nextEst}
+            href={{ pathname: '/solicitud', query: `token=${Token}` }}
+          >
+            <Button className={styles.botNextEst} variant='light'>
+              Nueva Solicitud
+            </Button>
           </NextLink>
-          <Button className={styles.botEst} variant='light'>Mis Solicitud</Button>
-          <Button className={styles.botEst} variant='light'>Logout</Button>
+          <Button className={styles.botEst} variant='light'>
+            Mis Solicitud
+          </Button>
+          <Button className={styles.botEst} variant='light'>
+            Logout
+          </Button>
         </div>
       </div>
       <div className={styles.boxe20}>
@@ -166,22 +185,26 @@ export default function Est() {
           <div className={styles.boxe220}>Titulos1</div>
           <div className={styles.boxe221}>
             <div className={styles.boxe2211}>
-              <div className={styles.boxe22110}>
-                Search
-              </div>
+              <div className={styles.boxe22110}>Search</div>
               <div className={styles.boxe22111}>
-                <Listar columns={columnsSoli} data={dataSoli}/>
+                <Listar columns={columnsSoli} data={dataSoli} />
               </div>
               <div className={styles.boxe22112}>
                 <NextLink className={styles.boxe221120} href='/acp'>
-                  <Button className={styles.botNextEst} variant='light'>Carta de aceptacion</Button>
+                  <Button className={styles.botNextEst} variant='light'>
+                    Carta de aceptacion
+                  </Button>
                 </NextLink>
                 <div className={styles.boxe221121}> Memorias </div>
               </div>
             </div>
             <div className={styles.boxe2210}>
-              <div className={styles.boxe22100}><Datosest/></div>
-              <div className={styles.boxe22100}><Listar columns={columnsempresa} data={dataempresa}/> </div>
+              <div className={styles.boxe22100}>
+                <Datosest />
+              </div>
+              <div className={styles.boxe22100}>
+                <Listar columns={columnsempresa} data={dataempresa} />{' '}
+              </div>
             </div>
           </div>
         </div>
