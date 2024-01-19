@@ -18,9 +18,9 @@ export default function Login() {
   // seteo de userType
   const searchParams = useSearchParams();
   const userType = searchParams.get("userType");
-  const backendUrl = "http://localhost:3200"; //cambiar al .env en un futuro
+  const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
   const funcionlogin = async () => {
-    router.push(`/${userType}`); //redirecciona a la pagina de inicio de cada usuario por el momento*****
+
     if (!isValid || !rut.raw || !password) {
       alert("Rut o contraseña inválidos");
       return; // Evitar iniciar sesión si el RUT no es válido
@@ -29,14 +29,14 @@ export default function Login() {
     const userData = {
       rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
       password: password,
-      usertype: userType,
+      //usertype: userType, // despues
     };
     // Realiza la solicitud a la API
 
     try {
       setIsLoading(true);
 
-      const response = await fetch(`${backendUrl}/login-${userType}`, {
+      const response = await fetch(`${backendUrl}/usuario/validar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +45,8 @@ export default function Login() {
       });
 
       if (response.ok) {
-        router.push(`/${userType}`);
+        //router.push(`/${userType}`); 
+        router.push(`/coo`); // cambiar al implementar tipos de usuario //userType
       } else {
         // Maneja el caso de credenciales incorrectas
         alert("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
