@@ -42,11 +42,11 @@ export default function Login() {
         },
         body: JSON.stringify(userData),
       });
-
+      console.log(userData);
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
-      
+        
         router.push(`/${userType}?token=${token}`); // cambiar al implementar tipos de usuario //userType
       } else {
         // Maneja el caso de credenciales incorrectas
