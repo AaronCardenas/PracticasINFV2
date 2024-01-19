@@ -11,6 +11,7 @@ const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
 
 
 export default function Soli() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const Token = searchParams.get("token");
   console.log("Token: ", Token);
