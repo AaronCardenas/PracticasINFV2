@@ -13,6 +13,11 @@ const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
 export default function Soli() {
 
   const [value, setValue] = React.useState("");
+  const [rutEmpresa, setRutEmpresa] = useState({ raw: "", formatted: "" });
+
+  const clickEmpresa = (rutEmpresa) => {
+    setRutEmpresa(rutEmpresa.target.value);
+  }
 
   const handleSelectionChange = (e) => {
     setValue(e.target.value);
@@ -184,12 +189,16 @@ export default function Soli() {
     },
   ];
 
-  const funcionlogin = async () => {
+  const funcionSoli = async () => {
+
+    console.log(rutEmpresa);
+
 
     // Configurar los datos para la solicitud a la API
     const userData = {
       rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
-      rutEmpresa: rutEmpresa.raw,
+
+      // rutEmpresa: rutEmpresa.raw, 
       //usertype: userType, // despues
     };
     // Realiza la solicitud a la API
@@ -381,7 +390,7 @@ export default function Soli() {
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
                     <Button className={styles.buttomSoli}>Guardar</Button>
-                    <Button className={styles.buttomSoli} onClick={}>Solicitar</Button>
+                    <Button className={styles.buttomSoli} onClick={funcionSoli}>Solicitar</Button>
                   </div>
                 </div>
               </div>

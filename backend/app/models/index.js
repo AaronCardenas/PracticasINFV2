@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(values.DB_NAME, values.DB_USER, values.DB_PASSWORD, {
   host: values.DB_HOST,
-  dialect: values.DB_DIALECT,
+  dialect: 'mysql',
   pool: {
     max: values.DB_POOL_MAX,
     min: values.DB_POOL_MIN,
