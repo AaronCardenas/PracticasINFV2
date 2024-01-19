@@ -12,11 +12,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const backendUrl = 'http://localhost:3000'; //cambiar al .env en un futuro
 
 export default function Soli() {
-<<<<<<< HEAD
   const [pdfUrl, setPdfUrl] = useState(null);
-=======
   const router = useRouter();
->>>>>>> 83c44deb414efa3c34fcaa22f3b7f95114a8b8c5
   const searchParams = useSearchParams();
   const Token = searchParams.get('token');
   console.log('Token: ', Token);
