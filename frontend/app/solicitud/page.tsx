@@ -2,17 +2,23 @@
 import React, { useState, useEffect } from "react";
 import { Button, Select, SelectItem, Input, Image} from "@nextui-org/react";
 import NextLink from "next/link";
-import { useRouter } from "next/router"; // Importa el router de Next.js
 import styles from "../../styles/styleop.module.css";
 import { motion } from "framer-motion";
 import Listar from "../../components/Tablas/tabla";
 import Datosest from "../../components/Tablas/datosest";
+import { useRouter, useSearchParams } from "next/navigation";
 const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
 
+
 export default function Soli() {
+  const searchParams = useSearchParams();
+  const Token = searchParams.get("token");
+  console.log("Token: ", Token);
   const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
-  const [token, setToken] = useState(null); 
   const [value, setValue] = React.useState("");
+  const handleSelectionChange = (e) => {
+    setValue(e.target.value);
+  };
   const handleSelectionChangeEmpresa = (e) => {
     setValue(e.target.value);
     setSelectedEmpresaId(e.target.value);
@@ -190,19 +196,19 @@ export default function Soli() {
       alert("Selecciona una empresa antes de solicitar");
       return;
     }
+    
     const Data = {
       rutEmpresa: selectedEmpresaId,
-      //usertype: userType, // despues
+      token: Token,
     };
-    // Realiza la solicitud a la API
 
+    // Realiza la solicitud a la API
     try {
       console.log("Data", Data)
       const response = await fetch(`${backendUrl}/utils/unirDatos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Agrega el token a los headers
         },
         body: JSON.stringify(Data),
       });

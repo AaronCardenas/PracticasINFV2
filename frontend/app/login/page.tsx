@@ -28,8 +28,7 @@ export default function Login() {
     // Configurar los datos para la solicitud a la API
     const userData = {
       rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
-      password: password,
-      //usertype: userType, // despues
+      password: password
     };
     // Realiza la solicitud a la API
 
@@ -48,7 +47,7 @@ export default function Login() {
         const data = await response.json();
         const token = data.token;
       
-        router.push(`/coo`); // cambiar al implementar tipos de usuario //userType
+        router.push(`/${userType}?token=${token}`); // cambiar al implementar tipos de usuario //userType
       } else {
         // Maneja el caso de credenciales incorrectas
         alert("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
