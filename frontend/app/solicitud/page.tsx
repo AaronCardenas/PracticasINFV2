@@ -14,7 +14,10 @@ export default function Soli() {
   const [token, setToken] = useState(null); 
   const auth = useAuth();
   const [value, setValue] = React.useState("");
-
+  useEffect(() => {
+    // Obtiene el token del contexto de autenticación
+    setToken(auth.authToken);
+  }, [auth.authToken]);
   const handleSelectionChange = (e) => {
     setValue(e.target.value);
   };
@@ -185,12 +188,15 @@ export default function Soli() {
     },
   ];
 
-  const funcionlogin = async () => {
-
+  const funcionSoli = async () => {
+    const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
     // Configurar los datos para la solicitud a la API
-    const userData = {
-      rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
-      rutEmpresa: rutEmpresa.raw,
+    if (!selectedEmpresaId) {
+      alert("Selecciona una empresa antes de solicitar");
+      return;
+    }
+    const Data = {
+      rutEmpresa: selectedEmpresaId,
       //usertype: userType, // despues
     };
     // Realiza la solicitud a la API
