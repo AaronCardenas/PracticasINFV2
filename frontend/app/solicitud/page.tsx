@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from "../context/AuthContext";
 const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
 
 export default function Soli() {
+  const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
   const [token, setToken] = useState(null); 
   const auth = useAuth();
   const [value, setValue] = React.useState("");
@@ -20,6 +21,10 @@ export default function Soli() {
   }, [auth.authToken]);
   const handleSelectionChange = (e) => {
     setValue(e.target.value);
+  };
+  const handleSelectionChangeEmpresa = (e) => {
+    setValue(e.target.value);
+    setSelectedEmpresaId(e.target.value);
   };
   const dataSoli = [
     {
@@ -189,7 +194,6 @@ export default function Soli() {
   ];
 
   const funcionSoli = async () => {
-    const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
     // Configurar los datos para la solicitud a la API
     if (!selectedEmpresaId) {
       alert("Selecciona una empresa antes de solicitar");
@@ -290,7 +294,7 @@ export default function Soli() {
                   placeholder="Selecciona una Empresa"
                   labelPlacement="outside"
                   className={styles.selectSoli}
-                  onChange={handleSelectionChange}
+                  onChange={handleSelectionChangeEmpresa}
                 >
                   {dataempresa.map((empresa) => (
                     <SelectItem
