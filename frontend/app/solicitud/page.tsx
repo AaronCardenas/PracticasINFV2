@@ -1,4 +1,6 @@
 'use client';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
 import React, { useState, useEffect } from 'react';
 import { Button, Select, SelectItem, Input, Image } from '@nextui-org/react';
 import NextLink from 'next/link';
@@ -10,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const backendUrl = 'http://localhost:3000'; //cambiar al .env en un futuro
 
 export default function Soli() {
+  const [pdfUrl, setPdfUrl] = useState(null);
   const searchParams = useSearchParams();
   const Token = searchParams.get('token');
   console.log('Token: ', Token);
@@ -213,7 +216,14 @@ export default function Soli() {
       });
 
       if (response.ok) {
-        console.log('response', response);
+        const blob = await response.blob();
+
+        // Crear una URL para el blob
+        const blobUrl = URL.createObjectURL(blob);
+  
+        // Abrir una nueva ventana y realizar la descarga
+        window.open(blobUrl, '_blank');
+        // console.log('response', response);
       } else {
         // Maneja el caso de credenciales incorrectas
         alert('Error al recibir respuesta.');
