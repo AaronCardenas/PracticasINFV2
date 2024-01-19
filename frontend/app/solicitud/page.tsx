@@ -7,13 +7,17 @@ import styles from "../../styles/styleop.module.css";
 import { motion } from "framer-motion";
 import Listar from "../../components/Tablas/tabla";
 import Datosest from "../../components/Tablas/datosest";
-
+import { AuthProvider, useAuth } from "../context/AuthContext";
 const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
 
 export default function Soli() {
-
+  const [token, setToken] = useState(null); 
+  const auth = useAuth();
   const [value, setValue] = React.useState("");
-
+  useEffect(() => {
+    // Obtiene el token del contexto de autenticación
+    setToken(auth.authToken);
+  }, [auth.authToken]);
   const handleSelectionChange = (e) => {
     setValue(e.target.value);
   };
@@ -184,24 +188,28 @@ export default function Soli() {
     },
   ];
 
-  const funcionlogin = async () => {
-
+  const funcionSoli = async () => {
+    const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
     // Configurar los datos para la solicitud a la API
-    const userData = {
-      rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
-      rutEmpresa: rutEmpresa.raw,
+    if (!selectedEmpresaId) {
+      alert("Selecciona una empresa antes de solicitar");
+      return;
+    }
+    const Data = {
+      rutEmpresa: selectedEmpresaId,
       //usertype: userType, // despues
     };
     // Realiza la solicitud a la API
 
     try {
-
+      console.log("Data", Data)
       const response = await fetch(`${backendUrl}/utils/unirDatos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Agrega el token a los headers
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(Data),
       });
 
       if (response.ok) {
@@ -381,7 +389,7 @@ export default function Soli() {
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
                     <Button className={styles.buttomSoli}>Guardar</Button>
-                    <Button className={styles.buttomSoli} onClick={}>Solicitar</Button>
+                    <Button className={styles.buttomSoli} onClick={funcionSoli}>Solicitar</Button>
                   </div>
                 </div>
               </div>
