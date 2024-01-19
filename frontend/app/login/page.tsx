@@ -7,9 +7,7 @@ import { useRut } from "react-rut-formatter";
 import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
 import styles from '../../styles/styleop.module.css';
 import { motion } from "framer-motion";
-import { AuthProvider, useAuth } from "../../context/AuthContext";
 export default function Login() {
-  const auth = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +47,7 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
-        // Almacena el token utilizando el contexto de autenticación
-        auth.login(token); 
+      
         router.push(`/coo`); // cambiar al implementar tipos de usuario //userType
       } else {
         // Maneja el caso de credenciales incorrectas
@@ -162,11 +159,7 @@ export default function Login() {
     </div>
     
   );
-}export const getServerSideProps = async (context) => {
-  return {
-    props: {},
-  };
-};
+}
 /*
 
 <motion.div

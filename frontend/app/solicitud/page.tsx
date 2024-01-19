@@ -7,21 +7,12 @@ import styles from "../../styles/styleop.module.css";
 import { motion } from "framer-motion";
 import Listar from "../../components/Tablas/tabla";
 import Datosest from "../../components/Tablas/datosest";
-import { AuthProvider, useAuth } from "../context/AuthContext";
 const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
 
 export default function Soli() {
   const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
   const [token, setToken] = useState(null); 
-  const auth = useAuth();
   const [value, setValue] = React.useState("");
-  useEffect(() => {
-    // Obtiene el token del contexto de autenticación
-    setToken(auth.authToken);
-  }, [auth.authToken]);
-  const handleSelectionChange = (e) => {
-    setValue(e.target.value);
-  };
   const handleSelectionChangeEmpresa = (e) => {
     setValue(e.target.value);
     setSelectedEmpresaId(e.target.value);
