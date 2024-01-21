@@ -264,7 +264,7 @@ export default function Soli() {
           <div className={styles.boxe220soli}>
             <div className={styles.boxe2200soli}>
               <div className={styles.boxe22000soli}>
-                <p className={styles.TextSoli}>Asigantura</p>
+                <p className={styles.TextSoli}>Asignatura</p>
                 <Select
                   aria-label='Asignatura'
                   size='lg'
