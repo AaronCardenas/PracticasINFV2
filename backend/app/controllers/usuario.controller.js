@@ -29,6 +29,8 @@ const validarUsuario = async (req,res,next) => {
                 message:"Usuario validado exitosamente.",
                 token:token
             });
+
+        // Despues buscar por tipoUsuario 
         }
         // Password incorrecto
         else{
