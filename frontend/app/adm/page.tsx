@@ -62,16 +62,21 @@ export default function Admin() {
   return (
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
-        <NextLink href="https://informatica.uv.cl/">
+        <NextLink href="https://informatica.uv.cl/" className={styles.boxc11}>
+          <Image
+            id="logoPracticas"
+            radius="none"
+            src="../PracticasUV2.svg"
+            alt="Icono de la plataforma"
+            height={"50%"}
+          />
           <Image
             radius="none"
             src="../UV.svg"
-            alt="Descripción del SVG"
-            width={"100%"}
-            height={"100%"}
+            alt="Icono UV"
+            height={"50%"}
           />
         </NextLink>
-        <div className={styles.boxc11}>Icono Plataforma</div>
         <div className={styles.boxe12}>
           <Button className={styles.botones}>boton1</Button>
           <Button className={styles.botones}>boton1</Button>
