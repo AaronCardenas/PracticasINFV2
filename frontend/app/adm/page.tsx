@@ -8,30 +8,42 @@ import Listar from "../../components/Tablas/tab";
 import NextLink from "next/link";
 import { AllSoli } from "../../api/adm/solicitudes";
 import TAB from "../../components/Tablas/TabADM/fulltab";
-import { data } from "autoprefixer";
 
 export default function Admin() {
   //ejemplo de los datos
   const [data, setData] = useState([]);
   const statusOptions = [
-    { name: "Presentacion", uid: "iniciado" },
-    { name: "Aceptacion", uid: "pendiente" },
+    { name: "Presentacion", uid: "1" },
+    { name: "Aceptacion", uid: "2" },
   ];
   const columns = [
-    { name: "ID", uid: "id", sortable: true },
-    { name: "RUT", uid: "rut", sortable: true },
-    { name: "Rut de Empresa", uid: "rutEmpresa", sortable: true },
+    { name: "ID", uid: "idSolicitud", sortable: true },
+    { name: "RUT Estudiante", uid: "rut", sortable: true },
+    { name: "RUT Empresa", uid: "rutEmpresa", sortable: true },
     { name: "Fecha", uid: "fechaSolicitud", sortable: true },
     { name: "N Practica", uid: "numeroPractica", sortable: true },
     { name: "Estado", uid: "fase", sortable: false },
+    { name: "Actions", uid: "actions", sortable: false },
   ];
-  const INITIAL_VISIBLE_COLUMNS = ["id", "rut", "Rut de Empresa", "N Practica","Estado"];
+  const INITIAL_VISIBLE_COLUMNS = [
+    "idSolicitud",
+    "rut",
+    "rutEmpresa",
+    "numeroPractica",
+    "fase",
+    "actions",
+  ];
+  const statusColorMap = {
+    active: "success",
+    paused: "danger",
+    vacation: "warning",
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const rawData = await AllSoli();
         const transformedData = rawData.map((item) => ({
-          name: item.idSolicitud,
+          idSolicitud: item.idSolicitud,
           rut: item.rut,
           rutEmpresa: item.rutEmpresa,
           fechaSolicitud: item.fechaSolicitud,
@@ -47,18 +59,6 @@ export default function Admin() {
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
-  const datos = [
-    {
-      id: 1,
-      name: "Tony Reichert",
-      role: "CEO",
-      team: "Management",
-      status: "active",
-      age: "29",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-      email: "tony.reichert@example.com",
-    },
-  ];
   return (
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
@@ -91,9 +91,10 @@ export default function Admin() {
             <div className={styles.boxp2211}>
               <TAB
                 columns={columns}
-                datos={datos}
+                datos={data}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
+                statusColorMap={statusColorMap}
               />
             </div>
           </div>

@@ -14,51 +14,57 @@ import {
   DropdownItem,
   Pagination,
 } from "@nextui-org/react";
-import {PlusIcon} from "./PlusIcon";
-import {VerticalDotsIcon} from "./VerticalDotsIcon";
-import {SearchIcon} from "./SearchIcon";
-import {ChevronDownIcon} from "./ChevronDownIcon";
-import {capitalize} from "./utils";
+import { PlusIcon } from "./PlusIcon";
+import { VerticalDotsIcon } from "./VerticalDotsIcon";
+import { SearchIcon } from "./SearchIcon";
+import { ChevronDownIcon } from "./ChevronDownIcon";
+import { capitalize } from "./utils";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
-export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUMNS}) {
+export default function TAB({
+  columns,
+  datos,
+  statusOptions,
+  INITIAL_VISIBLE_COLUMNS,
+  statusColorMap,
+}) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(INITIAL_VISIBLE_COLUMNS)
+  );
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "fase",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
-
   const pages = Math.ceil(datos.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
-
-    return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
+    if (visibleColumns === "all") {
+      return columns;
+    }
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
   }, [visibleColumns]);
-
   const filteredItems = React.useMemo(() => {
     let filtereddatos = [...datos];
 
     if (hasSearchFilter) {
       filtereddatos = filtereddatos.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        user.rut.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+    if (
+      statusFilter !== "all" &&
+      Array.from(statusFilter).length !== statusOptions.length
+    ) {
       filtereddatos = filtereddatos.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+        user.rut.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -84,12 +90,27 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
 
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
-
+    const handleCellClick = () => {
+      const tempInput = document.createElement('input');
+      tempInput.value = cellValue;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    };
     switch (columnKey) {
-      case "id":
-        return (
-          <p> {user.id}</p>
-        );
+      case "idSolicitud":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.idSolicitud}</p>;
+      case "rut":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.rut}</p>;
+      case "rutEmpresa":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.rutEmpresa}</p>;
+      case "fechaSolicitud":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.fechaSolicitud}</p>;
+      case "numeroPractica":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.numeroPractica}</p>;
+      case "fase":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.fase}</p>;
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -117,7 +138,6 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
     setPage(1);
   }, []);
 
-
   const onSearchChange = React.useCallback((value) => {
     if (value) {
       setFilterValue(value);
@@ -137,7 +157,7 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
               base: "w-full sm:max-w-[44%]",
               inputWrapper: "border-1",
             }}
-            placeholder="Buscar..."
+            placeholder="Buscar Rut ..."
             size="sm"
             startContent={<SearchIcon className="text-default-300" />}
             value={filterValue}
@@ -171,16 +191,8 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
                 ))}
               </DropdownMenu>
             </Dropdown>
-
-            <Button
-              endContent={<PlusIcon/>}
-              size="l"
-            >
-              Nueva solicitud
-            </Button>
           </div>
         </div>
-        
       </div>
     );
   }, [
@@ -216,7 +228,12 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
 
   const classNames = React.useMemo(
     () => ({
-      base: ["overflow-hidden", "bg-white", "border-3 rounded-lg", "text-black"],
+      base: [
+        "overflow-hidden",
+        "bg-white",
+        "border-3 rounded-lg",
+        "text-black",
+      ],
       wrapper: ["max-h-[382px]", "max-w-3xl"],
       th: ["bg-black", "text-white", "border-b", "border-divider"],
       td: [
@@ -228,9 +245,8 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
         "group-data-[last=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda
       ],
     }),
-    [],
+    []
   );
-  
 
   return (
     <Table
@@ -259,8 +275,10 @@ export default function TAB({columns, datos, statusOptions,INITIAL_VISIBLE_COLUM
       </TableHeader>
       <TableBody emptyContent={"No datos found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+          <TableRow key={item.idSolicitud}>
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
           </TableRow>
         )}
       </TableBody>
