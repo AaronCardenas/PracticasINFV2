@@ -11,7 +11,7 @@ const crearSolicitud = async (req, res) => {
     const solicitud = await db.solicitud.create({
       idSolicitud: datos.idSolicitud,
       rut: rut,
-      rutEmpresa: datos.rutEmpresa,
+      rutsolicitud: datos.rutsolicitud,
       fechaSolicitud: datos.fechaSolicitud,
       numeroPractica: datos.numeroPractica,
       fase: datos.fase,
@@ -28,6 +28,25 @@ const crearSolicitud = async (req, res) => {
     });
   }
 };
+
+const allSolicitud = async (req, res) => {
+  try {
+      const solicitudes = await db.solicitud.findAll({
+          attributes: ['idSolicitud', 'rut', 'rutEmpresa', 'fechaSolicitud', 'numeroPractica', 'fase']
+      });
+
+      return res.status(200).json({
+          message: "Solicitudes listadas exitosamente.",
+          solicitudes: solicitudes
+      });
+  } catch (err) {
+      return res.status(500).json({
+          message: "Error al listar solicitudes.",
+          err
+      });
+  }
+};
 module.exports = {
   crearSolicitud,
+  allSolicitud
 };
