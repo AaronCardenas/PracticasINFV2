@@ -1,10 +1,16 @@
 import { backendUrl } from "../config";
-export const solicitudes = async (token) => {
+
+export const funcionSoli= async (token) => {
+
+};
+
+export const solicitudes = async (token,datos) => {
   const Data = {
     token: token,
+    datos: datos,
   };
   try {
-    const response = await fetch(`${backendUrl}/`, {
+    const response = await fetch(`${backendUrl}/solicitud/crear`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +31,7 @@ export const solicitudes = async (token) => {
   }
 };
 
-export const funcionSoli = async (Token, selectedEmpresaId, asignatura) => {
+export const PDF = async (Token, selectedEmpresaId, asignatura) => {
   // Configurar los datos para la solicitud a la API
   if (!selectedEmpresaId) {
     alert("Selecciona una empresa antes de solicitar");

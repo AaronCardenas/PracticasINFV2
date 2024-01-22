@@ -7,7 +7,7 @@ import NextLink from "next/link";
 import styles from "../../../styles/styleop.module.css";
 import Datosest from "../../../components/Tablas/datosest";
 import { useRouter, useSearchParams } from "next/navigation";
-import { funcionSoli, funcionSave } from "../../../api/est/solicitudes"; //cambiar al .env en un futuro
+import { funcionSoli, funcionSave, solicitudes} from "../../../api/est/solicitudes"; //cambiar al .env en un futuro
 
 export default function Soli() {
   const router = useRouter();
@@ -59,7 +59,13 @@ export default function Soli() {
     setSelectedRegionName(e.target.value);
   };
   const Solicitar = async () => {
-    funcionSoli(Token, selectedEmpresaId, asignatura);
+    const datos={
+        idSolicitud:12,
+        rutEmpresa: selectedEmpresaId,
+        numeroPractica: asignatura.id,
+        fase: 1
+    };
+    solicitudes(Token, datos);
   };
   const Save = async () => {
     // Aquí puedes utilizar los valores almacenados en los estados
@@ -329,6 +335,7 @@ export default function Soli() {
               <div className={styles.boxe22000soli}>
                 <p className={styles.TextSoli}>Asignatura</p>
                 <Select
+                  id="select-Asignatura"
                   aria-label="Asignatura"
                   size="lg"
                   variant="faded"
@@ -352,6 +359,7 @@ export default function Soli() {
               <div className={styles.boxe22000soli}>
                 <p className={styles.TextSoli}>Empresas</p>
                 <Select
+                  id="select-Empresa"
                   aria-label="Empresas"
                   size="lg"
                   variant="faded"
