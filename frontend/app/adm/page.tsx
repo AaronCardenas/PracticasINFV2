@@ -91,10 +91,6 @@ export default function Admin() {
         <div className={styles.boxp22}>
           <div className={styles.boxp220}>Panel de administración</div>
           <div className={styles.boxp221}>
-            <div className={styles.boxp2210}>
-              <p>Search</p>
-              <p>Boton</p>
-            </div>
             <div className={styles.boxp2211}>
               <TAB
                 columns={columns}

@@ -116,17 +116,17 @@ export default function TAB({
     };
     switch (columnKey) {
       case "idSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.idSolicitud}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
       case "rut":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.rut}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rut}</p>;
       case "rutEmpresa":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.rutEmpresa}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rutEmpresa}</p>;
       case "fechaSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.fechaSolicitud}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud}</p>;
       case "numeroPractica":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.numeroPractica}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.numeroPractica}</p>;
       case "fase":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.fase}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fase}</p>;
       case "acciones":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -240,16 +240,20 @@ export default function TAB({
   const classNames = React.useMemo(
     () => ({
       base: [
+        "w-full",
+        "h-full",
         "overflow-hidden",
         "bg-white",
         "border-3 rounded-lg",
         "text-black",
+        "padding-[10px]",
+        "gap-10",
       ],
       wrapper: ["max-h-[382px]", "max-w-3xl"],
-      th: ["bg-black", "text-white", "border-b", "border-divider","text-center"],
+      th: ["bg-black", "text-white", "border-b", "border-divider", "text-center", "text-md"],
       td: [
         // ...otras clases para las celdas
-        "group-data-[first=true]:first:before:rounded-none border border-black", // añade borde negro a la primera celda
+        "group-data-[first=true]:first:before:rounded-none border border-black ", // añade borde negro a la primera celda
         "group-data-[first=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda de la primera fila
         "group-data-[middle=true]:before:rounded-none border border-black ", // añade borde negro a las celdas del medio
         "group-data-[last=true]:first:before:rounded-none border border-black", // añade borde negro a la primera celda de la última fila

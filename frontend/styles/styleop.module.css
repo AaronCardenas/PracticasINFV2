@@ -415,7 +415,7 @@
     justify-content:center;
     align-items: center ;
     padding: 20px;
-    height: 90%;
+    height: 100%;
     width:100%;
     border-top-left-radius: 2ch;
     background-color: #334550;
@@ -893,7 +893,6 @@
     align-items: center;
     height: 98%;
     width:98%;
-    padding: 10px;
     border-radius: 2ch;
     color:rgb(0, 0, 0);
 }

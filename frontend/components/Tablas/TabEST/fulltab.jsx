@@ -12,57 +12,59 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
   Pagination,
 } from "@nextui-org/react";
-import {PlusIcon} from "./PlusIcon";
-import {VerticalDotsIcon} from "./VerticalDotsIcon";
-import {SearchIcon} from "./SearchIcon";
-import {ChevronDownIcon} from "./ChevronDownIcon";
-import {columns, datos, statusOptions} from "./data";
-import {capitalize} from "./utils";
+import { PlusIcon } from "./PlusIcon";
+import { VerticalDotsIcon } from "./VerticalDotsIcon";
+import { SearchIcon } from "./SearchIcon";
+import { ChevronDownIcon } from "./ChevronDownIcon";
+import { capitalize } from "./utils";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
-
-export default function TAB() {
+export default function TAB({
+  columns,
+  datos,
+  statusOptions,
+  INITIAL_VISIBLE_COLUMNS,
+  statusColorMap,
+}) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(INITIAL_VISIBLE_COLUMNS)
+  );
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "fase",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
-
   const pages = Math.ceil(datos.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
-
-    return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
+    if (visibleColumns === "all") {
+      return columns;
+    }
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
   }, [visibleColumns]);
-
   const filteredItems = React.useMemo(() => {
     let filtereddatos = [...datos];
 
     if (hasSearchFilter) {
       filtereddatos = filtereddatos.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        user.rut.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+    if (
+      statusFilter !== "all" &&
+      Array.from(statusFilter).length !== statusOptions.length
+    ) {
       filtereddatos = filtereddatos.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+        user.rut.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -88,24 +90,44 @@ export default function TAB() {
 
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
-
+    const handleCellClick = () => {
+      const tempInput = document.createElement('input');
+      tempInput.value = cellValue;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    };
+    const handleDropdownSelect = (selectedOption) => {
+      switch (selectedOption) {
+        case "Pendiente":
+          // Lógica para la opción Pendiente
+          break;
+        case "Aceptar":
+          // Lógica para la opción Aceptar
+          break;
+        case "Rechazar":
+          // Lógica para la opción Rechazar
+          break;
+        default:
+          // Otras opciones
+          break;
+      }
+    };
     switch (columnKey) {
-      case "name":
-        return (
-          <p> {user.email}</p>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="dot"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
+      case "idSolicitud":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
+      case "rut":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rut}</p>;
+      case "rutEmpresa":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rutEmpresa}</p>;
+      case "fechaSolicitud":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud}</p>;
+      case "numeroPractica":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.numeroPractica}</p>;
+      case "fase":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fase}</p>;
+      case "acciones":
         return (
           <div className="relative flex justify-end items-center gap-2">
             <Dropdown className="bg-background border-1 border-default-200">
@@ -115,9 +137,9 @@ export default function TAB() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                <DropdownItem onSelect={() => handleDropdownSelect("Aceptar")}>Aceptar</DropdownItem>
+                <DropdownItem onSelect={() => handleDropdownSelect("Pendiente")}>Pendiente</DropdownItem>
+                <DropdownItem onSelect={() => handleDropdownSelect("Rechazar")}>Rechazar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -131,7 +153,6 @@ export default function TAB() {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
-
 
   const onSearchChange = React.useCallback((value) => {
     if (value) {
@@ -152,7 +173,7 @@ export default function TAB() {
               base: "w-full sm:max-w-[44%]",
               inputWrapper: "border-1",
             }}
-            placeholder="Buscar..."
+            placeholder="Buscar Rut ..."
             size="sm"
             startContent={<SearchIcon className="text-default-300" />}
             value={filterValue}
@@ -186,7 +207,6 @@ export default function TAB() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-
             <Button
               endContent={<PlusIcon/>}
               size="l"
@@ -195,7 +215,6 @@ export default function TAB() {
             </Button>
           </div>
         </div>
-        
       </div>
     );
   }, [
@@ -220,33 +239,33 @@ export default function TAB() {
           isCompact
           onChange={setPage}
         />
-        <span className="text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${items.length} selected`}
-        </span>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   const classNames = React.useMemo(
     () => ({
-      base: ["overflow-hidden","bg-white", "border-3 rounded-lg"],
+      base: [
+        "w-full",
+        "overflow-hidden",
+        "bg-white",
+        "border-3 rounded-lg",
+        "text-black",
+        "padding-[10px]",
+        "gap-10",
+      ],
       wrapper: ["max-h-[382px]", "max-w-3xl"],
-      th: ["bg-black", "text-white", "border-b", "border-divider"],
+      th: ["bg-black", "text-white", "border-b", "border-divider", "text-center", "text-md"],
       td: [
-        // changing the rows border radius
-        // first
-        "group-data-[first=true]:first:before:rounded-none",
-        "group-data-[first=true]:last:before:rounded-none",
-        // middle
-        "group-data-[middle=true]:before:rounded-none",
-        // last
-        "group-data-[last=true]:first:before:rounded-none",
-        "group-data-[last=true]:last:before:rounded-none",
+        // ...otras clases para las celdas
+        "group-data-[first=true]:first:before:rounded-none border border-black ", // añade borde negro a la primera celda
+        "group-data-[first=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda de la primera fila
+        "group-data-[middle=true]:before:rounded-none border border-black ", // añade borde negro a las celdas del medio
+        "group-data-[last=true]:first:before:rounded-none border border-black", // añade borde negro a la primera celda de la última fila
+        "group-data-[last=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda
       ],
     }),
-    [],
+    []
   );
 
   return (
@@ -267,7 +286,7 @@ export default function TAB() {
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
+            align={column.uid === "acciones" ? "center" : "start"}
             allowsSorting={column.sortable}
           >
             {column.name}
@@ -276,8 +295,10 @@ export default function TAB() {
       </TableHeader>
       <TableBody emptyContent={"No datos found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+          <TableRow key={item.idSolicitud}>
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
           </TableRow>
         )}
       </TableBody>
