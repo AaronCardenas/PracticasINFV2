@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize) =>{
   const empresa = sequelize.define('empresa', {
 
     rutEmpresa: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(12),
       primaryKey: true
     },
     razonSocial: {

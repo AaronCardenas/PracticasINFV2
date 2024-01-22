@@ -35,7 +35,6 @@ const crearEmpresa = async (req,res) => {
     const { rutEmpresa, razonSocial, ciudad, region, direccion, rubro } = req.body;
 
     try{
-
         const empresa = await db.empresa.create({
             rutEmpresa: rutEmpresa,
             razonSocial: razonSocial,

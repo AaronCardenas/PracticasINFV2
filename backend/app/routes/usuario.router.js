@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { validarUsuario, crearUsuario } = require('../controllers/usuario.controller.js');
+const { validarUsuario, crearUsuario, getdata, updatedata } = require('../controllers/usuario.controller.js');
 
 //Ruta de prueba
 router.get("/",(req,res)=>{
@@ -10,5 +10,6 @@ router.get("/",(req,res)=>{
 // Ruta de validacion de usuario                    // DATOS JSON:
 router.post("/validar",validarUsuario);             // {rut, password}
 router.post("/crear",crearUsuario);                 // {rut, password, telefono, correo, direccion, planEstudio, ingreso, tipoUsuario, nombre1, nombre2, apellido1, apellido2}
-
+router.post("/get",getdata);// {token}
+router.put("/update",updatedata);//{TokenExpiredError,datos}
 module.exports = router;

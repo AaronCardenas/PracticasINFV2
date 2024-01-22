@@ -1,4 +1,4 @@
-import { Navbar } from "../../components/navbar";
+import { Navbar } from "../../../components/navbar";
 import styles from "../../styles/styleop.module.css";
 export default function SoliLayout({
 	children,

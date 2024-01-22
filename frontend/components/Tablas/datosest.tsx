@@ -2,25 +2,44 @@ import React, { useState, useEffect } from "react";
 import {
   Select,
   Button,
-  ButtonGroup,
   Input,
   SelectItem,
 } from "@nextui-org/react";
 import styles from '../../styles/styleop.module.css'
-export default function Datosest() {
-  const data = {
-    name: "Juan",
-    rut: "12345678-9",
-    email: "@email",
-    fono: "+569123456789",
-    plan: "Plan C",
-    ingreso: "2019",
-  };
-  const [formData, setFormData] = useState(data);
+import { datosEst,actualizarDatosUsuario} from "../../api/est/solicitudes";
+export default function Datosest({token}) {
   const [isDisabled, setIsDisabled] = useState(true);
+  const [data, setData] = useState({});
+  const [formData, setFormData] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await datosEst(token);
+        setData(data);setFormData(data);
+        console.log("Datos del usuario:", data);
+        console.log("Datos update usuario:", formData);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+    fetchData();
+  }, [token]);
   const editardatos = () => {
-    if (isDisabled!) alert("Se modificaran los datos del estudiante");
+    if (!isDisabled) {
+      alert("Se modificaron los datos");
+    }
     setIsDisabled(!isDisabled);
+  };
+
+  const actualizarDatosEnBackend = async () => {
+    try {
+      // Llama a la función para actualizar datos en el backend
+      console.log("Datos a actualizar:", formData);
+      await actualizarDatosUsuario(token, formData);
+      alert("Datos actualizados exitosamente");
+    } catch (error) {
+      alert("Error al actualizar datos del usuario");
+    }
   };
   const currentYear = new Date().getFullYear();
   const years = Array.from(
@@ -28,29 +47,40 @@ export default function Datosest() {
     (_, index) => currentYear - index
   );
   const planesDeCarrera = ["Plan A", "Plan B", "Plan C", "Plan D", "Plan E"];
-
-  const [selectedPlan, setSelectedPlan] = useState(data.plan);
+  const [selectedPlan, setSelectedPlan] = useState(data.planEstudio);
   const [selectedIngreso, setSelectedIngreso] = useState(data.ingreso);
-
-  useEffect(() => {
-    // Actualiza los datos de formData cuando cambia selectedPlan o selectedIngreso
-    setFormData((prevData) => ({
-      ...prevData,
-      plan: selectedPlan,
-      ingreso: selectedIngreso,
-    }));
-  }, [selectedPlan, selectedIngreso]);
-
   return (
     <div className={styles.datosest}>
       <p className={styles.Titulo}>Datos del alumno</p>
       <Input
         className={styles.Textacept}
         type="name"
-        label="Nombre completo:"
-        placeholder={data.name}
+        label="Primer nombre:"
+        placeholder={data.nombre1}
         isDisabled={isDisabled}
       />
+      <Input
+        className={styles.Textacept}
+        type="name"
+        label="Segundo nombre:"
+        placeholder={data.nombre2}
+        isDisabled={isDisabled}
+      />
+      <Input
+        className={styles.Textacept}
+        type="name"
+        label="Primer apellido:"
+        placeholder={data.apellido1}
+        isDisabled={isDisabled}
+      />
+      <Input
+        className={styles.Textacept}
+        type="name"
+        label="Segundo apellido:"
+        placeholder={data.apellido2}
+        isDisabled={isDisabled}
+      />
+      
       <Input
         className={styles.Textacept}
         type="rut"
@@ -62,14 +92,14 @@ export default function Datosest() {
         className={styles.Textacept}
         type="email"
         label="Email"
-        placeholder={data.email}
+        placeholder={data.correo}
         isDisabled
       />
       <Input
         className={styles.Textacept}
         type="fono"
         label="Fono"
-        placeholder={data.fono}
+        placeholder={data.telefono}
         isDisabled={isDisabled}
       />
       <Select
@@ -77,8 +107,8 @@ export default function Datosest() {
         isDisabled={isDisabled}
         disabled={isDisabled}
         label="Plan de estudio"
-        placeholder={selectedPlan}
-        value={selectedPlan}
+        placeholder={data.planEstudio}
+        value={data.planEstudio}
         onChange={(value) => {
           setSelectedPlan(value);
           // Agrega la lógica necesaria para manejar el cambio de valor
@@ -96,8 +126,8 @@ export default function Datosest() {
         className={styles.Textacept}
         isDisabled={isDisabled}
         label="Año de ingreso"
-        placeholder={selectedIngreso}
-        value={selectedIngreso}
+        placeholder={data.ingreso}
+        value={data.ingreso}
         onChange={(value) => {
           setSelectedIngreso(value);
           // Agrega la lógica necesaria para manejar el cambio de valor
@@ -110,9 +140,15 @@ export default function Datosest() {
           </SelectItem>
         ))}
       </Select>
-      <ButtonGroup>
-        <Button
-          onClick={editardatos}
+      <Button
+          size="lg"
+          onClick={() => {
+            editardatos();
+            // Llama a la función de actualización cuando se habilita la edición
+            if (!isDisabled) {
+              actualizarDatosEnBackend();
+            }
+          }}
           className={
             isDisabled
               ? "text-white bg-gradient-to-r from-blue-500 to-violet-500"
@@ -121,7 +157,6 @@ export default function Datosest() {
         >
           {isDisabled ? "Habilitar Edición" : "Guardar Cambios"}
         </Button>
-      </ButtonGroup>
     </div>
   );
 }
