@@ -2,14 +2,15 @@ module.exports = (sequelize, Sequelize) => {
     const solicitud = sequelize.define('solicitud de practica', {
         idSolicitud: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true
           },
           rut: {
-            type: Sequelize.STRING(15),
+            type: Sequelize.STRING(12),
             allowNull: true
           },
           rutEmpresa: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING(12),
             allowNull: true
           },
           fechaSolicitud: {
@@ -29,11 +30,11 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
           },
           fase: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.ENUM('Solicitada','Aceptada','Rechazada','Terminada', 'Calificada'),
             allowNull: true
           },
           calificacion: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.FLOAT,
             allowNull: true
           }        
     }, {

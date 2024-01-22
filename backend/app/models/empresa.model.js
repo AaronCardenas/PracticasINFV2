@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize) =>{
   const empresa = sequelize.define('empresa', {
 
     rutEmpresa: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(12),
       primaryKey: true
     },
     razonSocial: {
@@ -11,19 +11,19 @@ module.exports = (sequelize, Sequelize) =>{
       allowNull: true
     },
     ciudad: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(45), // TEXT?
       allowNull: true
     },
     region: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(45), // TEXT?
       allowNull: true
     },
     direccion: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(45), // TEXT?
       allowNull: true
     },
     rubro: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(45), // TEXT?
       allowNull: true
     }
   }, {

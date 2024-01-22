@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const usuario =sequelize.define('usuario',{
     rut: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.STRING(12),
         primaryKey: true
       },
       password: {
