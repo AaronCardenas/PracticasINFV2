@@ -17,6 +17,7 @@ export default function Soli() {
   const [selectedRegionName, setSelectedRegionName] = useState(null);
   const [asignatura, setAsignatura] = useState(null);
   const [isInputsDisabled, setIsInputsDisabled] = useState(false);
+  const [sempresa, setSempresa] = useState(false);
 
   const [razonsocial, setrazonsocial] = useState("");
   const [direccion, setDireccion] = useState("");
@@ -72,6 +73,8 @@ export default function Soli() {
     };
     // Llamar a la función de guardado con los datos
     funcionSave(dataToSave);
+    setSempresa(true);
+    setIsInputsDisabled(true);
   };
   const dataSoli = [
     {
@@ -356,6 +359,7 @@ export default function Soli() {
                   placeholder="Selecciona una Empresa"
                   labelPlacement="outside"
                   className={styles.selectSoli}
+                  isDisabled={sempresa}
                   onChange={handleSelectionChangeEmpresa}
                 >
                   {dataempresa.map((empresa) => (

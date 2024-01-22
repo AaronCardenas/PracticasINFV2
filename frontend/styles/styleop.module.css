@@ -1059,7 +1059,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 2ch;
-    height: 50%;
+    height: 65%;
     width:100%;
     background-color: #334550;
 }
@@ -1073,7 +1073,7 @@
     font-size: x-large;
     padding: 10px;
     color:white;
-    height: 50%;
+    height: 35%;
     width:100%;
     background-color: #334550;
 }

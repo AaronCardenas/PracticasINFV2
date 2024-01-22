@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from "react";
-import {
-  Select,
-  Button,
-  Input,
-  SelectItem,
-} from "@nextui-org/react";
-import styles from '../../styles/styleop.module.css'
-import { datosEst,actualizarDatosUsuario} from "../../api/est/solicitudes";
-export default function Datosest({token}) {
+import { Select, Button, Input, SelectItem } from "@nextui-org/react";
+import styles from "../../styles/styleop.module.css";
+import { datosEst, actualizarDatosUsuario } from "../../api/est/solicitudes";
+import { updateSourceFile } from "typescript";
+export default function Datosest({ token }) {
   const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState({});
-  const [formData, setFormData] = useState({});
+  const [newdata, setNewData] = useState({});
+  const [selectedPlan, setSelectedPlan] = useState(data.planEstudio);
+  const [selectedIngreso, setSelectedIngreso] = useState(data.ingreso);
+  const planesDeCarrera = ["Plan A", "Plan B", "Plan C", "Plan D", "Plan E"];
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await datosEst(token);
-        setData(data);setFormData(data);
-        console.log("Datos del usuario:", data);
-        console.log("Datos update usuario:", formData);
+        setData(data);
       } catch (error) {
         console.error("Error al obtener datos del usuario:", error);
       }
@@ -26,16 +23,28 @@ export default function Datosest({token}) {
   }, [token]);
   const editardatos = () => {
     if (!isDisabled) {
+      const updatedData = {
+        nombre1: document.getElementById("input-nombre1").value || data.nombre1,
+        nombre2: document.getElementById("input-nombre2").value || data.nombre2,
+        apellido1: document.getElementById("input-apellido1").value || data.apellido1,
+        apellido2: document.getElementById("input-apellido2").value || data.apellido2,
+        correo: document.getElementById("input-email").value || data.correo,
+        telefono: document.getElementById("input-fono").value || data.telefono,
+        planEstudio: selectedPlan || data.planEstudio,
+        ingreso: selectedIngreso || data.ingreso,
+      };
+      actualizarDatosEnBackend(updatedData);
       alert("Se modificaron los datos");
+      //obtener valores nuevos de los inputs
     }
     setIsDisabled(!isDisabled);
   };
 
-  const actualizarDatosEnBackend = async () => {
+  const actualizarDatosEnBackend = async (updatedData) => {
     try {
       // Llama a la función para actualizar datos en el backend
-      console.log("Datos a actualizar:", formData);
-      await actualizarDatosUsuario(token, formData);
+      console.log("Datos a actualizar:", updatedData);
+      await actualizarDatosUsuario(token, updatedData);
       alert("Datos actualizados exitosamente");
     } catch (error) {
       alert("Error al actualizar datos del usuario");
@@ -46,13 +55,11 @@ export default function Datosest({token}) {
     { length: currentYear - 1979 },
     (_, index) => currentYear - index
   );
-  const planesDeCarrera = ["Plan A", "Plan B", "Plan C", "Plan D", "Plan E"];
-  const [selectedPlan, setSelectedPlan] = useState(data.planEstudio);
-  const [selectedIngreso, setSelectedIngreso] = useState(data.ingreso);
   return (
     <div className={styles.datosest}>
       <p className={styles.Titulo}>Datos del alumno</p>
       <Input
+        id="input-nombre1"
         className={styles.Textacept}
         type="name"
         label="Primer nombre:"
@@ -60,6 +67,7 @@ export default function Datosest({token}) {
         isDisabled={isDisabled}
       />
       <Input
+        id="input-nombre2"
         className={styles.Textacept}
         type="name"
         label="Segundo nombre:"
@@ -67,6 +75,7 @@ export default function Datosest({token}) {
         isDisabled={isDisabled}
       />
       <Input
+        id="input-apellido1"
         className={styles.Textacept}
         type="name"
         label="Primer apellido:"
@@ -74,14 +83,16 @@ export default function Datosest({token}) {
         isDisabled={isDisabled}
       />
       <Input
+        id="input-apellido2"
         className={styles.Textacept}
         type="name"
         label="Segundo apellido:"
         placeholder={data.apellido2}
         isDisabled={isDisabled}
       />
-      
+
       <Input
+        id="rut"
         className={styles.Textacept}
         type="rut"
         label="Rut"
@@ -89,6 +100,7 @@ export default function Datosest({token}) {
         isDisabled
       />
       <Input
+        id="input-email"
         className={styles.Textacept}
         type="email"
         label="Email"
@@ -96,6 +108,7 @@ export default function Datosest({token}) {
         isDisabled
       />
       <Input
+        id="input-fono"
         className={styles.Textacept}
         type="fono"
         label="Fono"
@@ -103,6 +116,7 @@ export default function Datosest({token}) {
         isDisabled={isDisabled}
       />
       <Select
+        id="select-plan"
         className={styles.Textacept}
         isDisabled={isDisabled}
         disabled={isDisabled}
@@ -123,6 +137,7 @@ export default function Datosest({token}) {
       </Select>
 
       <Select
+        id="select-ingreso"
         className={styles.Textacept}
         isDisabled={isDisabled}
         label="Año de ingreso"
@@ -141,22 +156,18 @@ export default function Datosest({token}) {
         ))}
       </Select>
       <Button
-          size="lg"
-          onClick={() => {
-            editardatos();
-            // Llama a la función de actualización cuando se habilita la edición
-            if (!isDisabled) {
-              actualizarDatosEnBackend();
-            }
-          }}
-          className={
-            isDisabled
-              ? "text-white bg-gradient-to-r from-blue-500 to-violet-500"
-              : "text-white bg-gradient-to-r from-red-500 to-violet-500"
-          }
-        >
-          {isDisabled ? "Habilitar Edición" : "Guardar Cambios"}
-        </Button>
+        size="lg"
+        onClick={() => {
+          editardatos();
+        }}
+        className={
+          isDisabled
+            ? "text-white bg-gradient-to-r from-blue-500 to-violet-500"
+            : "text-white bg-gradient-to-r from-red-500 to-violet-500"
+        }
+      >
+        {isDisabled ? "Habilitar Edición" : "Guardar Cambios"}
+      </Button>
     </div>
   );
 }

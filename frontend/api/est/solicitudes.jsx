@@ -135,7 +135,7 @@ export const actualizarDatosUsuario = async (token, nuevosDatos) => {
       },
       body: JSON.stringify({
         token: token,
-        nuevosDatos: nuevosDatos,
+        datos: nuevosDatos,
       }),
     });
 

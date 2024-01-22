@@ -38,28 +38,30 @@ const validarUsuario = async (req, res, next) => {
     }
   }
 };
-const getdata = async (req, res) => {//datos del usuario
-    const { token } = req.body;
-    try {
-      const { rut } = jwt.verify(token, key);
-      const usuario = await db.usuario.findOne({ where: { rut: rut } });
-      if (!usuario) {
-        return res.status(404).json({
-          message: "No se encontró el usuario.",
-        });
-      }
-      return res.status(200).json({
-        message: "Datos del usuario obtenidos exitosamente.",
-        usuario: usuario,
-      });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({
-        message: "Error al obtener datos del usuario.",
-        error: err,
+const getdata = async (req, res) => {
+  const { token } = req.body;
+  try {
+    const { rut } = jwt.verify(token, key);
+    const usuario = await db.usuario.findOne({ where: { rut: rut } ,attributes: { exclude: ['password'] },});
+
+    if (!usuario) {
+      return res.status(404).json({
+        message: "No se encontró el usuario.",
       });
     }
-  };
+
+    return res.status(200).json({
+      message: "Datos del usuario obtenidos exitosamente.",
+      usuario: usuario,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Error al obtener datos del usuario.",
+      error: err,
+    });
+  }
+};
 // Por ahora para cualquiera, coordinadores, supervisores y jefe de carrera. se definiran despues. Solo para estudiantes.
 const crearUsuario = async (req, res) => {
   const {
