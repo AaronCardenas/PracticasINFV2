@@ -116,17 +116,17 @@ export default function TAB({
     };
     switch (columnKey) {
       case "idSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.idSolicitud}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.idSolicitud}</p>;
       case "rut":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.rut}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.rut}</p>;
       case "rutEmpresa":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.rutEmpresa}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.rutEmpresa}</p>;
       case "fechaSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.fechaSolicitud}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.fechaSolicitud}</p>;
       case "numeroPractica":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.numeroPractica}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.numeroPractica}</p>;
       case "fase":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.fase}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center' }}> {user.fase}</p>;
       case "acciones":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -246,7 +246,7 @@ export default function TAB({
         "text-black",
       ],
       wrapper: ["max-h-[382px]", "max-w-3xl"],
-      th: ["bg-black", "text-white", "border-b", "border-divider"],
+      th: ["bg-black", "text-white", "border-b", "border-divider","text-center"],
       td: [
         // ...otras clases para las celdas
         "group-data-[first=true]:first:before:rounded-none border border-black", // añade borde negro a la primera celda

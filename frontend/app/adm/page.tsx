@@ -63,6 +63,13 @@ export default function Admin() {
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
         <NextLink href="https://informatica.uv.cl/" className={styles.boxc11}>
+          
+          <Image
+            radius="none"
+            src="../UV.svg"
+            alt="Icono UV"
+            height={"50%"}
+          />
           <Image
             id="logoPracticas"
             radius="none"
@@ -70,12 +77,6 @@ export default function Admin() {
             alt="Icono de la plataforma"
             height={"50%"}
             width={"60%"}
-          />
-          <Image
-            radius="none"
-            src="../UV.svg"
-            alt="Icono UV"
-            height={"50%"}
           />
         </NextLink>
         <div className={styles.boxe12}>
@@ -88,7 +89,7 @@ export default function Admin() {
       <div className={styles.boxp20}>
         <div className={styles.boxp21}>ICONOUSER</div>
         <div className={styles.boxp22}>
-          <div className={styles.boxp220}>Titulos1</div>
+          <div className={styles.boxp220}>Panel de administración</div>
           <div className={styles.boxp221}>
             <div className={styles.boxp2210}>
               <p>Search</p>
