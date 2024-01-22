@@ -86,8 +86,26 @@ const crearUsuario = async (req,res) => {
     
 };
 
+const verDatosUsuario = async (req,res) => {
+
+    const {rut} = req.body;
+
+    const usuario = await db.usuario.findOne({where:{rut:rut}});
+
+    if(!usuario){
+        return res.status(404).json({
+            message:"Usuario no encontrado."
+        });
+    }
+
+    return res.status(200).json({
+        message:"Usuario encontrado.",
+        usuario:usuario
+    });
+};
 
 module.exports = {
     validarUsuario,
-    crearUsuario
+    crearUsuario,
+    verDatosUsuario
 };
