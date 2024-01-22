@@ -98,6 +98,22 @@ export default function TAB({
       document.execCommand('copy');
       document.body.removeChild(tempInput);
     };
+    const handleDropdownSelect = (selectedOption) => {
+      switch (selectedOption) {
+        case "Pendiente":
+          // Lógica para la opción Pendiente
+          break;
+        case "Aceptar":
+          // Lógica para la opción Aceptar
+          break;
+        case "Rechazar":
+          // Lógica para la opción Rechazar
+          break;
+        default:
+          // Otras opciones
+          break;
+      }
+    };
     switch (columnKey) {
       case "idSolicitud":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.idSolicitud}</p>;
@@ -121,9 +137,9 @@ export default function TAB({
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                <DropdownItem onSelect={() => handleDropdownSelect("Aceptar")}>Aceptar</DropdownItem>
+                <DropdownItem onSelect={() => handleDropdownSelect("Pendiente")}>Pendiente</DropdownItem>
+                <DropdownItem onSelect={() => handleDropdownSelect("Rechazar")}>Rechazar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
