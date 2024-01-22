@@ -23,7 +23,7 @@ export default function Admin() {
     { name: "Fecha", uid: "fechaSolicitud", sortable: true },
     { name: "N Practica", uid: "numeroPractica", sortable: true },
     { name: "Estado", uid: "fase", sortable: false },
-    { name: "Actions", uid: "actions", sortable: false },
+    { name: "Acciones", uid: "acciones", sortable: false },
   ];
   const INITIAL_VISIBLE_COLUMNS = [
     "idSolicitud",
@@ -31,7 +31,7 @@ export default function Admin() {
     "rutEmpresa",
     "numeroPractica",
     "fase",
-    "actions",
+    "acciones",
   ];
   const statusColorMap = {
     active: "success",
@@ -69,6 +69,7 @@ export default function Admin() {
             src="../PracticasUV2.svg"
             alt="Icono de la plataforma"
             height={"50%"}
+            width={"60%"}
           />
           <Image
             radius="none"

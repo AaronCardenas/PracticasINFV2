@@ -127,7 +127,7 @@ export default function TAB({
         return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.numeroPractica}</p>;
       case "fase":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer' }}> {user.fase}</p>;
-      case "actions":
+      case "acciones":
         return (
           <div className="relative flex justify-end items-center gap-2">
             <Dropdown className="bg-background border-1 border-default-200">
@@ -277,7 +277,7 @@ export default function TAB({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
+            align={column.uid === "acciones" ? "center" : "start"}
             allowsSorting={column.sortable}
           >
             {column.name}
