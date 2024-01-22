@@ -90,6 +90,7 @@ export default function TAB({
 
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
+    
     const handleCellClick = () => {
       const tempInput = document.createElement('input');
       tempInput.value = cellValue;
@@ -122,7 +123,7 @@ export default function TAB({
       case "rutEmpresa":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rutEmpresa}</p>;
       case "fechaSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud}</p>;
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud.split('T')[0]}</p>;
       case "numeroPractica":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.numeroPractica}</p>;
       case "fase":
@@ -207,12 +208,6 @@ export default function TAB({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button
-              endContent={<PlusIcon/>}
-              size="l"
-            >
-              Nueva solicitud
-            </Button>
           </div>
         </div>
       </div>
@@ -247,6 +242,7 @@ export default function TAB({
     () => ({
       base: [
         "w-full",
+        "h-full",
         "overflow-hidden",
         "bg-white",
         "border-3 rounded-lg",

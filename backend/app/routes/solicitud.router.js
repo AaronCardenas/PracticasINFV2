@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { crearSolicitud,allSolicitud} = require('../controllers/solicitud.controller.js');
+const { crearSolicitud,allSolicitud,allestSolicitud} = require('../controllers/solicitud.controller.js');
 
 //Ruta de prueba
 router.get("/",(req,res)=>{
@@ -9,5 +9,5 @@ router.get("/",(req,res)=>{
 // Ruta de validacion de empresa                // DATOS JSON: 
 router.post("/crear",crearSolicitud);
 router.get("/all",allSolicitud);
-
+router.post("/allestSolicitud",allestSolicitud);
 module.exports = router;
