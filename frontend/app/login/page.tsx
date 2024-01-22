@@ -18,7 +18,7 @@ export default function Login() {
   // seteo de userType
   const searchParams = useSearchParams();
   const userType = searchParams.get("userType");
-  const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
+  const backendUrl = "http://localhost:3001"; //cambiar al .env en un futuro
   const funcionlogin = async () => {
 
     if (!isValid || !rut.raw || !password) {

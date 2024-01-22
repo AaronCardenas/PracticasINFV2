@@ -17,6 +17,7 @@ export default function Soli() {
   const Token = searchParams.get('token');
   console.log('Token: ', Token);
   const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
+  const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [value, setValue] = React.useState('');
   const handleSelectionChange = (e) => {
     setValue(e.target.value);
@@ -25,6 +26,12 @@ export default function Soli() {
     setValue(e.target.value);
     setSelectedEmpresaId(e.target.value);
   };
+  
+  const handleSelectionChangeRegion = (e) => {
+    setValue(e.target.value);
+    setSelectedRegionId(e.target.value);
+  };
+
   const dataSoli = [
     {
       'N° Solicitud': 1222222,
@@ -192,6 +199,87 @@ export default function Soli() {
     },
   ];
 
+  const region=[
+    {
+      id: 1,
+      nombre: "Región I - Tarapacá"
+    },
+    {
+      id: 2,
+      nombre: "Región II - Antofagasta"
+
+    },
+    {
+      id: 3,
+      nombre: "Región III - Atacama"
+
+    },
+    {
+      id: 4,
+      nombre: "Región IV - Coquimbo"
+
+    },
+    {
+      id: 5,
+      nombre: "Región V - Valparaíso"
+
+    },
+    {
+      id: 6,
+      nombre: "Región VI - O'Higgins"
+
+    },
+    {
+      id: 7,
+      nombre: "Región VII - Maule"
+  
+    },
+    {
+      id: 8,
+      nombre: "Región VIII - Biobío"
+
+    },
+    {
+      id: 9,
+      nombre: "Región IX - La Araucanía"
+
+    },
+    {
+      id: 10,
+      nombre: "Región X - Los Ríos"
+
+    },
+    {
+      id: 11,
+      nombre: "Región XI - Aysén"
+
+    },
+    {
+      id: 12,
+      nombre: "Región XII - Magallanes"
+
+    },
+    {
+      id: 13,
+      nombre: "Región Metropolitana"
+
+    },
+    {
+      id: 14,
+      nombre: "Región XIV - Los Ríos"
+
+    },
+    {
+      id: 15,
+      nombre: "Región XV - Arica y Parinacota"
+
+    },
+    {
+      id: 16,
+      nombre: "Región XVI - Ñuble"
+
+    }
+  ]
   const funcionSoli = async () => {
     // Configurar los datos para la solicitud a la API
     if (!selectedEmpresaId) {
@@ -349,16 +437,26 @@ export default function Soli() {
                 </div>
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
-                    <Input
-                      radius='sm'
-                      size='lg'
-                      label='Direccion 2'
-                      labelPlacement='outside'
-                      classNames={{
-                        inputWrapper: ['bg-default-200/50', '!cursor-text'],
-                        label: ['!text-white'],
-                      }}
-                    />
+                    <Select
+                    aria-label='Region'
+                    size='lg'
+                    variant='faded'
+                    color='secondary'
+                    placeholder='Selecciona una Region'
+                    labelPlacement='outside'
+                    className={styles.selectSoli}
+                    onChange={handleSelectionChangeRegion}
+                  >
+                    {region.map((region) => (
+                      <SelectItem
+                        className={styles.selectItemSoli}
+                        key={region.id}
+                        value={region.id}
+                      >
+                        {region.nombre}
+                      </SelectItem>
+                    ))}
+                  </Select>
                   </div>
                   <div className={styles.boxe2201100soli}>
                     <Input
