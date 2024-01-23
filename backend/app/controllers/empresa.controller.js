@@ -37,19 +37,30 @@ const crearEmpresa = async (req,res) => {
 
     try{
 
-        const empresa = await db.empresa.create({
-            rutEmpresa: rutEmpresa,
-            razonSocial: razonSocial,
-            ciudad: ciudad,
-            region: region,
-            direccion: direccion,
-            rubro: rubro
-        });
+        empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+        console.log(empresa);
 
-        return res.status(200).json({
-            message:"Empresa creada exitosamente.",
-            empresa
-        });
+        if (empresa){
+            return res.status(409).json({                           // 409: Revisar codigo HTTP. Sharp 🤨 
+                message:"La empresa ya existe."
+            });
+        }
+        else{
+
+            const empresa = await db.empresa.create({
+                rutEmpresa,
+                razonSocial,
+                ciudad,
+                region,
+                direccion,
+                rubro
+            });
+
+            return res.status(200).json({
+                message:"Empresa creada exitosamente.",
+                empresa
+            });
+        }
     } catch(err){
         return res.status(500).json({
             message:"Error al crear empresa.",

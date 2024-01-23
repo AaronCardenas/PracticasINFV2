@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) =>{
       primaryKey: true
     },
     razonSocial: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(170),
       allowNull: true
     },
     ciudad: {
@@ -19,11 +19,11 @@ module.exports = (sequelize, Sequelize) =>{
       allowNull: true
     },
     direccion: {
-      type: Sequelize.STRING(45), // TEXT?
+      type: Sequelize.STRING(170), // TEXT?
       allowNull: true
     },
     rubro: {
-      type: Sequelize.STRING(45), // TEXT?
+      type: Sequelize.STRING(170), // TEXT?
       allowNull: true
     }
   }, {

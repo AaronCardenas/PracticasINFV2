@@ -26,7 +26,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
           },
           descripcionRechazo: {
-            type: Sequelize.STRING(100),
+            type: Sequelize.STRING(170),
             allowNull: true
           },
           fase: {

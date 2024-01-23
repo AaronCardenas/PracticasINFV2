@@ -11,15 +11,15 @@ module.exports = (sequelize, Sequelize) =>{
             allowNull: true
           },
           correoSupervisor: {
-            type: Sequelize.STRING(45),
+            type: Sequelize.STRING(50),
             allowNull: true
           },
           tareas: {
-            type: Sequelize.STRING(45),
+            type: Sequelize.STRING(100),
             allowNull: true
           },
           area: {
-            type: Sequelize.STRING(45),
+            type: Sequelize.STRING(50),
             allowNull: true
           },
           fechaInicio: {

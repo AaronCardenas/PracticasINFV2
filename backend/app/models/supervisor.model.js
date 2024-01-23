@@ -21,11 +21,11 @@ module.exports = (sequelize, Sequelize)=> {
       allowNull: true
     },
     cargoAdministrativo: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(50),
       allowNull: true
     },
     titulocargo: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(50),
       allowNull: true
     }
   }, {
