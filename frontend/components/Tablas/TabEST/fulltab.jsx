@@ -14,12 +14,13 @@ import {
   DropdownItem,
   Pagination,
 } from "@nextui-org/react";
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { capitalize } from "./utils";
-
+import NextLink from 'next/link';
 export default function TAB({
   columns,
   datos,
@@ -38,6 +39,9 @@ export default function TAB({
     column: "fase",
     direction: "ascending",
   });
+  const searchParams = useSearchParams(); 
+  const router= useRouter();
+  const Token = searchParams.get('token');
   const [page, setPage] = React.useState(1);
   const pages = Math.ceil(datos.length / rowsPerPage);
 
@@ -92,12 +96,7 @@ export default function TAB({
     const cellValue = user[columnKey];
     
     const handleCellClick = () => {
-      const tempInput = document.createElement('input');
-      tempInput.value = cellValue;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
+      // Lógica para cuando se hace click en una celda
     };
     const handleDropdownSelect = (selectedOption) => {
       switch (selectedOption) {
@@ -209,6 +208,15 @@ export default function TAB({
               </DropdownMenu>
             </Dropdown>
           </div>
+          <NextLink href={{ pathname: 'est/solicitud', query: `token=${Token}`}}>
+            <Button
+              className="bg-black text-white "
+              endContent={<PlusIcon />}
+              size="l"
+            >
+              Nueva solicitud
+            </Button>
+          </NextLink>
         </div>
       </div>
     );

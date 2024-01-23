@@ -4,8 +4,6 @@ import { Button, Image } from '@nextui-org/react';
 import NextLink from 'next/link';
 // import { useRouter } from 'next/router'; // Importa el router de Next.js
 import styles from '../../styles/styleop.module.css';
-import { motion } from 'framer-motion';
-import Listar from '../../components/Tablas/tabla';
 import Datosest from '../../components/Tablas/datosest';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TAB from '../../components/Tablas/TabEST/fulltab';
