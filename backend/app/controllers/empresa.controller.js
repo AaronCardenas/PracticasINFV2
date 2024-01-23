@@ -1,4 +1,5 @@
 const db = require("../models");
+const Op = db.Sequelize.Op;
 const jwt = require('jsonwebtoken');
 const key = require('../config/const.js').JWT_SECRET;
 
@@ -77,10 +78,42 @@ const listarEmpresas = async (req,res) => {
             err
         });
     }
-}
+};
+
+const buscarEmpresas = async (req,res) => {
+
+    const razonSocial = req.query.razonSocial;
+    console.log(razonSocial);
+
+    try{
+
+        const empresas = await db.empresa.findAll({
+            where: { razonSocial: {
+                [Op.like]: `%${razonSocial}%`
+            } }
+        });
+
+        if(empresas.length == 0){
+            return res.status(404).json({
+                message:"No se encontraron empresas."
+            });
+        }
+
+        return res.status(200).json({
+            message:"Empresas encontradas.",
+            empresas
+        });
+    } catch(err){
+        return res.status(500).json({
+            message:"Error al buscar empresas.",
+            err
+        });
+    }
+};
 
 module.exports = {
     validarEmpresa,
     crearEmpresa,
-    listarEmpresas
+    listarEmpresas,
+    buscarEmpresas
 };
