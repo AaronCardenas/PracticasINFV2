@@ -35,3 +35,5 @@ module.exports = (sequelize, Sequelize)=> {
   });
   return supervisor;
 };
+
+// Signup con correo, rutEmpresa

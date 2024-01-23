@@ -16,6 +16,6 @@ router.post("/crear",crearEmpresa);             // {rutEmpresa, razonSocial, ciu
 // Rutas de listado de empresas
 router.get("/listar",listarEmpresas);
 
-router.get("/buscar", buscarEmpresas)        // ?razonSocial=nombreEmpresa (completo o incompleto)(como parametros query)
+router.get("/buscar", buscarEmpresas)           // ?razonSocial=nombreEmpresa (completo o incompleto)(como parametros query)
 
 module.exports = router;

@@ -130,9 +130,25 @@ const verSolicitudesAceptadasU = async(req,res)=>{
     }
 };
 
+const allSolicitudes = async (req, res) => {
+  try {
+    const solicitudes = await db.solicitud.findAll();
+    return res.status(200).json({
+      message: "Solicitudes listadas exitosamente",
+      solicitudes,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error al listar las solicitudes",
+      err,
+    });
+  }
+};
+
 module.exports = {
     crearSolicitud,
     faseSolicitud,
     verSolicitudesUsuario,
-    verSolicitudesAceptadasU
+    verSolicitudesAceptadasU,
+    allSolicitudes
 };
