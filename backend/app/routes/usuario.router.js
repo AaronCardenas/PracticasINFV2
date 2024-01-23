@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { validarUsuario, crearUsuario, verDatosUsuario } = require('../controllers/usuario.controller.js');
+const { validarUsuario, crearUsuario, verDatosUsuario} = require('../controllers/usuario.controller.js');
 
 //Ruta de prueba
 router.get("/",(req,res)=>{

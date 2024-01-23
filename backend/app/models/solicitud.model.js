@@ -2,8 +2,9 @@ module.exports = (sequelize, Sequelize) => {
     const solicitud = sequelize.define('solicitud de practica', {
         idSolicitud: {
             type: Sequelize.INTEGER,
+            primaryKey: true,
             autoIncrement: true,
-            primaryKey: true
+            allowNull: false
           },
           rut: {
             type: Sequelize.STRING(12),

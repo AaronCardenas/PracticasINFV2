@@ -104,8 +104,11 @@ const verDatosUsuario = async (req,res) => {
     });
 };
 
+
+
 module.exports = {
     validarUsuario,
     crearUsuario,
-    verDatosUsuario
+    verDatosUsuario,
+    
 };

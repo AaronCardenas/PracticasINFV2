@@ -11,7 +11,7 @@ router.get("/",(req,res)=>{
 router.post("/validar",validarEmpresa);         // { "razonSocial": "nombreEmpresa" } 
 
 //Ruta de creacion de Empresa
-router.put("/crear",crearEmpresa);             // {rutEmpresa, razonSocial, ciudad, region, direccion, rubro}
+router.post("/crear",crearEmpresa);             // {rutEmpresa, razonSocial, ciudad, region, direccion, rubro}
 
 // Rutas de listado de empresas
 router.get("/listar",listarEmpresas);
