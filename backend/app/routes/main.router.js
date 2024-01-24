@@ -12,6 +12,8 @@ const usuarioRouter = require('./usuario.router.js');
 const empresaRouter = require('./empresa.router.js');
 const solicitudRouter = require('./solicitud.router.js');
 const supervisorRouter = require('./supervisor.router.js');
+const memoriaRouter = require('./memoria.router.js');
+const informeRouter = require('./informe.router.js');
 
 module.exports = app => {
 
@@ -20,4 +22,6 @@ module.exports = app => {
     app.use('/empresa', empresaRouter);
     app.use('/solicitud',solicitudRouter);
     app.use('/supervisor',supervisorRouter);
+    app.use('/memoria',memoriaRouter);
+    app.use('/informe',informeRouter);
 }

@@ -10,13 +10,15 @@ const crearSolicitud = async (req, res) => {
     });
   
     const solicitudAceptada = await db.solicitud.findOne({
-      where: { rut, fase: "Aceptada", numeroPractica }, // En entero, la fase aceptada es 3
-    });
+        where: { rut, fase: 3, numeroPractica }, // En entero, la fase aceptada es 3
+      });
   
     const solicitudPracticaAnteriorNoTerminada = await db.solicitud.findOne({
       where: { rut, fase: { [Op.not]: 5 }, numeroPractica: numeroPractica - 1 }, // Revisar
     });
-  
+    const solicitudCreada = await db.solicitud.findOne({
+        where: { rut, rutEmpresa: rutempresa, extension, numeroPractica },
+      });
     if (solicitudCalificada) {
       return res.status(409).json({
         message: "Ya se ha realizado esta práctica profesional",
@@ -29,7 +31,11 @@ const crearSolicitud = async (req, res) => {
       return res.status(409).json({
         message: "Aun no se termina la práctica profesional anterior",
       });
-    }
+    }else if(solicitudCreada){
+        return res.status(409).json({
+          message: "Ya se ha creado esta solicitud",
+        });
+      };
   
     try {
       const solicitud = await db.solicitud.create({
