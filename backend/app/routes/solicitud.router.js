@@ -1,6 +1,16 @@
 const router = require('express').Router();
 
-const { faseSolicitud, verSolicitudesUsuario, verSolicitudesAceptadasU, crearSolicitud, allSolicitudesCoo, allSolicitudesJefe, allSolicitudesSec } = require('../controllers/solicitud.controller.js');
+const { 
+    faseSolicitud,
+    verSolicitudesUsuario,
+    verSolicitudesAceptadasU,
+    crearSolicitud,
+    allSolicitudesCoo,
+    allSolicitudesJefe,
+    allSolicitudesSec,
+    readyAlumno,
+    readySupervisor
+} = require('../controllers/solicitud.controller.js');
 
 //Ruta de prueba
 router.get("/",(req,res)=>{
@@ -15,6 +25,8 @@ router.post("/SolicitudesAceptadas",verSolicitudesAceptadasU);  // {rut}
 router.get("/allSolicitudesCoo",allSolicitudesCoo);             
 router.get("/allSolicitudesJefe",allSolicitudesJefe);           
 router.get("/allSolicitudesSec",allSolicitudesSec);
+router.put("/readyAlumno", readyAlumno);                        // {idSolicitud}
+router.put("/readySupervisor", readySupervisor);                // {idSolicitud}
 
 
 module.exports = router;

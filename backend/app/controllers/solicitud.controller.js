@@ -179,6 +179,62 @@ const allSolicitudesSec = async (req, res) => {
   }
 };
 
+const readySupervisor = async (req, res) => {
+
+  const { idSolicitud } = req.body;
+
+  try {
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
+
+    if (!solicitud) {
+      return res.status(404).json({
+        message: "Solicitud no encontrada",
+      });
+    }
+
+    solicitud.supervisorCheck = true;
+    await solicitud.save();
+
+    return res.status(200).json({
+      message: "Solicitud actualizada exitosamente",
+    });
+  }
+  catch (err) {
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      err,
+    });
+  }
+};
+
+const readyAlumno = async (req, res) => {
+
+  const { idSolicitud } = req.body;
+
+  try {
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
+
+    if (!solicitud) {
+      return res.status(404).json({
+        message: "Solicitud no encontrada",
+      });
+    }
+
+    solicitud.alumnoCheck = true;
+    await solicitud.save();
+
+    return res.status(200).json({
+      message: "Solicitud actualizada exitosamente",
+    });
+  }
+  catch (err) {
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      err,
+    });
+  }
+};
+
 module.exports = {
     crearSolicitud,
     faseSolicitud,
@@ -186,5 +242,7 @@ module.exports = {
     verSolicitudesAceptadasU,
     allSolicitudesCoo,
     allSolicitudesJefe,
-    allSolicitudesSec
+    allSolicitudesSec,
+    readySupervisor,
+    readyAlumno
 };
