@@ -6,15 +6,15 @@ const crearSolicitud = async (req, res) => {
     const { rut, rutempresa, extension, numeroPractica } = req.body;
   
     const solicitudCalificada = await db.solicitud.findOne({
-      where: { rut, fase: "Calificada", numeroPractica },
+      where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
     });
   
     const solicitudAceptada = await db.solicitud.findOne({
-      where: { rut, fase: "Aceptada", numeroPractica },
+      where: { rut, fase: "Aceptada", numeroPractica }, // En entero, la fase aceptada es 3
     });
   
     const solicitudPracticaAnteriorNoTerminada = await db.solicitud.findOne({
-      where: { rut, fase: { [Op.not]: "Calificada" }, numeroPractica: numeroPractica - 1 },
+      where: { rut, fase: { [Op.not]: 5 }, numeroPractica: numeroPractica - 1 }, // Revisar
     });
   
     if (solicitudCalificada) {
@@ -38,7 +38,7 @@ const crearSolicitud = async (req, res) => {
         fechaSolicitud: new Date(),
         extension,
         numeroPractica,
-        fase: 'Solicitada',
+        fase: 1,
       });
   
       return res.status(201).json({
