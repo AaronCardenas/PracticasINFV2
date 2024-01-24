@@ -25,8 +25,8 @@ router.post("/SolicitudesAceptadas",verSolicitudesAceptadasU);  // {rut}
 router.get("/allSolicitudesCoo",allSolicitudesCoo);             
 router.get("/allSolicitudesJefe",allSolicitudesJefe);           
 router.get("/allSolicitudesSec",allSolicitudesSec);
-router.put("/readyAlumno", readyAlumno);                        // {idSolicitud}
-router.put("/readySupervisor", readySupervisor);                // {idSolicitud}
+router.post("/readyAlumno", readyAlumno);                        // {idSolicitud}
+router.post("/readySupervisor", readySupervisor);                // {idSolicitud}
 
 
 module.exports = router;

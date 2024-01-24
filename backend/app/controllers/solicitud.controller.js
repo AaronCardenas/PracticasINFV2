@@ -67,8 +67,18 @@ const faseSolicitud = async (req, res) => {
       });
     }
 
+    if (solicitud.fase === 2) {
+
+      if (solicitud.supervisorCheck === false || solicitud.alumnoCheck === false) {
+        return res.status(409).json({
+          message: "Solicitud no se encuentra lista para avanzar de fase",
+        });
+      }
+      
+    }
+
     solicitud.fase = fase;
-    if (fase === "Rechazada") {
+    if (fase === 7) {
       solicitud.descripcionRechazo = rechazo;
     }
 
@@ -192,6 +202,12 @@ const readySupervisor = async (req, res) => {
       });
     }
 
+    if(solicitud.supervisorCheck == true){
+      return res.status(409).json({
+        message: "Solicitud ya fue marcada como lista por el supervisor",
+      });
+    }
+
     if(solicitud.fase == 2){
       solicitud.supervisorCheck = true;
       await solicitud.save();
@@ -217,9 +233,10 @@ const readySupervisor = async (req, res) => {
 
 const readyAlumno = async (req, res) => {
 
+  const { idSolicitud } = req.body;
+
   try {
 
-    const { idSolicitud }  = parseInt(req.body.idSolicitud);
     const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
     
     if (!solicitud) {
@@ -229,7 +246,7 @@ const readyAlumno = async (req, res) => {
     }
 
     if(solicitud.fase == 2){
-      solicitud.supervisorCheck = true;
+      solicitud.alumnoCheck = true;
       await solicitud.save();
 
       return res.status(200).json({

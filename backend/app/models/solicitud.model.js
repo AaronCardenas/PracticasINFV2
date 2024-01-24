@@ -44,11 +44,13 @@ module.exports = (sequelize, Sequelize) => {
           },
           supervisorCheck:{             // A usar para el cambio de fase.
             type: Sequelize.BOOLEAN,
-            allowNull: true
+            allowNull: true,
+            defaultValue: false
           },
           alumnoCheck:{                 // A usar para el cambio de fase.
             type: Sequelize.BOOLEAN,
-            allowNull: true
+            allowNull: true,
+            defaultValue: false
           },
           calificacion: {
             type: Sequelize.FLOAT,
