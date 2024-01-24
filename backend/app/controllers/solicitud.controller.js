@@ -192,12 +192,20 @@ const readySupervisor = async (req, res) => {
       });
     }
 
-    solicitud.supervisorCheck = true;
-    await solicitud.save();
+    if(solicitud.fase == 2){
+      solicitud.supervisorCheck = true;
+      await solicitud.save();
 
-    return res.status(200).json({
-      message: "Solicitud actualizada exitosamente",
-    });
+      return res.status(200).json({
+        message: "Solicitud actualizada exitosamente. Supervisor listo.",
+      });
+    }
+    else{
+      return res.status(409).json({
+        message: "Solicitud no se encuentra en la fase correcta",
+      });
+    }
+
   }
   catch (err) {
     return res.status(500).json({
@@ -209,23 +217,31 @@ const readySupervisor = async (req, res) => {
 
 const readyAlumno = async (req, res) => {
 
-  const { idSolicitud } = req.body;
-
   try {
-    const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
 
+    const { idSolicitud }  = parseInt(req.body.idSolicitud);
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
+    
     if (!solicitud) {
       return res.status(404).json({
         message: "Solicitud no encontrada",
       });
     }
 
-    solicitud.alumnoCheck = true;
-    await solicitud.save();
+    if(solicitud.fase == 2){
+      solicitud.supervisorCheck = true;
+      await solicitud.save();
 
-    return res.status(200).json({
-      message: "Solicitud actualizada exitosamente",
-    });
+      return res.status(200).json({
+        message: "Solicitud actualizada exitosamente. Alumno listo.",
+      });
+    }
+    else{
+      return res.status(409).json({
+        message: "Solicitud no se encuentra en la fase correcta",
+      });
+    }
+
   }
   catch (err) {
     return res.status(500).json({
@@ -233,6 +249,7 @@ const readyAlumno = async (req, res) => {
       err,
     });
   }
+
 };
 
 module.exports = {
@@ -243,6 +260,6 @@ module.exports = {
     allSolicitudesCoo,
     allSolicitudesJefe,
     allSolicitudesSec,
-    readySupervisor,
-    readyAlumno
+    readyAlumno,
+    readySupervisor
 };
