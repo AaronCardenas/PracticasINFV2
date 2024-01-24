@@ -1,5 +1,7 @@
 const db = require("../models");
-const tokenfunc =require('../helpers/token.helpers.js');
+const tokenfunc = require('../helpers/token.helpers.js');
+
+// TO-DO: Implementar seguridad de passwords, requiere implementacion en front y back. (Hashing, salting, etc.)
 
 const logout = async (req,res) => {
     const token = req.body.token.toString();
@@ -10,7 +12,6 @@ const logout = async (req,res) => {
         } catch (error) {
             return res.status(500).json(error);
         }
-    
     }
 }
 
@@ -41,7 +42,7 @@ const login = async (req, res) => {
   };
   
 
-const validarUsuario = async (req,res) => {
+const validarUsuario = async (req,res) => {             // Para que se usara a comparacion del login?
     const {token,tipoUsuario} = req.body;
     if (token){
         try {

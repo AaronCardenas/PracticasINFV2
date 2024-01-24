@@ -11,6 +11,7 @@ const utilsRouter = require('./utils.router.js');
 const usuarioRouter = require('./usuario.router.js');
 const empresaRouter = require('./empresa.router.js');
 const solicitudRouter = require('./solicitud.router.js');
+const supervisorRouter = require('./supervisor.router.js');
 
 module.exports = app => {
 
@@ -18,4 +19,5 @@ module.exports = app => {
     app.use('/usuario', usuarioRouter);
     app.use('/empresa', empresaRouter);
     app.use('/solicitud',solicitudRouter);
+    app.use('/supervisor',supervisorRouter);
 }

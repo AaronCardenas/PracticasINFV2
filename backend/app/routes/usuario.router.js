@@ -13,4 +13,5 @@ router.post("/crear",crearUsuario);                 // {rut, password, telefono,
 router.post("/verDatos",verDatosUsuario);           // {rut}
 router.post("/login",login);                        // {rut, password}
 router.post("/logout",logout);                      // {token}
+
 module.exports = router;
