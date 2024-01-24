@@ -34,6 +34,14 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.ENUM('Solicitada','Aceptada','Rechazada','Terminada', 'Calificada'),
             allowNull: true
           },
+          supervisorCheck:{             // A usar para el cambio de fase.
+            type: Sequelize.BOOLEAN,
+            allowNull: true
+          },
+          alumnoCheck:{                 // A usar para el cambio de fase.
+            type: Sequelize.BOOLEAN,
+            allowNull: true
+          },
           calificacion: {
             type: Sequelize.FLOAT,
             allowNull: true
