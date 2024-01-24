@@ -31,7 +31,15 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
           },
           fase: {
-            type: Sequelize.ENUM('Solicitada','Aceptada','Rechazada','Terminada', 'Calificada'),
+            type: Sequelize.INTEGER,
+            /*
+            1: Solicitada
+            2: Firmada // Carta de presentacion
+            3: Aceptada // Carta de aceptacion
+            4: Terminada // Lo demas
+            5: Calificada // ...
+            7: Rechazada (""""""hipotetico"""""")
+            */
             allowNull: true
           },
           supervisorCheck:{             // A usar para el cambio de fase.

@@ -85,6 +85,7 @@ const faseSolicitud = async (req, res) => {
   }
 };
 
+// Vista usuario
 const verSolicitudesUsuario = async (req, res)=>{
     try {        
         const {rut}= req.body;
@@ -107,7 +108,7 @@ const verSolicitudesUsuario = async (req, res)=>{
     }
 
 };
-
+// Vista usuario
 const verSolicitudesAceptadasU = async(req,res)=>{
     try {        
         const {rut}= req.body;
@@ -130,9 +131,42 @@ const verSolicitudesAceptadasU = async(req,res)=>{
     }
 };
 
-const allSolicitudes = async (req, res) => {
+// Vista coordinador
+const allSolicitudesCoo = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll();
+    const solicitudes = await db.solicitud.findAll({where:{fase:"2"}});
+    return res.status(200).json({
+      message: "Solicitudes listadas exitosamente",
+      solicitudes,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error al listar las solicitudes",
+      err,
+    });
+  }
+};
+
+// Vista Jefe de Carrera
+const allSolicitudesJefe = async (req, res) => {
+  try {
+    const solicitudes = await db.solicitud.findAll({where:{fase:"1"}});
+    return res.status(200).json({
+      message: "Solicitudes listadas exitosamente",
+      solicitudes,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error al listar las solicitudes",
+      err,
+    });
+  }
+};
+
+// Vista Secretaria // No implementada
+const allSolicitudesSec = async (req, res) => {
+  try {
+    const solicitudes = await db.solicitud.findAll({where:{fase:"3"}});
     return res.status(200).json({
       message: "Solicitudes listadas exitosamente",
       solicitudes,
@@ -150,5 +184,7 @@ module.exports = {
     faseSolicitud,
     verSolicitudesUsuario,
     verSolicitudesAceptadasU,
-    allSolicitudes
+    allSolicitudesCoo,
+    allSolicitudesJefe,
+    allSolicitudesSec
 };
