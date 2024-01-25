@@ -182,3 +182,29 @@ export const AllestSoli = async (token) => {
   }
 };
 
+
+
+export const extarerEmpresa = async (token, idSolicitud) => {
+  try {
+    const response = await fetch(`${backendUrl}/empresa/getEmpresa`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+        idSolicitud: idSolicitud
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data; // Puedes devolver la respuesta del servidor si es necesario
+    } else {
+      throw new Error("Error al actualizar datos del usuario");
+    }
+  } catch (error) {
+    console.error("Error en la solicitud al servidor:", error);
+    throw error; // Puedes manejar el error según tus necesidades
+  }
+};

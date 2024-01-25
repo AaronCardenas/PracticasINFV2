@@ -14,6 +14,7 @@ export default function Acp() {
   const searchParams = useSearchParams(); 
   const router= useRouter();
   const Token = searchParams.get('token');
+  const idSolicitud = searchParams.get('idSolicitud');
 
   const handleSelectionChange = (e) => {
     setValue(e.target.value);

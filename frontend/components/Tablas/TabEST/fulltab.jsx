@@ -138,7 +138,7 @@ export default function TAB({
               </DropdownTrigger>
               <DropdownMenu aria-label="opciones">
                 <DropdownItem onClick={() => handleDropdownSelect("Carta Presentacion")}>DW Carta Presentación</DropdownItem>
-                <DropdownItem href={`est/acp?token=${Token}?idSolicitud=${idSolicitud}`}>Carta de Aceptación</DropdownItem>
+                <DropdownItem href={`est/acp?idSolicitud=${user.idSolicitud}&token=${Token}`}>Carta de Aceptación</DropdownItem>
                 <DropdownItem onClick={() => handleDropdownSelect("Eliminar")}>Eliminar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
