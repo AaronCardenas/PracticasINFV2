@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) =>{
   const memoria= sequelize.define('memoria', {
     idmemoria: {
       type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true
     },
     idSolicitud: {

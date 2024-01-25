@@ -3,15 +3,16 @@ module.exports = (sequelize, Sequelize) => {
         idSolicitud: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            autoIncrement: true,  // Agrega esta línea para hacerlo autoincrementable
-            unique: true,        // Agrega esta línea para hacerlo único
+
+            autoIncrement: true,
+            allowNull: false
           },
           rut: {
-            type: Sequelize.STRING(15),
+            type: Sequelize.STRING(12),
             allowNull: true
           },
           rutEmpresa: {
-            type: Sequelize.STRING(15),
+            type: Sequelize.STRING(12),
             allowNull: true
           },
           fechaSolicitud: {
@@ -27,15 +28,33 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
           },
           descripcionRechazo: {
-            type: Sequelize.STRING(100),
+            type: Sequelize.STRING(170),
             allowNull: true
           },
           fase: {
             type: Sequelize.INTEGER,
+            /*
+            1: Solicitada
+            2: Firmada // Carta de presentacion
+            3: Aceptada // Carta de aceptacion
+            4: Terminada // Lo demas
+            5: Calificada // ...
+            7: Rechazada (""""""hipotetico"""""")
+            */
             allowNull: true
           },
+          supervisorCheck:{             // A usar para el cambio de fase.
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+          },
+          alumnoCheck:{                 // A usar para el cambio de fase.
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+          },
           calificacion: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.FLOAT,
             allowNull: true
           }        
     }, {

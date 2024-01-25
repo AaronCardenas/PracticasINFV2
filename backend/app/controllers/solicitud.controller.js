@@ -1,75 +1,293 @@
 const db = require("../models");
-const jwt = require("jsonwebtoken");
-const key = require("../config/const.js").JWT_SECRET;
-const bcrypt = require("bcrypt");
 
+
+const key = require('../config/const.js').JWT_SECRET;
+const jwt = require('jsonwebtoken');
+const Op = db.Sequelize.Op;
 
 const crearSolicitud = async (req, res) => {
-  const { token,datos } = req.body;
-  const { rut } = jwt.verify(token, key);
-  try {
-    const solicitud = await db.solicitud.create({
-      idSolicitud: datos.idSolicitud,
-      rut: rut,
-      rutsolicitud: datos.rutsolicitud,
-      fechaSolicitud: datos.fechaSolicitud,
-      numeroPractica: datos.numeroPractica,
-      fase: datos.fase,
+    const { rut, rutempresa, numeroPractica } = req.body;
+  
+    const solicitudCalificada = await db.solicitud.findOne({
+      where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
+    });
+  
+    const solicitudAceptada = await db.solicitud.findOne({
+        where: { rut, fase: 3, numeroPractica }, // En entero, la fase aceptada es 3
+      });
+  
+    const solicitudPracticaAnteriorNoTerminada = await db.solicitud.findOne({
+      where: { rut, fase: { [Op.not]: 5 }, numeroPractica: numeroPractica - 1 }, // Revisar
     });
 
+    if (solicitudCalificada) {
+      return res.status(409).json({
+        message: "Ya se ha realizado esta práctica profesional",
+      });
+    } else if (solicitudAceptada) {
+      return res.status(409).json({
+        message: "Ya se ha aceptado esta práctica profesional",
+      });
+    } else if (solicitudPracticaAnteriorNoTerminada) {
+      return res.status(409).json({
+        message: "Aun no se termina la práctica profesional anterior",
+      });
+    }else if(solicitudCreada){
+        return res.status(409).json({
+          message: "Ya se ha creado esta solicitud",
+        });
+      };
+  
+    try {
+      const solicitud = await db.solicitud.create({
+        rut,
+        rutEmpresa: rutempresa,
+        fechaSolicitud: new Date(),
+        numeroPractica,
+        fase: 1,
+      });
+  
+      return res.status(201).json({
+        message: "Solicitud creada exitosamente",
+        solicitud,
+      });
+    } catch (error) {
+      console.error('Error al crear solicitud:', error);
+      return res.status(500).json({
+        message: "Error interno del servidor al crear la solicitud",
+      });
+    }
+};
+
+const faseSolicitud = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const { fase, rechazo } = req.body;
+
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud: id } });
+    
+    if (!solicitud) {
+      return res.status(404).json({
+        message: "Solicitud no encontrada",
+      });
+    }
+
+    if (solicitud.fase === 2) {
+
+      if (solicitud.supervisorCheck === false || solicitud.alumnoCheck === false) {
+        return res.status(409).json({
+          message: "Solicitud no se encuentra lista para avanzar de fase",
+        });
+      }
+      
+    }
+
+    solicitud.fase = fase;
+    if (fase === 7) {
+      solicitud.descripcionRechazo = rechazo;
+    }
+
+    await solicitud.save();
+
     return res.status(200).json({
-      message: "Solicitud creado exitosamente.",
-      solicitud: solicitud,
+      message: "Solicitud cambiada de fase exitosamente",
     });
   } catch (err) {
     return res.status(500).json({
-      message: "Error al crear solicitud.",
-      error: err,
+      message: "Error interno del servidor",
+      err,
     });
   }
 };
 
-const allSolicitud = async (req, res) => {
-  try {
-      const solicitudes = await db.solicitud.findAll({
-          attributes: ['idSolicitud', 'rut', 'rutEmpresa', 'fechaSolicitud', 'numeroPractica', 'fase']
-      });
+// Vista usuario
+const verSolicitudesUsuario = async (req, res)=>{
+    try {        
+        const { token }= req.body;
+        console.log(token);
+        const usuario = await jwt.verify(token, key);
+        console.log(usuario.rut);
 
-      return res.status(200).json({
-          message: "Solicitudes listadas exitosamente.",
-          solicitudes: solicitudes
-      });
-  } catch (err) {
-      return res.status(500).json({
-          message: "Error al listar solicitudes.",
-          err
-      });
-  }
+        const solicitudes= await db.solicitud.findAll({where:{rut:usuario.rut}});
+        // const solicitudList =  solicitudes.map((solicitud)=>{return {
+        //     idSolicitud:solicitud.idSolicitud,
+        //     rutEmpresa:solicitud.rutEmpresa,
+        //     numeroPractica:solicitud.numeroPractica,
+        //     fase:solicitud.fase};
+        // }); 
+        return res.status(200).json({
+            message:"Solicitudes listadas exitosamente",
+            solicitudes
+        });
+    }
+    catch (err) {
+        return res.status(500).json({
+            message:"Error al listar las solicitudes",
+            err
+        })
+    }
+
 };
-const allestSolicitud = async (req, res) => {
-  const { token } = req.body;
-  const { rut } = jwt.verify(token, key);
+// Vista usuario
+const verSolicitudesAceptadasU = async(req,res)=>{
+    try {        
+        const {rut}= req.body;
+        const solicitudes= await db.solicitud.findAll({where:{rut:rut,fase:"Aceptada"}});
+        const solicitudList =  solicitudes.map((solicitud)=>{return {
+            idSolicitud:solicitud.idSolicitud,
+            numeroPractica:solicitud.numeroPractica,
+            fase:solicitud.fase};
+        }); 
+        return res.status(200).json({
+            message:"Solicitudes listadas exitosamente",
+            solicitudList
+        });
+    }
+    catch (err) {
+        return res.status(500).json({
+            message:"Error al listar las solicitudes",
+            err
+        })
+    }
+};
+
+// Vista coordinador
+const allSolicitudesCoo = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({
-      attributes: ['idSolicitud', 'rut', 'rutEmpresa', 'fechaSolicitud', 'numeroPractica', 'fase'],
-      where: {
-        rut: rut,
-      },
+    const solicitudes = await db.solicitud.findAll({where:{fase:"2"}});
+    return res.status(200).json({
+      message: "Solicitudes listadas exitosamente",
+      solicitudes,
     });
-
-      return res.status(200).json({
-          message: "Solicitudes listadas exitosamente.",
-          solicitudes: solicitudes
-      });
   } catch (err) {
-      return res.status(500).json({
-          message: "Error al listar solicitudes.",
-          err
-      });
+    return res.status(500).json({
+      message: "Error al listar las solicitudes",
+      err,
+    });
   }
 };
+
+// Vista Jefe de Carrera
+const allSolicitudesJefe = async (req, res) => {
+  try {
+    const solicitudes = await db.solicitud.findAll({where:{fase:"1"}});
+    return res.status(200).json({
+      message: "Solicitudes listadas exitosamente",
+      solicitudes,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error al listar las solicitudes",
+      err,
+    });
+  }
+};
+
+// Vista Secretaria // No implementada
+const allSolicitudesSec = async (req, res) => {
+  try {
+    const solicitudes = await db.solicitud.findAll({where:{fase:"3"}});
+    return res.status(200).json({
+      message: "Solicitudes listadas exitosamente",
+      solicitudes,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error al listar las solicitudes",
+      err,
+    });
+  }
+};
+
+const readySupervisor = async (req, res) => {
+
+  const { idSolicitud } = req.body;
+
+  try {
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
+
+    if (!solicitud) {
+      return res.status(404).json({
+        message: "Solicitud no encontrada",
+      });
+    }
+
+    if(solicitud.supervisorCheck == true){
+      return res.status(409).json({
+        message: "Solicitud ya fue marcada como lista por el supervisor",
+      });
+    }
+
+    if(solicitud.fase == 2){
+      solicitud.supervisorCheck = true;
+      await solicitud.save();
+
+      return res.status(200).json({
+        message: "Solicitud actualizada exitosamente. Supervisor listo.",
+      });
+    }
+    else{
+      return res.status(409).json({
+        message: "Solicitud no se encuentra en la fase correcta",
+      });
+    }
+
+  }
+  catch (err) {
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      err,
+    });
+  }
+};
+
+const readyAlumno = async (req, res) => {
+
+  const { idSolicitud } = req.body;
+
+  try {
+
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud } });
+    
+    if (!solicitud) {
+      return res.status(404).json({
+        message: "Solicitud no encontrada",
+      });
+    }
+
+    if(solicitud.fase == 2){
+      solicitud.alumnoCheck = true;
+      await solicitud.save();
+
+      return res.status(200).json({
+        message: "Solicitud actualizada exitosamente. Alumno listo.",
+      });
+    }
+    else{
+      return res.status(409).json({
+        message: "Solicitud no se encuentra en la fase correcta",
+      });
+    }
+
+  }
+  catch (err) {
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      err,
+    });
+  }
+
+};
+
 module.exports = {
-  crearSolicitud,
-  allSolicitud,
-  allestSolicitud
+    crearSolicitud,
+    faseSolicitud,
+    verSolicitudesUsuario,
+    verSolicitudesAceptadasU,
+    allSolicitudesCoo,
+    allSolicitudesJefe,
+    allSolicitudesSec,
+    readyAlumno,
+    readySupervisor
 };

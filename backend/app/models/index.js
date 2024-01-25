@@ -2,14 +2,14 @@ const values = require("../config/const.js");
 const Sequelize = require("sequelize");
 require('dotenv').config();
 
-const sequelize = new Sequelize("practica", "root", values.DB_PASSWORD, {
-  host: "localhost",
-  dialect: 'mysql',
+const sequelize = new Sequelize(values.DB_NAME, values.DB_USER, values.DB_PASSWORD, {
+  host: values.DB_HOST,
+  dialect: values.DB_DIALECT,
   pool: {
-    max: 20,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
+    max: values.DB_POOL_MAX,
+    min: values.DB_POOL_MIN,
+    acquire: values.DB_POOL_ACQUIRE,
+    idle: values.DB_POOL_IDLE
   }
 });
 

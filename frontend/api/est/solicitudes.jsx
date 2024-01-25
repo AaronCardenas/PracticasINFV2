@@ -46,7 +46,8 @@ export const PDF = async (Token, selectedEmpresaId, asignatura) => {
 
   // Realiza la solicitud a la API
   try {
-    console.log("Data", Data);
+
+    // console.log("Data", Data);
     const response = await fetch(`${backendUrl}/utils/unirDatos`, {
       method: "POST",
       headers: {
@@ -111,7 +112,9 @@ export const datosEst = async (token) => {
     token: token,
   };
   try {
-    const response = await fetch(`${backendUrl}/usuario/get`, {
+
+    const response = await fetch(`${backendUrl}/usuario/verDatos`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -161,7 +164,9 @@ export const AllestSoli = async (token) => {
     token: token,
   };
   try {
-    const response = await fetch(`${backendUrl}/solicitud/allestSolicitud`, {
+
+    const response = await fetch(`${backendUrl}/solicitud/listaSolicitudes`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -180,6 +185,7 @@ export const AllestSoli = async (token) => {
     console.error("Error de request", error);
     alert("Se produjo un error al intentar de nuevo mas tarde");
   }
+
 };
 
 

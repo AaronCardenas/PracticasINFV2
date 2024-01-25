@@ -1,13 +1,35 @@
 const router = require('express').Router();
 
-const { crearSolicitud,allSolicitud,allestSolicitud} = require('../controllers/solicitud.controller.js');
+
+const { 
+    faseSolicitud,
+    verSolicitudesUsuario,
+    verSolicitudesAceptadasU,
+    crearSolicitud,
+    allSolicitudesCoo,
+    allSolicitudesJefe,
+    allSolicitudesSec,
+    readyAlumno,
+    readySupervisor
+} = require('../controllers/solicitud.controller.js');
+
 
 //Ruta de prueba
 router.get("/",(req,res)=>{
     res.json({message:"Ruta de /solicitud/ funcionando"});
 });
-// Ruta de validacion de empresa                // DATOS JSON: 
-router.post("/crear",crearSolicitud);
-router.get("/all",allSolicitud);
-router.post("/allestSolicitud",allestSolicitud);
+
+
+// Ruta de validacion de usuario                                // DATOS JSON:
+router.post("/crear",crearSolicitud);                           // { rut, rutempresa, extension, numeroPractica }
+router.put("/:id",faseSolicitud);                               // {fase, descripcionRechazo (puede ser nulo)}
+router.post("/listaSolicitudes",verSolicitudesUsuario);         // {rut}
+router.post("/SolicitudesAceptadas",verSolicitudesAceptadasU);  // {rut}
+router.get("/allSolicitudesCoo",allSolicitudesCoo);             
+router.get("/allSolicitudesJefe",allSolicitudesJefe);           
+router.get("/allSolicitudesSec",allSolicitudesSec);
+router.post("/readyAlumno", readyAlumno);                        // {idSolicitud}
+router.post("/readySupervisor", readySupervisor);                // {idSolicitud}
+
+
 module.exports = router;
