@@ -85,13 +85,7 @@ export default function Est() {
             className={styles.nextEst}
             href={{ pathname: 'est/solicitud', query: `token=${Token}`}}
           >
-            <Button className={styles.botNextEst} variant='light'>
-              Nueva Solicitud
-            </Button>
           </NextLink>
-          <Button className={styles.botEst} variant='light'>
-            Mis Solicitud
-          </Button>
           <Button className={styles.botEst} variant='light'>
             Logout
           </Button>
@@ -115,11 +109,7 @@ export default function Est() {
                 </div>
               </div>
               <div className={styles.boxe22112}>
-                <NextLink className={styles.boxe221120} href='/acp'>
-                  <Button className={styles.botNextEst} variant='light'>
-                    Carta de aceptacion
-                  </Button>
-                </NextLink>
+                
                 <div className={styles.boxe221121}> Memorias </div>
               </div>
             </div>

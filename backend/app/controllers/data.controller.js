@@ -5,7 +5,7 @@ const { conversion } = require('./conversion.controller.js');
 
 
 exports.unirDatos = async (req,res) => {
-    const { token, rutEmpresa ,asignatura} = req.body;
+    const { token, rutEmpresa, asignatura} = req.body;
     const rutUsuario = jwt.verify(token, key).rut;
     const usuario = await db.usuario.findOne({where:{rut:rutUsuario}});
     const empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});

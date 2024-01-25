@@ -6,7 +6,13 @@ const jwt = require('jsonwebtoken');
 const Op = db.Sequelize.Op;
 
 const crearSolicitud = async (req, res) => {
-    const { rut, rutempresa, numeroPractica } = req.body;
+    const { token, datos } = req.body;
+
+    const { rut } = jwt.verify(token, key);
+
+    const numeroPractica = datos.numeroPractica;
+
+    console.log(datos);
   
     const solicitudCalificada = await db.solicitud.findOne({
       where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
@@ -32,18 +38,14 @@ const crearSolicitud = async (req, res) => {
       return res.status(409).json({
         message: "Aun no se termina la práctica profesional anterior",
       });
-    }else if(solicitudCreada){
-        return res.status(409).json({
-          message: "Ya se ha creado esta solicitud",
-        });
-      };
+    }
   
     try {
       const solicitud = await db.solicitud.create({
         rut,
-        rutEmpresa: rutempresa,
+        rutEmpresa: datos.rutEmpresa,
         fechaSolicitud: new Date(),
-        numeroPractica,
+        numeroPractica: datos.numeroPractica,
         fase: 1,
       });
   
@@ -73,7 +75,7 @@ const faseSolicitud = async (req, res) => {
       });
     }
 
-    if (solicitud.fase === 2) {
+    if (solicitud.fase === 3) {
 
       if (solicitud.supervisorCheck === false || solicitud.alumnoCheck === false) {
         return res.status(409).json({
@@ -155,7 +157,7 @@ const verSolicitudesAceptadasU = async(req,res)=>{
 // Vista coordinador
 const allSolicitudesCoo = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({where:{fase:"2"}});
+    const solicitudes = await db.solicitud.findAll({where:{fase:"3"}});
     return res.status(200).json({
       message: "Solicitudes listadas exitosamente",
       solicitudes,
@@ -171,7 +173,7 @@ const allSolicitudesCoo = async (req, res) => {
 // Vista Jefe de Carrera
 const allSolicitudesJefe = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({where:{fase:"1"}});
+    const solicitudes = await db.solicitud.findAll({where:{fase:"2"}});
     return res.status(200).json({
       message: "Solicitudes listadas exitosamente",
       solicitudes,
@@ -187,7 +189,7 @@ const allSolicitudesJefe = async (req, res) => {
 // Vista Secretaria // No implementada
 const allSolicitudesSec = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({where:{fase:"3"}});
+    const solicitudes = await db.solicitud.findAll({where:{fase:"1"}});
     return res.status(200).json({
       message: "Solicitudes listadas exitosamente",
       solicitudes,

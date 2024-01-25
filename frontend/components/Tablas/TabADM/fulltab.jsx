@@ -122,7 +122,6 @@ export default function TAB({
           // Suponiendo que "Pendiente" no requiere cambios en el backend
           break;
         case "Aceptar":
-          console.log(idSolicitud)
           actualizarFaseSolicitud(idSolicitud, "Aceptada");
           marcarComoAceptada(idSolicitud); // Esta es una función hipotética para el cambio visual
           break;

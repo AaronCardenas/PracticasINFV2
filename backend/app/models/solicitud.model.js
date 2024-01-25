@@ -35,10 +35,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             /*
             1: Solicitada
-            2: Firmada // Carta de presentacion
-            3: Aceptada // Carta de aceptacion
-            4: Terminada // Lo demas
-            5: Calificada // ...
+            2: Revisada
+            3: Firmada // Carta de aceptacion
+            4: Aceptada // Carta de presentacion
+            5: Terminada // Lo demas
+            6: Calificada // ...
             7: Rechazada (""""""hipotetico"""""")
             */
             allowNull: true

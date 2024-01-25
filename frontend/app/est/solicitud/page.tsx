@@ -15,7 +15,7 @@ export default function Soli() {
   const Token = searchParams.get("token");
   const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
   const [selectedRegionName, setSelectedRegionName] = useState(null);
-  const [asignatura, setAsignatura] = useState(null);
+  const [asignatura, setAsignatura] = useState({id: "1", nombre: "ICI-2413", carrera: "Ingenieria Civil Informatica" });
   const [isInputsDisabled, setIsInputsDisabled] = useState(false);
   const [sempresa, setSempresa] = useState(false);
 
@@ -51,7 +51,7 @@ export default function Soli() {
   };
 
   const handleAsignaturaChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setAsignatura(e.target.value);
   };
 
@@ -59,10 +59,10 @@ export default function Soli() {
     setSelectedRegionName(e.target.value);
   };
   const Solicitar = async () => {
+    console.log(asignatura.id);
     const datos={
-        idSolicitud:12,
         rutEmpresa: selectedEmpresaId,
-        numeroPractica: asignatura.id,
+        numeroPractica: 1,
         fase: 1
     };
     solicitudes(Token, datos);
@@ -191,8 +191,8 @@ export default function Soli() {
   };
   const dataempresa = [
     {
-      id: 969608006,
-      nombre: "GasValpo",
+      id: "78936330-7",
+      RazonSocial: "MacOnline",
       rurbo: "Awa",
     },
     {
@@ -313,14 +313,9 @@ export default function Soli() {
             className={styles.nextEst}
             href={{ pathname: "/solicitud", query: { token: "token" } }}
           >
-            <Button className={styles.botNextEst} variant="light">
-              Nueva Solicitud
-            </Button>
+
           </NextLink>
           <NextLink className={styles.nextEst} href="/est">
-            <Button className={styles.botNextEst} variant="light">
-              Mis Solicitud
-            </Button>
           </NextLink>
           <Button className={styles.botEst} variant="light">
             Logout
@@ -344,6 +339,7 @@ export default function Soli() {
                   labelPlacement="outside"
                   className={styles.selectSoli}
                   onChange={handleAsignaturaChange}
+                  
                 >
                   {Asignaturas.map((asignatura) => (
                     <SelectItem

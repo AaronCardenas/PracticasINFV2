@@ -21,6 +21,8 @@ import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { capitalize } from "./utils";
 import NextLink from 'next/link';
+import { PDF } from "../../../api/est/solicitudes.jsx";
+
 export default function TAB({
   columns,
   datos,
@@ -101,8 +103,9 @@ export default function TAB({
     const handleDropdownSelect = (selectedOption) => {
       switch (selectedOption) {
 
-        case "Carta Presentacion ":
-          // Lógica para la opción Pendiente
+        case "Carta Presentacion":
+        
+          PDF(Token, user.rutEmpresa, user.numeroPractica);
           break;
         case "Carta Aceptacion":
           // Lógica para la opción Aceptar

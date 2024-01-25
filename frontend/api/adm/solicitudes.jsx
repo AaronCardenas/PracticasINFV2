@@ -2,7 +2,7 @@ import { backendUrl } from "../config";
 
 export const AllSoli = async () => {
   try {
-    const response = await fetch(`${backendUrl}/solicitud/all`, {
+    const response = await fetch(`${backendUrl}/solicitud/AllSolicitudesSec`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const actualizarFaseSolicitud = async (idSolicitud, nuevaFase, rechazo) =
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({ nuevaFase: nuevaFase, rechazo: rechazo }),
+      body: JSON.stringify({ fase: nuevaFase, rechazo: rechazo }),
 
     });
 
