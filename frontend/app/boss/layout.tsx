@@ -4,5 +4,5 @@ export default function BossLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <section>{children}</section>;
+  return <section id="secctionadm">{children}</section>;
 }

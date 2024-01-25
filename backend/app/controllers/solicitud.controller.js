@@ -3,7 +3,7 @@ const db = require("../models");
 const Op = db.Sequelize.Op;
 
 const crearSolicitud = async (req, res) => {
-    const { rut, rutempresa, extension, numeroPractica } = req.body;
+    const { rut, rutempresa, numeroPractica } = req.body;
   
     const solicitudCalificada = await db.solicitud.findOne({
       where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
@@ -16,9 +16,7 @@ const crearSolicitud = async (req, res) => {
     const solicitudPracticaAnteriorNoTerminada = await db.solicitud.findOne({
       where: { rut, fase: { [Op.not]: 5 }, numeroPractica: numeroPractica - 1 }, // Revisar
     });
-    const solicitudCreada = await db.solicitud.findOne({
-        where: { rut, rutEmpresa: rutempresa, extension, numeroPractica },
-      });
+
     if (solicitudCalificada) {
       return res.status(409).json({
         message: "Ya se ha realizado esta práctica profesional",
@@ -42,7 +40,6 @@ const crearSolicitud = async (req, res) => {
         rut,
         rutEmpresa: rutempresa,
         fechaSolicitud: new Date(),
-        extension,
         numeroPractica,
         fase: 1,
       });
