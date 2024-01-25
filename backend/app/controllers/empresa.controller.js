@@ -1,4 +1,5 @@
 const db = require("../models");
+const Op = db.Sequelize.Op;
 const jwt = require('jsonwebtoken');
 const key = require('../config/const.js').JWT_SECRET;
 
@@ -35,19 +36,31 @@ const crearEmpresa = async (req,res) => {
     const { rutEmpresa, razonSocial, ciudad, region, direccion, rubro } = req.body;
 
     try{
-        const empresa = await db.empresa.create({
-            rutEmpresa: rutEmpresa,
-            razonSocial: razonSocial,
-            ciudad: ciudad,
-            region: region,
-            direccion: direccion,
-            rubro: rubro
-        });
 
-        return res.status(200).json({
-            message:"Empresa creada exitosamente.",
-            empresa
-        });
+        empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+        console.log(empresa);
+
+        if (empresa){
+            return res.status(409).json({                           // 409: Revisar codigo HTTP. Sharp 🤨 
+                message:"La empresa ya existe."
+            });
+        }
+        else{
+
+            const empresa = await db.empresa.create({
+                rutEmpresa,
+                razonSocial,
+                ciudad,
+                region,
+                direccion,
+                rubro
+            });
+
+            return res.status(200).json({
+                message:"Empresa creada exitosamente.",
+                empresa
+            });
+        }
     } catch(err){
         return res.status(500).json({
             message:"Error al crear empresa.",
@@ -76,10 +89,76 @@ const listarEmpresas = async (req,res) => {
             err
         });
     }
-}
+};
+
+const buscarEmpresas = async (req,res) => {
+
+    const razonSocial = req.query.razonSocial;
+    console.log(razonSocial);
+
+    try{
+
+        const empresas = await db.empresa.findAll({
+            where: { razonSocial: {
+                [Op.like]: `%${razonSocial}%`
+            } }
+        });
+
+        if(empresas.length == 0){
+            return res.status(404).json({
+                message:"No se encontraron empresas."
+            });
+        }
+
+        return res.status(200).json({
+            message:"Empresas encontradas.",
+            empresas
+        });
+    } catch(err){
+        return res.status(500).json({
+            message:"Error al buscar empresas.",
+            err
+        });
+    }
+};
+
+const getEmpresa = async (req,res) => {
+
+    const { idSolicitud } = req.body;
+
+
+    try{
+
+        const solicitud = await db.solicitud.findOne({where:{idSolicitud:idSolicitud}});
+
+        const rutEmpresa = solicitud.rutEmpresa; 
+
+        const empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+
+        if(!empresa){
+            return res.status(404).json({
+                message:"La empresa no existe."
+            });
+        }
+
+        return res.status(200).json({
+            message:"Empresa encontrada.",
+            empresa
+        });
+    } catch(err){
+        return res.status(500).json({
+            message:"Error al buscar empresa.",
+            err
+        });
+    }
+};
+
+
 
 module.exports = {
     validarEmpresa,
     crearEmpresa,
-    listarEmpresas
+    listarEmpresas,
+    buscarEmpresas,
+    getEmpresa
 };

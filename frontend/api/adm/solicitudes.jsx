@@ -24,12 +24,14 @@ export const AllSoli = async () => {
 
 export const actualizarFaseSolicitud = async (idSolicitud, nuevaFase, rechazo) => {
   try {
-    const response = await fetch(`${backendUrl}/solicitud/fase`, {
+    const response = await fetch(`${backendUrl}/solicitud/?${idSolicitud}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ idSolicitud: idSolicitud, nuevaFase: nuevaFase, rechazo: rechazo }),
+
+      body: JSON.stringify({ nuevaFase: nuevaFase, rechazo: rechazo }),
+
     });
 
     if (!response.ok) {

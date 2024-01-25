@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize)=> {
       primaryKey: true
     },
     rutEmpresa: {
-      type: Sequelize.STRING(15),
+      type: Sequelize.STRING(12),
       allowNull: true,
     },
     nombre: {
@@ -21,11 +21,11 @@ module.exports = (sequelize, Sequelize)=> {
       allowNull: true
     },
     cargoAdministrativo: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(50),
       allowNull: true
     },
     titulocargo: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(50),
       allowNull: true
     }
   }, {
@@ -35,3 +35,5 @@ module.exports = (sequelize, Sequelize)=> {
   });
   return supervisor;
 };
+
+// Signup con correo, rutEmpresa

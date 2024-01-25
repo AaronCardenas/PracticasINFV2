@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const usuario =sequelize.define('usuario',{
     rut: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.STRING(12),
         primaryKey: true
       },
       password: {
@@ -13,19 +13,19 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: true
       },
       nombre1: {
-        type: Sequelize.STRING(45),
+        type: Sequelize.STRING(50),
         allowNull: true
       },
       nombre2: {
-        type: Sequelize.STRING(45),
+        type: Sequelize.STRING(50),
         allowNull: true
       },
       apellido1: {
-        type: Sequelize.STRING(45),
+        type: Sequelize.STRING(50),
         allowNull: true
       },
       apellido2: {
-        type: Sequelize.STRING(45),
+        type: Sequelize.STRING(50),
         allowNull: true
       },
       telefono: {
@@ -37,7 +37,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: true
       },
       direccion: {
-        type: Sequelize.STRING(45),
+        type: Sequelize.STRING(170),
         allowNull: true
       },
       planEstudio: {
