@@ -101,7 +101,12 @@ const faseSolicitud = async (req, res) => {
 // Vista usuario
 const verSolicitudesUsuario = async (req, res)=>{
     try {        
-        const {rut}= req.body;
+        const { token }= req.body;
+
+        const usuario = await jwt.verify(token, key);
+
+        rut = usuario.rut;
+
         const solicitudes= await db.solicitud.findAll({where:{rut:rut}});
         const solicitudList =  solicitudes.map((solicitud)=>{return {
             idSolicitud:solicitud.idSolicitud,

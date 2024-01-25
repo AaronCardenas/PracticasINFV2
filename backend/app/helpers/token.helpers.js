@@ -43,7 +43,7 @@ async function blacklist(token) {
 
 async function validarToken(token, tipoUsuario) {
     try {
-        const usuario=await jwt.verify(token, key);
+        const usuario = await jwt.verify(token, key);
         if (!tokenBlacklist.has(token) && usuario.tipoUsuario == tipoUsuario) {
             return {
                 message: "Usuario validado exitosamente.",
