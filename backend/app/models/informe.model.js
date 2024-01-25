@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) =>{
   const informe= sequelize.define('informe evaluacion', {
     idInforme: {
       type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true
     },
     idSolicitud: {

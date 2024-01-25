@@ -1,118 +1,83 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Image,
-} from "@nextui-org/react";
-import { useRouter } from "next/router"; // Importa el router de Next.js
+import React, { useState, useEffect } from "react";
+import { Button, Image } from "@nextui-org/react";
+import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
 import styles from "../../styles/styleop.module.css";
 import { motion } from "framer-motion";
 import Listar from "../../components/Tablas/tab";
 import NextLink from "next/link";
+import { AllSoli } from "../../api/adm/solicitudes";
+import TAB from "../../components/Tablas/TabADM/fulltab";
+
 export default function Admin() {
   //ejemplo de los datos
-  const data = [
-    {
-      id: 1,
-      nombre: 'Juan',
-      edad: 25,
-      fecha: '2023-01-01',
-      estado: 'Pendiente',
-    },
-    {
-      id: 2,
-      nombre: 'María',
-      edad: 30,
-      fecha: '2023-01-02',
-      estado: 'Pendiente',
-    },
-    {
-      id: 3,
-      nombre: 'Josería',
-      edad: 30,
-      fecha: '2023-01-02',
-      estado: 'Pendiente',
-    },
-    {
-      id: 4,
-      nombre: 'BBría',
-      edad: 30,
-      fecha: '2023-01-02',
-      estado: 'Pendiente',
-    },
-    {
-      id: 5,
-      nombre: 'AAAría',
-      edad: 30,
-      fecha: '2023-01-02',
-      estado: 'Pendiente',
-    },
+  const [data, setData] = useState([]);
+  const statusOptions = [
+    { name: "Presentacion", uid: "1" },
+    { name: "Aceptacion", uid: "2" },
   ];
-
-  const columns = {
-    id: 'Rut',
-    nombre: 'Nombre',
-    edad: 'Edad',
-    fecha: 'Fecha',
-    estado: 'Estado',
+  const columns = [
+    { name: "ID", uid: "idSolicitud", sortable: true },
+    { name: "RUT Estudiante", uid: "rut", sortable: true },
+    { name: "RUT Empresa", uid: "rutEmpresa", sortable: true },
+    { name: "Fecha", uid: "fechaSolicitud", sortable: true },
+    { name: "N Practica", uid: "numeroPractica", sortable: true },
+    { name: "Estado", uid: "fase", sortable: false },
+    { name: "Acciones", uid: "acciones", sortable: false },
+  ];
+  const INITIAL_VISIBLE_COLUMNS = [
+    "idSolicitud",
+    "rut",
+    "rutEmpresa",
+    "numeroPractica",
+    "acciones",
+  ];
+  const statusColorMap = {
+    active: "success",
+    paused: "danger",
+    vacation: "warning",
   };
-  
-  const initialModifications = data.reduce((acc, item) => {
-    acc[item.id] = 'Pendiente';
-    return acc;
-  }, {});
-  const [modifications, setModifications] = useState(initialModifications);
-
-  const Aprobar = (id) => {
-    const newData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, estado: 'Aprobado' };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const rawData = await AllSoli();
+        const transformedData = rawData.map((item) => ({
+          idSolicitud: item.idSolicitud,
+          rut: item.rut,
+          rutEmpresa: item.rutEmpresa,
+          fechaSolicitud: item.fechaSolicitud,
+          numeroPractica: item.numeroPractica,
+          fase: item.fase,
+        }));
+        setData(transformedData);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
       }
-      return item;
-    });
-    setModifications((prevModifications) => ({
-      ...prevModifications,
-      [id]: 'Aprobado',
-    }));
-  };
-
-  const Rechazar = (id) => {
-    const newData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, estado: 'Rechazado' };
-      }
-      return item;
-    });
-    setModifications((prevModifications) => ({
-      ...prevModifications,
-      [id]: 'Rechazado',
-    }));
-  };
-
-  const Pendiente = (id) => {
-    const newData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, estado: 'Pendiente' };
-      }
-      return item;
-    });
-    setModifications((prevModifications) => ({
-      ...prevModifications,
-      [id]: 'Pendiente',
-    }));
-  };
-  const Guardar = () => {
-    const pendientes = Object.entries(modifications)
-      .filter(([id, estado]) => estado != 'Pendiente')
-      .map(([id]) => id);
-    const datamod = data.filter((item) => pendientes.includes(String(item.id)));
-    console.log("datos a modificar:", datamod);
-  };
+    };
+    fetchData();
+    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
   return (
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
-        <NextLink href="https://informatica.uv.cl/"><Image radius="none" src='../UV.svg' alt="Descripción del SVG" width={'100%'} height={"100%"} /></NextLink>
-        <div className={styles.boxc11}>Icono Plataforma</div>
+        <NextLink href="https://informatica.uv.cl/" className={styles.boxc11}>
+          
+          <Image
+            radius="none"
+            src="../UV.svg"
+            alt="Icono UV"
+            height={"50%"}
+          />
+          <Image
+            id="logoPracticas"
+            radius="none"
+            src="../PracticasUV2.svg"
+            alt="Icono de la plataforma"
+            height={"50%"}
+            width={"60%"}
+          />
+        </NextLink>
         <div className={styles.boxe12}>
           <Button className={styles.botones}>boton1</Button>
           <Button className={styles.botones}>boton1</Button>
@@ -123,14 +88,16 @@ export default function Admin() {
       <div className={styles.boxp20}>
         <div className={styles.boxp21}>ICONOUSER</div>
         <div className={styles.boxp22}>
-          <div className={styles.boxp220}>Titulos1</div>
+          <div className={styles.boxp220}>Panel de administración</div>
           <div className={styles.boxp221}>
-            <div className={styles.boxp2210}>
-              <p>Search</p>
-              <p>Boton</p>
-            </div>
             <div className={styles.boxp2211}>
-              <Listar columns={columns} data={data} Modificaciones={modifications} Aprobar={Aprobar} Rechazar={Rechazar} Pendiente={Pendiente} Guardar={Guardar}/>
+              <TAB
+                columns={columns}
+                datos={data}
+                statusOptions={statusOptions}
+                INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
+                statusColorMap={statusColorMap}
+              />
             </div>
           </div>
         </div>

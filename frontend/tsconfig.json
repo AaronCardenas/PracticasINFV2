@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/EyeFilledIcon.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/EyeFilledIcon.jsx", "components/Tablas/Tabgod/fulltab.jsx", "components/Tablas/datosest.tsx"],
   "exclude": ["node_modules"]
 }

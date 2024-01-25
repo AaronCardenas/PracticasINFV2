@@ -1,43 +1,57 @@
 const db = require("../models");
-const jwt = require('jsonwebtoken');
+const tokenfunc = require('../helpers/token.helpers.js');
 const key = require('../config/const.js').JWT_SECRET;
-const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+// TO-DO: Implementar seguridad de passwords, requiere implementacion en front y back. (Hashing, salting, etc.)
 
-const validarUsuario = async (req,res,next) => {
-
-    const {rut, password} = req.body;
-
-    const usuario = await db.usuario.findOne({where:{rut:rut}});
-    
-    // No existe usuario
-    if(!usuario){
-
-        return res.status(404).json({
-            message:"Clave o RUT incorrectos (No existe)."
-        });
-    // Caso usuario existe
-    }else{
-        // Password correcto
-        if(usuario.password === password){
-
-            // Generacion del token
-            const token = jwt.sign({rut: rut, tipoUsuario: usuario.tipoUsuario}, key, {expiresIn: '1h' });
-            
-            // Envio de respuesta
-            res.status(200).json({
-                message:"Usuario validado exitosamente.",
-                token:token
-            });
-
-        // Despues buscar por tipoUsuario 
+const logout = async (req,res) => {
+    const token = req.body.token.toString();
+    if (token){
+        try {
+            const response = await tokenfunc.blacklist(token);
+            return res.status(200).json(response);
+        } catch (error) {
+            return res.status(500).json(error);
         }
-        // Password incorrecto
-        else{
+    }
+}
 
-            res.status(404).json({
-                message:"Clave o RUT incorrectos. (password incorrecto)"
-            });
+const login = async (req, res) => {
+    try {
+      const { rut, password } = req.body;
+  
+      const usuario = await db.usuario.findOne({ where: { rut: rut } });
+  
+      if (!usuario) {
+        return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
+      }
+  
+      const passwordCorrecto = usuario.password === password;
+  
+      if (passwordCorrecto) {
+        const token = await tokenfunc.generateToken(usuario);
+        return res.status(200).json({
+          message: "Usuario validado exitosamente.",
+          token: token
+        });
+      } else {
+        return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Error interno del servidor." });
+    }
+  };
+  
+
+const validarUsuario = async (req,res) => {             // Para que se usara a comparacion del login?
+    const {token,tipoUsuario} = req.body;
+    if (token){
+        try {
+            const validartoken = await tokenfunc.validarToken(token,tipoUsuario);
+            return res.status(200).json(validartoken);
+        } catch (error) {
+            return res.status(500).json(validarUsuario);
         }
     }
 };
@@ -86,8 +100,29 @@ const crearUsuario = async (req,res) => {
     
 };
 
+const verDatosUsuario = async (req,res) => {
+    const {token} = req.body;
+    const {rut} = await jwt.verify(token, key);
+    const usuario = await db.usuario.findOne({where:{rut:rut}});
+    //console.log(usuario);
+    if(!usuario){
+        return res.status(404).json({
+            message:"Usuario no encontrado."
+        });
+    }
+
+    return res.status(200).json({
+        message:"Usuario encontrado.",
+        usuario:usuario
+    });
+};
+
+
 
 module.exports = {
     validarUsuario,
-    crearUsuario
+    crearUsuario,
+    verDatosUsuario,
+    login,
+    logout
 };

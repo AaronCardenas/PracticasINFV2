@@ -35,14 +35,14 @@ export default function Login() {
     try {
       setIsLoading(true);
 
-      const response = await fetch(`${backendUrl}/usuario/validar`, {
+      const response = await fetch(`${backendUrl}/usuario/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
-      console.log(userData);
+      // console.log(userData);
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
