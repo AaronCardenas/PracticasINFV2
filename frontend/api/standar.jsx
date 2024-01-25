@@ -1,7 +1,7 @@
 import { backendUrl} from "./config";
 export const funcionlogin = async (rut, password,userType, isValid,setIsLoading,router) => {
     if ( !rut.raw || !password) {
-      console.log(rut.raw);
+
 
       alert("Rut o contraseña inválidos");
       return; // Evitar iniciar sesión si el RUT no es válido

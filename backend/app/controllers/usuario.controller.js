@@ -1,5 +1,7 @@
 const db = require("../models");
 const tokenfunc = require('../helpers/token.helpers.js');
+const key = require('../config/const.js').JWT_SECRET;
+const jwt = require('jsonwebtoken');
 
 // TO-DO: Implementar seguridad de passwords, requiere implementacion en front y back. (Hashing, salting, etc.)
 
@@ -99,11 +101,10 @@ const crearUsuario = async (req,res) => {
 };
 
 const verDatosUsuario = async (req,res) => {
-
-    const {rut} = req.body;
-
+    const {token} = req.body;
+    const {rut} = await jwt.verify(token, key);
     const usuario = await db.usuario.findOne({where:{rut:rut}});
-
+    //console.log(usuario);
     if(!usuario){
         return res.status(404).json({
             message:"Usuario no encontrado."

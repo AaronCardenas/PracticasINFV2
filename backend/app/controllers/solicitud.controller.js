@@ -1,5 +1,7 @@
 const db = require("../models");
 
+const key = require('../config/const.js').JWT_SECRET;
+const jwt = require('jsonwebtoken');
 const Op = db.Sequelize.Op;
 
 const crearSolicitud = async (req, res) => {
@@ -102,20 +104,20 @@ const faseSolicitud = async (req, res) => {
 const verSolicitudesUsuario = async (req, res)=>{
     try {        
         const { token }= req.body;
-
+        console.log(token);
         const usuario = await jwt.verify(token, key);
+        console.log(usuario.rut);
 
-        rut = usuario.rut;
-
-        const solicitudes= await db.solicitud.findAll({where:{rut:rut}});
-        const solicitudList =  solicitudes.map((solicitud)=>{return {
-            idSolicitud:solicitud.idSolicitud,
-            numeroPractica:solicitud.numeroPractica,
-            fase:solicitud.fase};
-        }); 
+        const solicitudes= await db.solicitud.findAll({where:{rut:usuario.rut}});
+        // const solicitudList =  solicitudes.map((solicitud)=>{return {
+        //     idSolicitud:solicitud.idSolicitud,
+        //     rutEmpresa:solicitud.rutEmpresa,
+        //     numeroPractica:solicitud.numeroPractica,
+        //     fase:solicitud.fase};
+        // }); 
         return res.status(200).json({
             message:"Solicitudes listadas exitosamente",
-            solicitudList
+            solicitudes
         });
     }
     catch (err) {

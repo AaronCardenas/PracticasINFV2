@@ -42,7 +42,7 @@ export default function Login() {
         },
         body: JSON.stringify(userData),
       });
-      console.log(userData);
+      // console.log(userData);
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
