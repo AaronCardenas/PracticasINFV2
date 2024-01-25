@@ -10,6 +10,7 @@ export const funcionlogin = async (rut, password,userType, isValid,setIsLoading,
       password: password
     };
     // Realiza la solicitud a la API
+    console.log(userData);
 
     try {
       setIsLoading(true);

@@ -1,5 +1,5 @@
 import styles from "../../styles/styleop.module.css";
-import { Navbar } from "../../components/navbar";
+import { Navbar } from "../../../components/navbar";
 export default function AcpLayout({
 	children,
 }: {

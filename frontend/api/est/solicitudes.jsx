@@ -181,3 +181,4 @@ export const AllestSoli = async (token) => {
     alert("Se produjo un error al intentar de nuevo mas tarde");
   }
 };
+

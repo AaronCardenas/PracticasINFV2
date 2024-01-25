@@ -100,13 +100,13 @@ export default function TAB({
     };
     const handleDropdownSelect = (selectedOption) => {
       switch (selectedOption) {
-        case "Pendiente":
+        case "Carta Presentacion ":
           // Lógica para la opción Pendiente
           break;
-        case "Aceptar":
+        case "Carta Aceptacion":
           // Lógica para la opción Aceptar
           break;
-        case "Rechazar":
+        case "Eliminar":
           // Lógica para la opción Rechazar
           break;
         default:
@@ -136,10 +136,10 @@ export default function TAB({
                   <VerticalDotsIcon className="text-default-400" />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem onSelect={() => handleDropdownSelect("Aceptar")}>Aceptar</DropdownItem>
-                <DropdownItem onSelect={() => handleDropdownSelect("Pendiente")}>Pendiente</DropdownItem>
-                <DropdownItem onSelect={() => handleDropdownSelect("Rechazar")}>Rechazar</DropdownItem>
+              <DropdownMenu aria-label="opciones">
+                <DropdownItem onClick={() => handleDropdownSelect("Carta Presentacion")}>DW Carta Presentación</DropdownItem>
+                <DropdownItem href={`est/acp?token=${Token}?idSolicitud=${idSolicitud}`}>Carta de Aceptación</DropdownItem>
+                <DropdownItem onClick={() => handleDropdownSelect("Eliminar")}>Eliminar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>

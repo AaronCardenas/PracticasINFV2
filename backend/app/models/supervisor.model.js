@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize)=> {
       primaryKey: true
     },
     rutEmpresa: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(15),
       allowNull: true,
     },
     nombre: {

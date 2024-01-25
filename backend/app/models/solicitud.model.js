@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
           },
           rutEmpresa: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING(15),
             allowNull: true
           },
           fechaSolicitud: {
