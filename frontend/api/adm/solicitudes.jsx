@@ -29,7 +29,9 @@ export const actualizarFaseSolicitud = async (idSolicitud, nuevaFase, rechazo) =
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({ nuevaFase: nuevaFase, rechazo: rechazo }),
+
     });
 
     if (!response.ok) {

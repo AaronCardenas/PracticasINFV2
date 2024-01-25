@@ -46,6 +46,7 @@ export const PDF = async (Token, selectedEmpresaId, asignatura) => {
 
   // Realiza la solicitud a la API
   try {
+
     // console.log("Data", Data);
     const response = await fetch(`${backendUrl}/utils/unirDatos`, {
       method: "POST",
@@ -111,7 +112,9 @@ export const datosEst = async (token) => {
     token: token,
   };
   try {
+
     const response = await fetch(`${backendUrl}/usuario/verDatos`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -161,7 +164,9 @@ export const AllestSoli = async (token) => {
     token: token,
   };
   try {
+
     const response = await fetch(`${backendUrl}/solicitud/listaSolicitudes`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -179,5 +184,33 @@ export const AllestSoli = async (token) => {
     // Maneja errores de red o de servidor
     console.error("Error de request", error);
     alert("Se produjo un error al intentar de nuevo mas tarde");
+  }
+
+};
+
+
+
+export const extarerEmpresa = async (token, idSolicitud) => {
+  try {
+    const response = await fetch(`${backendUrl}/empresa/getEmpresa`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+        idSolicitud: idSolicitud
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data; // Puedes devolver la respuesta del servidor si es necesario
+    } else {
+      throw new Error("Error al actualizar datos del usuario");
+    }
+  } catch (error) {
+    console.error("Error en la solicitud al servidor:", error);
+    throw error; // Puedes manejar el error según tus necesidades
   }
 };

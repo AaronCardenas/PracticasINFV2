@@ -1,5 +1,6 @@
 const db = require("../models");
 
+
 const key = require('../config/const.js').JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const Op = db.Sequelize.Op;

@@ -11,5 +11,5 @@ router.get("/",(req,res)=>{
 // Ruta de conversion                               // DATOS JSON:
 router.post("/conversion",conversion);              // {count, razonSocial, direccion, region, rut, semestre, horas, numeroPractica, nombre1, nombre2, apellido1, apellido2}
 
-router.post("/unirDatos",unirDatos);              // {rutUsuario, rutEmpresa}
+router.post("/unirDatos",unirDatos);              // {rutUsuario, rutEmpresa, asignatura}
 module.exports = router;

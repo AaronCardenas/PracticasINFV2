@@ -2,15 +2,19 @@
 import React, { useState, useEffect } from "react";
 import { Button, Select, SelectItem, Input, Image} from "@nextui-org/react";
 import NextLink from "next/link";
-import { useRouter } from "next/router"; // Importa el router de Next.js
-import styles from "../../styles/styleop.module.css";
-import { motion } from "framer-motion";
-import Listar from "../../components/Tablas/tabla";
-import Datosest from "../../components/Tablas/datosest";
-import Date from "../../components/datepicker";
-import TodoList from "../../components/tareas";
+import { useRouter, useSearchParams } from 'next/navigation';
+import styles from "../../../styles/styleop.module.css";
+import Datosest from "@/components/Tablas/datosest";
+
+import Date from "../../../components/datepicker";
+import TodoList from "../../../components/tareas";
 export default function Acp() {
   const [value, setValue] = React.useState("");
+
+  const searchParams = useSearchParams(); 
+  const router= useRouter();
+  const Token = searchParams.get('token');
+  const idSolicitud = searchParams.get('idSolicitud');
 
   const handleSelectionChange = (e) => {
     setValue(e.target.value);
@@ -312,7 +316,7 @@ export default function Acp() {
           </div>
           <div className={styles.boxe221soli}>
             <div className={styles.boxe2210soli}>
-              <Datosest />
+             <Datosest token={Token}/>
             </div>
             <NextLink className={styles.boxe2211soli} href="https://informatica.uv.cl/">
                 Universidad de Valparaiso

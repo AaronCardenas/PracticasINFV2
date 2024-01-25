@@ -7,6 +7,7 @@ import { useRut } from "react-rut-formatter";
 import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
 import styles from '../../styles/styleop.module.css';
 import { motion } from "framer-motion";
+import {funcionlogin} from '../../api/standar';
 export default function Login() {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -17,6 +18,7 @@ export default function Login() {
   const router = useRouter();
   // seteo de userType
   const searchParams = useSearchParams();
+
   const userType = searchParams.get("userType");
   const backendUrl = "http://localhost:3000"; //cambiar al .env en un futuro
   const funcionlogin = async () => {
@@ -65,7 +67,7 @@ export default function Login() {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       // Si se presiona Enter, realiza la misma función que el botón Ingresar
-      funcionlogin();
+      funcionlogin(rut, password,userType,isValid,setIsLoading,router);
     }
   };
   const reg=()=>{
