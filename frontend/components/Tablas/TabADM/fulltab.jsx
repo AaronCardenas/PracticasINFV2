@@ -97,7 +97,7 @@ export default function TAB({
       document.execCommand('copy');
       document.body.removeChild(tempInput);
     };
-    const handleDropdownSelect = (selectedOption) => {
+    /*const handleDropdownSelect = (selectedOption) => {
       switch (selectedOption) {
         case "Pendiente":
           // Lógica para la opción Pendiente
@@ -112,7 +112,37 @@ export default function TAB({
           // Otras opciones
           break;
       }
+    };*/
+    const handleDropdownSelect = (selectedOption, idSolicitud) => {
+      console.log("Opción seleccionada:", selectedOption, "ID de Solicitud:", idSolicitud);
+
+      switch (selectedOption) {
+        case "Pendiente":
+          // Lógica para la opción Pendiente
+          // Suponiendo que "Pendiente" no requiere cambios en el backend
+          break;
+        case "Aceptar":
+          console.log(idSolicitud)
+          actualizarFaseSolicitud(idSolicitud, "Aceptada");
+          marcarComoAceptada(idSolicitud); // Esta es una función hipotética para el cambio visual
+          break;
+        case "Rechazar":
+          // Lógica para la opción Rechazar
+          const rechazo = prompt("Por favor, ingresa la razón del rechazo:");
+          if (rechazo) {
+            actualizarFaseSolicitud(idSolicitud, "Rechazada", rechazo); // Asegúrate de usar el valor correcto para la fase
+          }
+          break;
+        default:
+          // Otras opciones
+          break;
+      }
     };
+    const click = () => {
+      alert("cualquier wea.....")
+    } ;
+
+    
     switch (columnKey) {
       case "idSolicitud":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
@@ -135,14 +165,16 @@ export default function TAB({
                   <VerticalDotsIcon className="text-default-400" />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem onSelect={() => handleDropdownSelect("Aceptar")}>Aceptar</DropdownItem>
-                <DropdownItem onSelect={() => handleDropdownSelect("Pendiente")}>Pendiente</DropdownItem>
-                <DropdownItem onSelect={() => handleDropdownSelect("Rechazar")}>Rechazar</DropdownItem>
+              <DropdownMenu aria-label="opciones">
+                <DropdownItem aria-label ="opcion aceptar" onClick={() => handleDropdownSelect("Aceptado", user.idSolicitud)}>Aceptar</DropdownItem>
+                <DropdownItem aria-label ="opcion pendiente" onSelect={() => handleDropdownSelect("Pendiente", user.idSolicitud)}>Pendiente</DropdownItem>
+                <DropdownItem aria-label ="opcion rechazar"onSelect={() => handleDropdownSelect("Rechazar", user.idSolicitud)}>Rechazar</DropdownItem>
+                
               </DropdownMenu>
             </Dropdown>
           </div>
         );
+
       default:
         return cellValue;
     }

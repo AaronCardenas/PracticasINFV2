@@ -30,7 +30,6 @@ export default function Admin() {
     "rut",
     "rutEmpresa",
     "numeroPractica",
-    "fase",
     "acciones",
   ];
   const statusColorMap = {
