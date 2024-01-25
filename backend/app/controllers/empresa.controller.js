@@ -122,9 +122,43 @@ const buscarEmpresas = async (req,res) => {
     }
 };
 
+const getEmpresa = async (req,res) => {
+
+    const { idSolicitud } = req.body;
+
+
+    try{
+
+        const solicitud = await db.solicitud.findOne({where:{idSolicitud:idSolicitud}});
+
+        const rutEmpresa = solicitud.rutEmpresa; 
+
+        const empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+
+        if(!empresa){
+            return res.status(404).json({
+                message:"La empresa no existe."
+            });
+        }
+
+        return res.status(200).json({
+            message:"Empresa encontrada.",
+            empresa
+        });
+    } catch(err){
+        return res.status(500).json({
+            message:"Error al buscar empresa.",
+            err
+        });
+    }
+};
+
+
+
 module.exports = {
     validarEmpresa,
     crearEmpresa,
     listarEmpresas,
-    buscarEmpresas
+    buscarEmpresas,
+    getEmpresa
 };
