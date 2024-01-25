@@ -1,6 +1,8 @@
 import { backendUrl} from "./config";
 export const funcionlogin = async (rut, password,userType, isValid,setIsLoading,router) => {
-    if (!isValid || !rut.raw || !password) {
+    if ( !rut.raw || !password) {
+      console.log(rut.raw);
+
       alert("Rut o contraseña inválidos");
       return; // Evitar iniciar sesión si el RUT no es válido
     }
@@ -14,7 +16,7 @@ export const funcionlogin = async (rut, password,userType, isValid,setIsLoading,
     try {
       setIsLoading(true);
 
-      const response = await fetch(`${backendUrl}/usuario/validar`, {
+      const response = await fetch(`${backendUrl}/usuario/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
