@@ -11,8 +11,10 @@ import TodoList from "../../../components/tareas";
 export default function Acp() {
   const [value, setValue] = React.useState("");
 
+  const [datos, setData] = useState({});
   const searchParams = useSearchParams(); 
-  const router= useRouter();
+  const router= 
+  useRouter();
   const Token = searchParams.get('token');
   const idSolicitud = searchParams.get('idSolicitud');
 
@@ -229,6 +231,8 @@ export default function Acp() {
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
                     <Input
+                        id= "input-rs"
+                        placeholder="datos.razonSocial"
                         radius="sm"
                         size="lg"
                         label="Razon social"
@@ -237,10 +241,13 @@ export default function Acp() {
                           inputWrapper: ["bg-default-200/50", "!cursor-text"],
                           label: ["!text-white"],
                         }}
+                        isDisabled
                       />
                   </div>
                   <div className={styles.boxe2201100soli}>
                     <Input
+                      id= "input-dir"
+                      placeholder="datos.direccion"
                       radius="sm"
                       size="lg"
                       label="Direccion"
@@ -249,12 +256,16 @@ export default function Acp() {
                         inputWrapper: ["bg-default-200/50", "!cursor-text"],
                         label: ["!text-white"],
                       }}
+                      isDisabled
+                      
                     />
                   </div>
                 </div>
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
                   <Input
+                      id= "input-dir2"
+                      placeholder="datos.direccion2"
                       radius="sm"
                       size="lg"
                       label="Direccion 2"
@@ -263,10 +274,13 @@ export default function Acp() {
                         inputWrapper: ["bg-default-200/50", "!cursor-text"],
                         label: ["!text-white"],
                       }}
+                      isDisabled
                     />
                   </div>
                   <div className={styles.boxe2201100soli}>
                   <Input
+                      id= "input-ciud"
+                      placeholder="datos.ciudad"
                       radius="sm"
                       size="lg"
                       label="Ciudad"
@@ -275,6 +289,7 @@ export default function Acp() {
                         inputWrapper: ["bg-default-200/50", "!cursor-text"],
                         label: ["!text-white"],
                       }}
+                      isDisabled
                     />
                   </div>
                 </div>
@@ -283,6 +298,8 @@ export default function Acp() {
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
                   <Input
+                      id= "input-rut"
+                      placeholder="datos.rut"
                       radius="sm"
                       size="lg"
                       label="Rut"
@@ -291,10 +308,13 @@ export default function Acp() {
                         inputWrapper: ["bg-default-200/50", "!cursor-text"],
                         label: ["!text-white"],
                       }}
+                      isDisabled
                     />
                   </div>
                   <div className={styles.boxe2201100soli}>
                   <Input
+                      id= "input-rub"
+                      placeholder="datos.rubro"
                       radius="sm"
                       size="lg"
                       label="Rubro"
@@ -303,6 +323,7 @@ export default function Acp() {
                         inputWrapper: ["bg-default-200/50", "!cursor-text"],
                         label: ["!text-white"],
                       }}
+                      isDisabled
                     />
                   </div>
                 </div>
