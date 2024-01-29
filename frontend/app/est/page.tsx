@@ -8,10 +8,12 @@ import Datosest from '../../components/Tablas/datosest';
 import { useRouter } from 'next/navigation';
 import TAB from '../../components/Tablas/TabEST/fulltab';
 import { AllestSoli } from '../../api/est/solicitudes';
+import TAB_EMP from '../../components/Tablas/TabEMP/fulltab';
 export default function Est() {
   const router= useRouter();
   const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const [data, setData] = useState([]);
+  const [data_emp, setData_emp] = useState([]);
   const statusOptions = [
     { name: "Presentacion", uid: "1" },
     { name: "Aceptacion", uid: "2" },
@@ -31,6 +33,16 @@ export default function Est() {
     "fase",
     "acciones",
     "fechaSolicitud"
+  ];
+  const INITIAL_VISIBLE_COLUMNS_EMP = [
+    "razonSocial",
+    "rutEmpresa",
+    "region",
+  ];
+  const columns_emp = [
+    { name: "Razon Social", uid: "razonSocial", sortable: true },
+    { name: "Rut Empresa", uid: "rutEmpresa", sortable: true },
+    { name: "Region", uid: "region", sortable: false },
   ];
   const statusColorMap = {
     active: "success",
@@ -58,6 +70,8 @@ export default function Est() {
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
@@ -113,7 +127,13 @@ export default function Est() {
                 <Datosest token={Token}/> 
               </div>
               <div className={styles.boxe22101}>
-                Tabla empresas
+              <TAB_EMP
+                columns={columns_emp}
+                datos={data}
+                statusOptions={statusOptions}
+                INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS_EMP}
+                statusColorMap={statusColorMap}
+              />
               </div>
             </div>
           </div>

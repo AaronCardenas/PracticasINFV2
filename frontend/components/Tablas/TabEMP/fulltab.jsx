@@ -23,7 +23,7 @@ import { capitalize } from "./utils";
 import NextLink from 'next/link';
 import { PDF } from "../../../api/est/solicitudes.jsx";
 
-export default function TAB({
+export default function TAB_EMP({
   columns,
   datos,
   statusOptions,
@@ -36,7 +36,7 @@ export default function TAB({
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "fase",
     direction: "ascending",
@@ -171,76 +171,9 @@ export default function TAB({
     }
   }, []);
 
-  const topContent = React.useMemo(() => {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            classNames={{
-              base: "w-full sm:max-w-[44%]",
-              inputWrapper: "border-1",
-            }}
-            placeholder="Buscar Rut ..."
-            size="sm"
-            startContent={<SearchIcon className="text-default-300" />}
-            value={filterValue}
-            variant="bordered"
-            onClear={() => setFilterValue("")}
-            onValueChange={onSearchChange}
-          />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="l"
-                  variant="flat"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <NextLink href='est/solicitud'>
-            <Button
-              className="bg-black text-white "
-              endContent={<PlusIcon />}
-              size="l"
-            >
-              Nueva solicitud
-            </Button>
-          </NextLink>
-        </div>
-      </div>
-    );
-  }, [
-    filterValue,
-    statusFilter,
-    visibleColumns,
-    onSearchChange,
-    onRowsPerPageChange,
-    datos.length,
-    hasSearchFilter,
-  ]);
-
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="px-2 flex justify-between items-center mt-auto">
         <Pagination
           showControls
           color="secondary"
@@ -289,7 +222,6 @@ export default function TAB({
       bottomContentPlacement="outside"
       classNames={classNames}
       sortDescriptor={sortDescriptor}
-      topContent={topContent}
       topContentPlacement="outside"
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
