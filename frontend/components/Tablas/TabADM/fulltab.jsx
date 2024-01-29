@@ -253,7 +253,7 @@ export default function TAB({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="py-2 px-2 flex justify-between items-center mt-auto">
         <Pagination
           showControls
           color="secondary"
