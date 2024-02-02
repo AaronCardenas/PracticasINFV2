@@ -70,12 +70,9 @@ export default function Est() {
       try {
         const rawData = await All_EMP(Token);
         const transformedData = rawData.map((item) => ({
-          idSolicitud: item.idSolicitud,
-          rut: item.rut,
           rutEmpresa: item.rutEmpresa,
-          fechaSolicitud: item.fechaSolicitud,
-          numeroPractica: item.numeroPractica,
-          fase: item.fase,
+          razonSocial: item.razonSocial,
+          region: item.region
         }));
         setData(transformedData);
       } catch (error) {
@@ -83,6 +80,7 @@ export default function Est() {
       }
     };
     fetchData();
+    //fetchDataEMP();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
