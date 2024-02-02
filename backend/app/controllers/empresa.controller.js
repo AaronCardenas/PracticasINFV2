@@ -69,19 +69,27 @@ const crearEmpresa = async (req,res) => {
     }
 }
 
+// Lista de Razones Sociales de las empresas
 const listarEmpresas = async (req,res) => {
+
+    // Deberian mostrarse empresas ya validadas.
+    // A definir.
 
     try{
 
         const empresas = await db.empresa.findAll({
-            attributes: ['razonSocial']
+            attributes: ['razonSocial','rutEmpresa','region']
         });
 
-        const razonSocialList = empresas.map(empresa => empresa.razonSocial);
+        const empresasList = empresas.map(empresa => ({
+            razonSocial: empresa.razonSocial,
+            rutEmpresa: empresa.rutEmpresa,
+            region: empresa.region,
+        }));
 
         return res.status(200).json({
             message:"Empresas listadas exitosamente.",
-            razonSocialList
+            empresasList
         });
     } catch(err){
         return res.status(500).json({
@@ -91,6 +99,7 @@ const listarEmpresas = async (req,res) => {
     }
 };
 
+// Busqueda de empresas por nombre o parte de este
 const buscarEmpresas = async (req,res) => {
 
     const razonSocial = req.query.razonSocial;
@@ -122,6 +131,7 @@ const buscarEmpresas = async (req,res) => {
     }
 };
 
+// Consulta de empresa de una solicitud especifica
 const getEmpresa = async (req,res) => {
 
     const { idSolicitud } = req.body;
@@ -153,7 +163,7 @@ const getEmpresa = async (req,res) => {
     }
 };
 
-
+const verDatosEmpresa = 
 
 module.exports = {
     validarEmpresa,
