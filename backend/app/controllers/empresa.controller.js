@@ -38,7 +38,6 @@ const crearEmpresa = async (req,res) => {
     try{
 
         empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
-        console.log(empresa);
 
         if (empresa){
             return res.status(409).json({                           // 409: Revisar codigo HTTP. Sharp 🤨 
@@ -103,7 +102,6 @@ const listarEmpresas = async (req,res) => {
 const buscarEmpresas = async (req,res) => {
 
     const razonSocial = req.query.razonSocial;
-    console.log(razonSocial);
 
     try{
 

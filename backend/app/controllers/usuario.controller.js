@@ -139,7 +139,6 @@ const verDatosUsuario = async (req,res) => {
     const {token} = req.body;
     const {rut} = await jwt.verify(token, key);
     const usuario = await db.usuario.findOne({where:{rut:rut}});
-    //console.log(usuario);
     if(!usuario){
         return res.status(404).json({
             message:"Usuario no encontrado."

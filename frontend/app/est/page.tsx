@@ -7,7 +7,7 @@ import styles from '../../styles/styleop.module.css';
 import Datosest from '../../components/Tablas/datosest';
 import { useRouter } from 'next/navigation';
 import TAB from '../../components/Tablas/TabEST/fulltab';
-import { AllestSoli } from '../../api/est/solicitudes';
+import { AllestSoli,All_EMP } from '../../api/est/solicitudes';
 import TAB_EMP from '../../components/Tablas/TabEMP/fulltab';
 export default function Est() {
   const router= useRouter();
@@ -53,6 +53,22 @@ export default function Est() {
     const fetchData = async () => {
       try {
         const rawData = await AllestSoli(Token);
+        const transformedData = rawData.map((item) => ({
+          idSolicitud: item.idSolicitud,
+          rut: item.rut,
+          rutEmpresa: item.rutEmpresa,
+          fechaSolicitud: item.fechaSolicitud,
+          numeroPractica: item.numeroPractica,
+          fase: item.fase,
+        }));
+        setData(transformedData);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+    const fetchDataEMP = async () => {
+      try {
+        const rawData = await All_EMP(Token);
         const transformedData = rawData.map((item) => ({
           idSolicitud: item.idSolicitud,
           rut: item.rut,

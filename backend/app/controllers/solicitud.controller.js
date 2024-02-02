@@ -12,7 +12,6 @@ const crearSolicitud = async (req, res) => {
 
     const numeroPractica = datos.numeroPractica;
 
-    console.log(datos);
   
     const solicitudCalificada = await db.solicitud.findOne({
       where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
@@ -107,9 +106,7 @@ const faseSolicitud = async (req, res) => {
 const verSolicitudesUsuario = async (req, res)=>{
     try {        
         const { token }= req.body;
-        console.log(token);
         const usuario = await jwt.verify(token, key);
-        console.log(usuario.rut);
 
         const solicitudes= await db.solicitud.findAll({where:{rut:usuario.rut}});
         // const solicitudList =  solicitudes.map((solicitud)=>{return {
