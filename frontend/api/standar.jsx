@@ -4,6 +4,7 @@ export const funcionlogin = async (rut, password,userType,isValid,setIsLoading,r
     alert("Rut o contraseña inválidos");
     return; // Evitar iniciar sesión si el RUT no es válido
   }
+  console.log(rut.raw); // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
   // Configurar los datos para la solicitud a la API
   const userData = {
     rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
