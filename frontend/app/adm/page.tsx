@@ -4,7 +4,6 @@ import { Button, Image } from "@nextui-org/react";
 import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
 import styles from "../../styles/styleop.module.css";
 import { motion } from "framer-motion";
-import Listar from "../../components/Tablas/tab";
 import NextLink from "next/link";
 import { AllSoli } from "../../api/adm/solicitudes";
 import TAB from "../../components/Tablas/TabADM/fulltab";
@@ -97,6 +96,7 @@ export default function Admin() {
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
                 statusColorMap={statusColorMap}
+                setDatos={setData}
               />
             </div>
           </div>

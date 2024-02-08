@@ -2,7 +2,7 @@ import { backendUrl } from "../config";
 
 export const AllSoli = async () => {
   try {
-    const response = await fetch(`${backendUrl}/solicitud/all`, {
+    const response = await fetch(`${backendUrl}/solicitud/AllSolicitudesSec`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,18 +22,19 @@ export const AllSoli = async () => {
   }
 };
 
-export const actualizarFaseSolicitud = async (idSolicitud, nuevaFase, rechazo) => {
+export const actualizarFaseSolicitud = async (idSolicitud, nroFase, motivoRechazo = null) => {
+
   try {
-    const response = await fetch(`${backendUrl}/solicitud/?${idSolicitud}`, {
-      method: "POST",
+    const response = await fetch(`${backendUrl}/solicitud/actualizar/${idSolicitud}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({ nuevaFase: nuevaFase, rechazo: rechazo }),
+      body: JSON.stringify({ nroFase: nroFase, idSolicitud, motivoRechazo: motivoRechazo}),
 
     });
-
+  
     if (!response.ok) {
       throw new Error('Error al actualizar la fase de la solicitud');
     }

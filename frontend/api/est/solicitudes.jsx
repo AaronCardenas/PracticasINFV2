@@ -39,9 +39,9 @@ export const PDF = async (Token, selectedEmpresaId, asignatura) => {
   }
 
   const Data = {
+    token: Token,
     rutEmpresa: selectedEmpresaId,
     asignatura: asignatura,
-    token: Token,
   };
 
   // Realiza la solicitud a la API
@@ -135,6 +135,36 @@ export const datosEst = async (token) => {
     return null;
   }
 };
+
+export const datosEMP = async (idSolicitud) => {
+  const Data = {
+    
+    idSolicitud: idSolicitud,
+  };
+  try {
+
+    const response = await fetch(`${backendUrl}/empresa/getEmpresa`, {
+
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Data),
+    });
+
+    if (response.ok) {
+      const empresa = await response.json();
+      return empresa;
+    } else {
+      alert("Error al recibir respuesta.");
+    }
+  } catch (error) {
+    // Maneja errores de red o de servidor
+    console.error("No funciono fetch:", error);
+    return null;
+  }
+};
+
 export const actualizarDatosUsuario = async (token, nuevosDatos) => {
   try {
     const response = await fetch(`${backendUrl}/usuario/update`, {
@@ -213,4 +243,32 @@ export const extarerEmpresa = async (token, idSolicitud) => {
     console.error("Error en la solicitud al servidor:", error);
     throw error; // Puedes manejar el error según tus necesidades
   }
+};
+export const All_EMP = async (token) => {
+  const Data = {
+    token: token,
+  };
+  try {
+
+    const response = await fetch(`${backendUrl}/empresa/`, {
+
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Data),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data.solicitudes;
+    } else {
+      // Maneja el caso de credenciales incorrectas
+      alert("Error al cargar solicitudes");
+    }
+  } catch (error) {
+    // Maneja errores de red o de servidor
+    console.error("Error de request", error);
+    alert("Se produjo un error al intentar de nuevo mas tarde");
+  }
+
 };

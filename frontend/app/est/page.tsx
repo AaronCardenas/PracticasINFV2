@@ -5,14 +5,15 @@ import NextLink from 'next/link';
 // import { useRouter } from 'next/router'; // Importa el router de Next.js
 import styles from '../../styles/styleop.module.css';
 import Datosest from '../../components/Tablas/datosest';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import TAB from '../../components/Tablas/TabEST/fulltab';
-import { AllestSoli } from '../../api/est/solicitudes';
+import { AllestSoli,All_EMP } from '../../api/est/solicitudes';
+import TAB_EMP from '../../components/Tablas/TabEMP/fulltab';
 export default function Est() {
-  const searchParams = useSearchParams(); 
   const router= useRouter();
-  const Token = searchParams.get('token');
+  const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const [data, setData] = useState([]);
+  const [data_emp, setData_emp] = useState([]);
   const statusOptions = [
     { name: "Presentacion", uid: "1" },
     { name: "Aceptacion", uid: "2" },
@@ -32,6 +33,16 @@ export default function Est() {
     "fase",
     "acciones",
     "fechaSolicitud"
+  ];
+  const INITIAL_VISIBLE_COLUMNS_EMP = [
+    "razonSocial",
+    "rutEmpresa",
+    "region",
+  ];
+  const columns_emp = [
+    { name: "Razon Social", uid: "razonSocial", sortable: true },
+    { name: "Rut Empresa", uid: "rutEmpresa", sortable: true },
+    { name: "Region", uid: "region", sortable: false },
   ];
   const statusColorMap = {
     active: "success",
@@ -55,10 +66,26 @@ export default function Est() {
         console.error("Error al obtener datos del usuario:", error);
       }
     };
+    const fetchDataEMP = async () => {
+      try {
+        const rawData = await All_EMP(Token);
+        const transformedData = rawData.map((item) => ({
+          rutEmpresa: item.rutEmpresa,
+          razonSocial: item.razonSocial,
+          region: item.region
+        }));
+        setData(transformedData);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
     fetchData();
+    //fetchDataEMP();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
@@ -81,17 +108,7 @@ export default function Est() {
           />
         </NextLink>
         <div className={styles.boxe12}>
-          <NextLink
-            className={styles.nextEst}
-            href={{ pathname: 'est/solicitud', query: `token=${Token}`}}
-          >
-            <Button className={styles.botNextEst} variant='light'>
-              Nueva Solicitud
-            </Button>
-          </NextLink>
-          <Button className={styles.botEst} variant='light'>
-            Mis Solicitud
-          </Button>
+ 
           <Button className={styles.botEst} variant='light'>
             Logout
           </Button>
@@ -115,20 +132,22 @@ export default function Est() {
                 </div>
               </div>
               <div className={styles.boxe22112}>
-                <NextLink className={styles.boxe221120} href='/acp'>
-                  <Button className={styles.botNextEst} variant='light'>
-                    Carta de aceptacion
-                  </Button>
-                </NextLink>
+                
                 <div className={styles.boxe221121}> Memorias </div>
               </div>
             </div>
             <div className={styles.boxe2210}>
               <div className={styles.boxe22100}>
-                <Datosest token={Token}/>
+                <Datosest token={Token}/> 
               </div>
               <div className={styles.boxe22101}>
-                empresa tab
+              <TAB_EMP
+                columns={columns_emp}
+                datos={data}
+                statusOptions={statusOptions}
+                INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS_EMP}
+                statusColorMap={statusColorMap}
+              />
               </div>
             </div>
           </div>
@@ -137,125 +156,3 @@ export default function Est() {
     </div>
   );
 }
-
-
-/* 
-'use client';
-import React, { useState, useEffect } from 'react';
-import { Button, Image } from '@nextui-org/react';
-import NextLink from 'next/link';
-// import { useRouter } from 'next/router'; // Importa el router de Next.js
-import styles from '../../styles/styleop.module.css';
-import { motion } from 'framer-motion';
-import Listar from '../../components/Tablas/tabla';
-import Datosest from '../../components/Tablas/datosest';
-import { useRouter, useSearchParams } from 'next/navigation';
-import TAB from '../../components/Tablas/TabEST/fulltab';
-export default function Est() {
-  const searchParams = useSearchParams(); 
-  const router= useRouter();
-  const Token = searchParams.get('token');
-  //ejemplo de los datos
-  const dataSoli = [
-    {
-      'N° Solicitud': 1222222,
-      Práctica: 'Práctica 1',
-      Empresa: 'Empresa 1',
-      Estado: 'Aprobado',
-      documentos: 'Documento 1',
-    },
-    {
-      'N° Solicitud': 2,
-      Práctica: 'Práctica 2',
-      Empresa: 'Empresa 2',
-      Estado: 'Pendiente',
-      documentos: 'Documento 2',
-    },
-    ;
-  const dataempresa = [
-    {
-      id: 1222222,
-      nombre: 'JuanMaestro',
-      rurbo: 'Industria',
-    },
-  ];
-  const columnsempresa = {
-    id: 'Rut',
-    nombre: 'Razon Social',
-    rurbo: 'Rubro',
-  };
-  //ejemplo de los datos
-  return (
-    <div className={styles.EstDiv}>
-      <div className={styles.boxe10}>
-        <NextLink href='https://informatica.uv.cl/' className={styles.boxe13}>
-          <Image
-            radius='none'
-            src='../UV.svg'
-            alt='Descripción del SVG'
-            width={'100%'}
-            height={'100%'}
-          />
-        </NextLink>
-        <NextLink href='https://informatica.uv.cl/' className={styles.boxe11}>
-          <Image
-            radius='none'
-            src='../UV.svg'
-            alt='Descripción del SVG'
-            width={'100%'}
-            height={'100%'}
-          />
-        </NextLink>
-        <div className={styles.boxe12}>
-          <NextLink
-            className={styles.nextEst}
-            href={{ pathname: 'est/solicitud', query: `token=${Token}`}}
-          >
-            <Button className={styles.botNextEst} variant='light'>
-              Nueva Solicitud
-            </Button>
-          </NextLink>
-          <Button className={styles.botEst} variant='light'>
-            Mis Solicitud
-          </Button>
-          <Button className={styles.botEst} variant='light'>
-            Logout
-          </Button>
-        </div>
-      </div>
-      <div className={styles.boxe20}>
-        <div className={styles.boxe21}> iconos notificaciones, usuario</div>
-        <div className={styles.boxe22}>
-          <div className={styles.boxe220}>Panel principal Estudiante</div>
-          <div className={styles.boxe221}>
-            <div className={styles.boxe2211}>
-              <div className={styles.boxe22111}>
-                <div className={styles.boxe221111}>
-                  
-                </div>
-              </div>
-              <div className={styles.boxe22112}>
-                <NextLink className={styles.boxe221120} href='/acp'>
-                  <Button className={styles.botNextEst} variant='light'>
-                    Carta de aceptacion
-                  </Button>
-                </NextLink>
-                <div className={styles.boxe221121}> Memorias </div>
-              </div>
-            </div>
-            <div className={styles.boxe2210}>
-              <div className={styles.boxe22100}>
-                <Datosest token={Token}/>
-              </div>
-              <div className={styles.boxe22101}>
-                <Listar columns={columnsempresa} data={dataempresa} />{' '}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-*/

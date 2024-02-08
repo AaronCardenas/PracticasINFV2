@@ -6,16 +6,15 @@ import { Button, Select, SelectItem, Input, Image } from "@nextui-org/react";
 import NextLink from "next/link";
 import styles from "../../../styles/styleop.module.css";
 import Datosest from "../../../components/Tablas/datosest";
-import { useRouter, useSearchParams } from "next/navigation";
-import { funcionSoli, funcionSave, solicitudes} from "../../../api/est/solicitudes"; //cambiar al .env en un futuro
+import { useRouter } from "next/navigation";
+import {funcionSave, solicitudes} from "../../../api/est/solicitudes"; //cambiar al .env en un futuro
 
 export default function Soli() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const Token = searchParams.get("token");
+  const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
   const [selectedRegionName, setSelectedRegionName] = useState(null);
-  const [asignatura, setAsignatura] = useState(null);
+  const [asignatura, setAsignatura] = useState({id: "1", razonsocial: "ICI-2413", carrera: "Ingenieria Civil Informatica" });
   const [isInputsDisabled, setIsInputsDisabled] = useState(false);
   const [sempresa, setSempresa] = useState(false);
 
@@ -51,7 +50,7 @@ export default function Soli() {
   };
 
   const handleAsignaturaChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setAsignatura(e.target.value);
   };
 
@@ -59,13 +58,14 @@ export default function Soli() {
     setSelectedRegionName(e.target.value);
   };
   const Solicitar = async () => {
+    console.log(asignatura.id);
     const datos={
-        idSolicitud:12,
         rutEmpresa: selectedEmpresaId,
-        numeroPractica: asignatura.id,
+        numeroPractica: 1,
         fase: 1
     };
     solicitudes(Token, datos);
+    router.back();
   };
   const Save = async () => {
     // Aquí puedes utilizar los valores almacenados en los estados
@@ -82,140 +82,28 @@ export default function Soli() {
     setSempresa(true);
     setIsInputsDisabled(true);
   };
-  const dataSoli = [
-    {
-      "N° Solicitud": 1222222,
-      Práctica: "Práctica 1",
-      Empresa: "Empresa 1",
-      Estado: "Aprobado",
-      documentos: "Documento 1",
-    },
-    {
-      "N° Solicitud": 2,
-      Práctica: "Práctica 2",
-      Empresa: "Empresa 2",
-      Estado: "Pendiente",
-      documentos: "Documento 2",
-    },
-    {
-      "N° Solicitud": 3,
-      Práctica: "Práctica 3",
-      Empresa: "Empresa 3",
-      Estado: "Rechazado",
-      documentos: "Documento 3",
-    },
-    {
-      "N° Solicitud": 4,
-      Práctica: "Práctica 4",
-      Empresa: "Empresa 4",
-      Estado: "Aprobado",
-      documentos: "Documento 4",
-    },
-    {
-      "N° Solicitud": 5,
-      Práctica: "Práctica 5",
-      Empresa: "Empresa 5",
-      Estado: "Pendiente",
-      documentos: "Documento 5",
-    },
-    {
-      "N° Solicitud": 6,
-      Práctica: "Práctica 6",
-      Empresa: "Empresa 6",
-      Estado: "Rechazado",
-      documentos: "Documento 6",
-    },
-    {
-      "N° Solicitud": 7,
-      Práctica: "Práctica 7",
-      Empresa: "Empresa 7",
-      Estado: "Aprobado",
-      documentos: "Documento 7",
-    },
-    {
-      "N° Solicitud": 8,
-      Práctica: "Práctica 8",
-      Empresa: "Empresa 8",
-      Estado: "Pendiente",
-      documentos: "Documento 8",
-    },
-    {
-      "N° Solicitud": 9,
-      Práctica: "Práctica 9",
-      Empresa: "Empresa 9",
-      Estado: "Rechazado",
-      documentos: "Documento 9",
-    },
-    {
-      "N° Solicitud": 10,
-      Práctica: "Práctica 10",
-      Empresa: "Empresa 10",
-      Estado: "Aprobado",
-      documentos: "Documento 10",
-    },
-    {
-      "N° Solicitud": 11,
-      Práctica: "Práctica 11",
-      Empresa: "Empresa 11",
-      Estado: "Pendiente",
-      documentos: "Documento 11",
-    },
-    {
-      "N° Solicitud": 12,
-      Práctica: "Práctica 12",
-      Empresa: "Empresa 12",
-      Estado: "Rechazado",
-      documentos: "Documento 12",
-    },
-    {
-      "N° Solicitud": 13,
-      Práctica: "Práctica 13",
-      Empresa: "Empresa 13",
-      Estado: "Aprobado",
-      documentos: "Documento 13",
-    },
-    {
-      "N° Solicitud": 14,
-      Práctica: "Práctica 14",
-      Empresa: "Empresa 14",
-      Estado: "Pendiente",
-      documentos: "Documento 14",
-    },
-  ];
-  const columnsSoli = {
-    "N° Solicitud": "N° Solicitud",
-    Práctica: "Práctica",
-    Empresa: "Empresa",
-    Estado: "Estado",
-    documentos: "Documentos",
-  };
   const dataempresa = [
     {
-      id: 969608006,
-      nombre: "GasValpo",
+      id: "78936330-7",
+      razonsocial: "Guaton",
       rurbo: "Awa",
     },
     {
       id: 1111111,
-      nombre: "Guaton",
+      razonsocial: "Guaton",
       rurbo: "Alimentación",
     },
     {
       id: 1333333,
-      nombre: "Mcdonals",
+      razonsocial: "Mcdonals",
       rurbo: "Alimentación",
     },
     {
       id: 1444444,
-      nombre: "KFC",
+      razonsocial: "KFC",
       rurbo: "Alimentación",
     },
   ];
-  const columnsempresa = {
-    id: "Rut",
-    nombre: "Razon Social",
-    rurbo: "Rubro",
-  };
   const Asignaturas = [
     {
       id: "1",
@@ -228,7 +116,6 @@ export default function Soli() {
       carrera: "Ingenieria Civil Informatica",
     },
   ];
-
   const region = [
     {
       id: 1,
@@ -309,19 +196,9 @@ export default function Soli() {
         </NextLink>
         <div className={styles.boxe11}>icono pag</div>
         <div className={styles.boxe12}>
-          <NextLink
-            className={styles.nextEst}
-            href={{ pathname: "/solicitud", query: { token: "token" } }}
-          >
-            <Button className={styles.botNextEst} variant="light">
-              Nueva Solicitud
-            </Button>
-          </NextLink>
-          <NextLink className={styles.nextEst} href="/est">
-            <Button className={styles.botNextEst} variant="light">
+        <Button className={styles.botNextEst} variant="light" onClick={()=>{router.back()}}>
               Mis Solicitud
             </Button>
-          </NextLink>
           <Button className={styles.botEst} variant="light">
             Logout
           </Button>
@@ -344,9 +221,11 @@ export default function Soli() {
                   labelPlacement="outside"
                   className={styles.selectSoli}
                   onChange={handleAsignaturaChange}
+                  
                 >
                   {Asignaturas.map((asignatura) => (
                     <SelectItem
+                      textValue = {asignatura.nombre}
                       className={styles.selectItemSoli}
                       key={asignatura.id}
                       value={asignatura.id}
@@ -372,11 +251,12 @@ export default function Soli() {
                 >
                   {dataempresa.map((empresa) => (
                     <SelectItem
+                      textValue = {empresa.razonsocial}
                       className={styles.selectItemSoli}
                       key={empresa.id}
                       value={empresa.id}
                     >
-                      {empresa.nombre}
+                      {empresa.razonsocial}
                     </SelectItem>
                   ))}
                 </Select>
@@ -430,6 +310,7 @@ export default function Soli() {
                     >
                       {region.map((region) => (
                         <SelectItem
+                          textValue = {region.nombre}
                           className={styles.selectItemSoli}
                           key={region.nombre}
                           value={region.nombre}
