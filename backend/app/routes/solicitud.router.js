@@ -10,7 +10,8 @@ const {
     allSolicitudesJefe,
     allSolicitudesSec,
     readyAlumno,
-    readySupervisor
+    readySupervisor,
+    actulizarFase
 } = require('../controllers/solicitud.controller.js');
 
 
@@ -29,7 +30,8 @@ router.get("/allSolicitudesCoo",allSolicitudesCoo);
 router.get("/allSolicitudesJefe",allSolicitudesJefe);           
 router.get("/allSolicitudesSec",allSolicitudesSec);
 router.post("/readyAlumno", readyAlumno);                        // {idSolicitud}
-router.post("/readySupervisor", readySupervisor);                // {idSolicitud}
+router.post("/readySupervisor", readySupervisor); 
+router.put("/actualizar/:id", actulizarFase);               // {idSolicitud, nroFase}
 
 
 module.exports = router;

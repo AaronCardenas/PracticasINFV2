@@ -96,6 +96,7 @@ export default function Admin() {
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
                 statusColorMap={statusColorMap}
+                setDatos={setData}
               />
             </div>
           </div>
