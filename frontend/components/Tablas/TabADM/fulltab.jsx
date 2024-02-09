@@ -18,13 +18,14 @@ import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { capitalize } from "./utils";
-
+import {actualizarFaseSolicitud} from "../../../api/adm/solicitudes"
 export default function TAB({
   columns,
   datos,
   statusOptions,
   INITIAL_VISIBLE_COLUMNS,
   statusColorMap,
+  setDatos,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -41,7 +42,7 @@ export default function TAB({
   const pages = Math.ceil(datos.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
-
+  
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") {
       return columns;
@@ -87,7 +88,7 @@ export default function TAB({
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
+  const renderCell = React.useCallback((user, columnKey,datos) => {
     const cellValue = user[columnKey];
     const handleCellClick = () => {
       const tempInput = document.createElement('input');
@@ -97,39 +98,30 @@ export default function TAB({
       document.execCommand('copy');
       document.body.removeChild(tempInput);
     };
-    /*const handleDropdownSelect = (selectedOption) => {
-      switch (selectedOption) {
-        case "Pendiente":
-          // Lógica para la opción Pendiente
-          break;
-        case "Aceptar":
-          // Lógica para la opción Aceptar
-          break;
-        case "Rechazar":
-          // Lógica para la opción Rechazar
-          break;
-        default:
-          // Otras opciones
-          break;
-      }
-    };*/
-    const handleDropdownSelect = (selectedOption, idSolicitud) => {
-      console.log("Opción seleccionada:", selectedOption, "ID de Solicitud:", idSolicitud);
 
+    const handleDropdownSelect = (selectedOption, idSolicitud, datos) => {
+      console.log("Opción seleccionada:", selectedOption, "ID de Solicitud:", idSolicitud);
+      
       switch (selectedOption) {
         case "Pendiente":
+          console.log("aqui",datos)
           // Lógica para la opción Pendiente
           // Suponiendo que "Pendiente" no requiere cambios en el backend
           break;
         case "Aceptar":
-          actualizarFaseSolicitud(idSolicitud, "Aceptada");
-          marcarComoAceptada(idSolicitud); // Esta es una función hipotética para el cambio visual
+          actualizarFaseSolicitud(idSolicitud, 2);
+          const index = datos.findIndex((item) => item.idSolicitud === idSolicitud);
+          const arreglo = [...datos.slice(0, index), ...datos.slice(index + 1)];
+          console.log("aqui",arreglo);
+          
+          setDatos(arreglo)
+          
           break;
-        case "Rechazar":
+        case "Rechazar": // cambiar el color
           // Lógica para la opción Rechazar
           const rechazo = prompt("Por favor, ingresa la razón del rechazo:");
           if (rechazo) {
-            actualizarFaseSolicitud(idSolicitud, "Rechazada", rechazo); // Asegúrate de usar el valor correcto para la fase
+            actualizarFaseSolicitud(idSolicitud, 7, rechazo); // Asegúrate de usar el valor correcto para la fase
           }
           break;
         default:
@@ -165,9 +157,9 @@ export default function TAB({
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="opciones">
-                <DropdownItem aria-label ="opcion aceptar" onClick={() => handleDropdownSelect("Aceptado", user.idSolicitud)}>Aceptar</DropdownItem>
-                <DropdownItem aria-label ="opcion pendiente" onSelect={() => handleDropdownSelect("Pendiente", user.idSolicitud)}>Pendiente</DropdownItem>
-                <DropdownItem aria-label ="opcion rechazar"onSelect={() => handleDropdownSelect("Rechazar", user.idSolicitud)}>Rechazar</DropdownItem>
+                <DropdownItem aria-label ="opcion aceptar" onClick={() => handleDropdownSelect("Aceptar", user.idSolicitud, datos)}>Aceptar</DropdownItem>
+                <DropdownItem aria-label ="opcion pendiente" onClick={() => handleDropdownSelect("Pendiente", user.idSolicitud, datos)}>Pendiente</DropdownItem>
+                <DropdownItem aria-label ="opcion rechazar"onClick={() => handleDropdownSelect("Rechazar", user.idSolicitud)}>Rechazar</DropdownItem>
                 
               </DropdownMenu>
             </Dropdown>
@@ -178,6 +170,9 @@ export default function TAB({
         return cellValue;
     }
   }, []);
+
+
+
 
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
@@ -322,7 +317,7 @@ export default function TAB({
         {(item) => (
           <TableRow key={item.idSolicitud}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell>{renderCell(item, columnKey, datos)}</TableCell>
             )}
           </TableRow>
         )}

@@ -42,6 +42,7 @@ export default function Boss() {
     const fetchData = async () => {
       try {
         const rawData = await AllSoli();
+        
         const transformedData = rawData.map((item) => ({
           idSolicitud: item.idSolicitud,
           rut: item.rut,
