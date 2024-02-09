@@ -107,7 +107,7 @@ export default function Login() {
           {isLoading ? (
             <Spinner color="secondary" size="lg"/>
           ) : (
-            <Button className={styles.loginBoton} onClick={funcionlogin} disabled={isLoading}>
+            <Button className={styles.loginBoton} onClick={() => funcionlogin(rut, password, userType, isValid, setIsLoading, router)} disabled={isLoading}>
               {isLoading ? 'Ingresando...' : 'Ingresar'}
             </Button>
           )}
