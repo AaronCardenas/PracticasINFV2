@@ -5,6 +5,23 @@ const key = require('../config/const.js').JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const Op = db.Sequelize.Op;
 
+const supXest = async (req, res) => {
+    try {
+        const {correoSupervisor} = req.body;
+        const supervisor= await db.supervisor.findOne({where:{correoSupervisor}});
+        const empresa= await db.empresa.findOne({where:{rutEmpresa:supervisor.rutEmpresa}});
+        const practicantes= await db.solicitud.findAll({where:{rutEmpresa:empresa.rutEmpresa}});
+        return res.status(200).json({
+            message: "Solicitudes listadas exitosamente",
+            practicantes
+        });
+    } catch (err) {
+        return res.status(500).json({
+            err
+        });
+    }
+};
+
 const crearSolicitud = async (req, res) => {
   const { token, datos } = req.body;
 
@@ -328,5 +345,6 @@ module.exports = {
   allSolicitudesSec,
   readyAlumno,
   readySupervisor,
-  actulizarFase
+  actulizarFase,
+  supXest
 };
