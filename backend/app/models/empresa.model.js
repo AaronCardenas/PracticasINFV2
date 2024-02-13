@@ -25,7 +25,11 @@ module.exports = (sequelize, Sequelize) =>{
     rubro: {
       type: Sequelize.STRING(170), // TEXT?
       allowNull: true
-    }
+    },
+    verificado: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
   }, {
     // Opciones adicionales
     tableName: 'empresa',
