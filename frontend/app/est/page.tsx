@@ -44,11 +44,6 @@ export default function Est() {
     { name: "Rut Empresa", uid: "rutEmpresa", sortable: true },
     { name: "Region", uid: "region", sortable: false },
   ];
-  const statusColorMap = {
-    active: "success",
-    paused: "danger",
-    vacation: "warning",
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -126,13 +121,8 @@ export default function Est() {
                 datos={data}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
-                statusColorMap={statusColorMap}
               />
                 </div>
-              </div>
-              <div className={styles.boxe22112}>
-                
-                <div className={styles.boxe221121}> Memorias </div>
               </div>
             </div>
             <div className={styles.boxe2210}>

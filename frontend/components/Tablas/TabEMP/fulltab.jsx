@@ -101,7 +101,6 @@ export default function TAB_EMP({
           isDisabled={hasSearchFilter}
           page={page}
           total={pages}
-          isCompact
           onChange={setPage}
         />
       </div>
