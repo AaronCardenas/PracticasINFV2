@@ -56,12 +56,13 @@ export default function Soli() {
   };
   const Solicitar = async () => {
     const datos={
-        rutEmpresa: selectedEmpresaId,
-        numeroPractica: asignatura.id,
+        rutEmpresa: rutEmpresa,
+        numeroPractica: parseInt(asignatura),
         fase: 1
     };
+    console.log(datos);
     solicitudes(Token, datos);
-    router.back();
+    //router.back();
   };
   const Save = async () => {
     const dataToSave = {
@@ -81,7 +82,7 @@ export default function Soli() {
     const fetchDataEMP = async () => {
       try {
         const Data = await All_EMP(Token);
-        const rawData= Data.empresasList;
+        const rawData= Data.empresas;
         const transformedData = rawData.map((item) => ({
           rutEmpresa: item.rutEmpresa,
           razonSocial: item.razonSocial,

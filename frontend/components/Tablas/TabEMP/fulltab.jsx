@@ -14,6 +14,7 @@ export default function TAB_EMP({
   datos,
   INITIAL_VISIBLE_COLUMNS,
 }) {
+  console.log("datos", datos);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(

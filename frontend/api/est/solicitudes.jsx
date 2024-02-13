@@ -234,7 +234,7 @@ export const extarerEmpresa = async (token, idSolicitud) => {
     throw error; // Puedes manejar el error según tus necesidades
   }
 };
-export const All_EMP = async (token) => {
+export const All_EMP = async () => {
   try {
     const response = await fetch(`${backendUrl}/empresa/listar`, {
       method: "GET",

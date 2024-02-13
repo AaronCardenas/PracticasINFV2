@@ -64,7 +64,7 @@ export default function Est() {
     const fetchDataEMP = async () => {
       try {
         const Data = await All_EMP(Token);
-        const rawData= Data.empresasList;
+        const rawData= Data.empresas;
         const transformedData = rawData.map((item) => ({
           rutEmpresa: item.rutEmpresa,
           razonSocial: item.razonSocial,
