@@ -75,7 +75,6 @@ const listarEmpresas = async (req,res) => {
     // A definir.
 
     try{
-
         const empresas = await db.empresa.findAll({
             attributes: ['razonSocial','rutEmpresa','region']
         });
@@ -160,7 +159,6 @@ const getEmpresa = async (req,res) => {
         });
     }
 };
-
 const verDatosEmpresa = 
 
 module.exports = {

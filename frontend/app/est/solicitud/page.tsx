@@ -8,27 +8,22 @@ import styles from "../../../styles/styleop.module.css";
 import Datosest from "../../../components/Tablas/datosest";
 import { useRouter } from "next/navigation";
 import {funcionSave, solicitudes} from "../../../api/est/solicitudes"; //cambiar al .env en un futuro
-
+import {All_EMP } from '../../../api/est/solicitudes';
 export default function Soli() {
   const router = useRouter();
   const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
-  const [selectedRegionName, setSelectedRegionName] = useState(null);
-  const [asignatura, setAsignatura] = useState({id: "1", razonsocial: "ICI-2413", carrera: "Ingenieria Civil Informatica" });
+  const [selectedRegionName, setSelectedRegionName] = useState('');
+  const [asignatura, setAsignatura] = useState({id: "1", nombre: "ICI-2413", carrera: "Ingenieria Civil Informatica" });
   const [isInputsDisabled, setIsInputsDisabled] = useState(false);
   const [sempresa, setSempresa] = useState(false);
-
+  const [dataempresa, setdataempresa] = useState([]);
   const [razonsocial, setrazonsocial] = useState("");
   const [direccion, setDireccion] = useState("");
   const [ciudad, setCiudad] = useState("");
   const [rutEmpresa, setRutEmpresa] = useState("");
   const [rubro, setRubro] = useState("");
 
-  const handleSelectionChangeEmpresa = (e) => {
-    const selectedId = e.target.value;
-    setSelectedEmpresaId(selectedId);
-    setIsInputsDisabled(Boolean(selectedId));
-  };
   const handlerazonsocialChange = (e) => {
     setrazonsocial(e.target.value);
   };
@@ -48,27 +43,27 @@ export default function Soli() {
   const handleRubroChange = (e) => {
     setRubro(e.target.value);
   };
-
   const handleAsignaturaChange = (e) => {
-    // console.log(e.target.value);
     setAsignatura(e.target.value);
   };
 
   const handleSelectionChangeRegion = (e) => {
-    setSelectedRegionName(e.target.value);
+    const index=e.target.value;
+    if(index){
+      const seleccion = region[parseInt(index)].nombre;
+      setSelectedRegionName(seleccion);
+    };
   };
   const Solicitar = async () => {
-    console.log(asignatura.id);
     const datos={
         rutEmpresa: selectedEmpresaId,
-        numeroPractica: 1,
+        numeroPractica: asignatura.id,
         fase: 1
     };
     solicitudes(Token, datos);
     router.back();
   };
   const Save = async () => {
-    // Aquí puedes utilizar los valores almacenados en los estados
     const dataToSave = {
       rutEmpresa: rutEmpresa,
       razonsocial: razonsocial,
@@ -77,33 +72,34 @@ export default function Soli() {
       direccion: direccion,
       rubro: rubro,
     };
-    // Llamar a la función de guardado con los datos
+    console.log(dataToSave);
     funcionSave(dataToSave);
     setSempresa(true);
     setIsInputsDisabled(true);
   };
-  const dataempresa = [
-    {
-      id: "78936330-7",
-      razonsocial: "Guaton",
-      rurbo: "Awa",
-    },
-    {
-      id: 1111111,
-      razonsocial: "Guaton",
-      rurbo: "Alimentación",
-    },
-    {
-      id: 1333333,
-      razonsocial: "Mcdonals",
-      rurbo: "Alimentación",
-    },
-    {
-      id: 1444444,
-      razonsocial: "KFC",
-      rurbo: "Alimentación",
-    },
-  ];
+  useEffect(() => {
+    const fetchDataEMP = async () => {
+      try {
+        const Data = await All_EMP(Token);
+        const rawData= Data.empresasList;
+        const transformedData = rawData.map((item) => ({
+          rutEmpresa: item.rutEmpresa,
+          razonSocial: item.razonSocial,
+          region: item.region,
+          direccion: item.direccion,
+          rubro: item.rubro,
+          ciudad: item.ciudad,
+
+        }));
+        setdataempresa(transformedData);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+    fetchDataEMP();
+    const intervalId = setInterval(fetchDataEMP, 5 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
   const Asignaturas = [
     {
       id: "1",
@@ -182,6 +178,27 @@ export default function Soli() {
       nombre: "Región XVI - Ñuble",
     },
   ];
+  const handleSelectionChangeEmpresa = (e) => {
+    const selectedId = e.target.value;
+    setSelectedEmpresaId(selectedId);setIsInputsDisabled(Boolean(selectedId));
+    const Empresa = dataempresa[parseInt(selectedId.replace(/^\D+/g, ''))];
+    if(Empresa){
+      setrazonsocial(Empresa.razonSocial);
+      setDireccion(Empresa.direccion);
+      setCiudad(Empresa.ciudad);
+      setRutEmpresa(Empresa.rutEmpresa);
+      setRubro(Empresa.rubro);
+      setSelectedRegionName(Empresa.region);
+    }
+    else{
+      setrazonsocial('');
+      setDireccion('');
+      setCiudad('');
+      setRutEmpresa('');
+      setRubro('');
+      setSelectedRegionName('');
+    };
+  };
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
@@ -251,12 +268,12 @@ export default function Soli() {
                 >
                   {dataempresa.map((empresa) => (
                     <SelectItem
-                      textValue = {empresa.razonsocial}
+                      textValue = {empresa.razonSocial}
                       className={styles.selectItemSoli}
                       key={empresa.id}
                       value={empresa.id}
                     >
-                      {empresa.razonsocial}
+                      {empresa.razonSocial}
                     </SelectItem>
                   ))}
                 </Select>
@@ -298,12 +315,12 @@ export default function Soli() {
                 </div>
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
-                    <Select
+                  <Select
                       aria-label="Region"
                       size="lg"
                       variant="faded"
                       color="secondary"
-                      placeholder="Selecciona una Region"
+                      placeholder={selectedEmpresaId ? `Región de ${selectedRegionName}` : "Selecciona una Región"}
                       labelPlacement="outside"
                       onChange={handleSelectionChangeRegion}
                       isDisabled={isInputsDisabled}
@@ -377,11 +394,9 @@ export default function Soli() {
                       isDisabled={isInputsDisabled}
                       onClick={Save}
                     >
-                      Guardar
+                      Guardar empresa
                     </Button>
-                    <Button className={styles.buttomSoli} onClick={Solicitar}>
-                      Solicitar
-                    </Button>
+                    
                   </div>
                 </div>
               </div>
@@ -391,20 +406,9 @@ export default function Soli() {
             <div className={styles.boxe2210soli}>
               <Datosest token={Token}/>
             </div>
-            <NextLink
-              className={styles.boxe2211soli}
-              href="https://informatica.uv.cl/"
-            >
-              Universidad de Valparaiso
-              <Image
-                src="https://informatica.uv.cl/templates/yootheme/cache/75/Banner_Web_2023_Informatica_2_1-75ac94f1.webp"
-                width="100%"
-                height="100%"
-                alt="Image"
-                sizes="cover"
-                isZoomed
-              />
-            </NextLink>
+            <Button className={styles.boxe2211soli} onClick={Solicitar}>
+                Realizar Solicitud
+              </Button>
           </div>
         </div>
       </div>

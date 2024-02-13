@@ -1,9 +1,6 @@
 import { backendUrl } from "../config";
-
 export const funcionSoli= async (token) => {
-
 };
-
 export const solicitudes = async (token,datos) => {
   const Data = {
     token: token,
@@ -30,7 +27,6 @@ export const solicitudes = async (token,datos) => {
     alert("Se produjo un error al intentar de nuevo mas tarde");
   }
 };
-
 export const PDF = async (Token, selectedEmpresaId, asignatura) => {
   // Configurar los datos para la solicitud a la API
   if (!selectedEmpresaId) {
@@ -135,10 +131,8 @@ export const datosEst = async (token) => {
     return null;
   }
 };
-
 export const datosEMP = async (idSolicitud) => {
   const Data = {
-    
     idSolicitud: idSolicitud,
   };
   try {
@@ -164,7 +158,6 @@ export const datosEMP = async (idSolicitud) => {
     return null;
   }
 };
-
 export const actualizarDatosUsuario = async (token, nuevosDatos) => {
   try {
     const response = await fetch(`${backendUrl}/usuario/update`, {
@@ -217,9 +210,6 @@ export const AllestSoli = async (token) => {
   }
 
 };
-
-
-
 export const extarerEmpresa = async (token, idSolicitud) => {
   try {
     const response = await fetch(`${backendUrl}/empresa/getEmpresa`, {
@@ -245,22 +235,16 @@ export const extarerEmpresa = async (token, idSolicitud) => {
   }
 };
 export const All_EMP = async (token) => {
-  const Data = {
-    token: token,
-  };
   try {
-
-    const response = await fetch(`${backendUrl}/empresa/`, {
-
-      method: "POST",
+    const response = await fetch(`${backendUrl}/empresa/listar`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(Data),
     });
     if (response.ok) {
       const data = await response.json();
-      return data.solicitudes;
+      return data;
     } else {
       // Maneja el caso de credenciales incorrectas
       alert("Error al cargar solicitudes");

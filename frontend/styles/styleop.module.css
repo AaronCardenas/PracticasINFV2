@@ -1062,10 +1062,12 @@
     gap: 30px;
     font-size: x-large;
     padding: 10px;
-    color:white;
+    color: white;
+    background-color: #58707e;
+    border: #3e525f 4px solid;
+    box-shadow: #000000 0px 0px 12px 0px;
     height: 35%;
     width:100%;
-    background-color: #334550;
 }
 .TextSoli{
     display: flex;
@@ -1093,7 +1095,7 @@
     border: #3e525f 4px solid;
     box-shadow: #000000 0px 0px 12px 0px;
     width: 80%;
-    height: 35%;
+    height: 75%;
 }
 .boxe22000acp{
     display: flex;
