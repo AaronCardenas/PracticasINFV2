@@ -6,29 +6,13 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
-  Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
   Pagination,
 } from "@nextui-org/react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PlusIcon } from "./PlusIcon";
-import { VerticalDotsIcon } from "./VerticalDotsIcon";
-import { SearchIcon } from "./SearchIcon";
-import { ChevronDownIcon } from "./ChevronDownIcon";
-import { capitalize } from "./utils";
-import NextLink from 'next/link';
-import { PDF } from "../../../api/est/solicitudes.jsx";
-
 export default function TAB_EMP({
   columns,
   datos,
-  statusOptions,
   INITIAL_VISIBLE_COLUMNS,
-  statusColorMap,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -40,10 +24,7 @@ export default function TAB_EMP({
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "fase",
     direction: "ascending",
-  });
-  const searchParams = useSearchParams(); 
-  const router= useRouter();
-  const Token = searchParams.get('token');
+  }); 
   const [page, setPage] = React.useState(1);
   const pages = Math.ceil(datos.length / rowsPerPage);
 
@@ -62,7 +43,7 @@ export default function TAB_EMP({
 
     if (hasSearchFilter) {
       filtereddatos = filtereddatos.filter((user) =>
-        user.rut.toLowerCase().includes(filterValue.toLowerCase())
+        user.rutEmpresa.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -70,7 +51,7 @@ export default function TAB_EMP({
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filtereddatos = filtereddatos.filter((user) =>
-        user.rut.toLowerCase().includes(filterValue.toLowerCase())
+        user.rutEmpresa.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -100,77 +81,17 @@ export default function TAB_EMP({
     const handleCellClick = () => {
       // Lógica para cuando se hace click en una celda
     };
-    const handleDropdownSelect = (selectedOption) => {
-      switch (selectedOption) {
-
-        case "Carta Presentacion":
-        
-          PDF(Token, user.rutEmpresa, user.numeroPractica);
-          break;
-        case "Carta Aceptacion":
-          // Lógica para la opción Aceptar
-          break;
-        case "Eliminar":
-
-
-          // Lógica para la opción Rechazar
-          break;
-        default:
-          // Otras opciones
-          break;
-      }
-    };
     switch (columnKey) {
-      case "idSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
-      case "rut":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rut}</p>;
       case "rutEmpresa":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rutEmpresa}</p>;
-      case "fechaSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud.split('T')[0]}</p>;
-      case "numeroPractica":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.numeroPractica}</p>;
-      case "fase":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fase}</p>;
-      case "acciones":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-400" />
-                </Button>
-              </DropdownTrigger>
-
-              <DropdownMenu aria-label="opciones">
-                <DropdownItem onClick={() => handleDropdownSelect("Carta Presentacion")}>DW Carta Presentación</DropdownItem>
-                <DropdownItem href={`est/acp?idSolicitud=${user.idSolicitud}`}>Carta de Aceptación</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect("Eliminar")}>Eliminar</DropdownItem>
-
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
+      case "razonSocial":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.razonSocial}</p>;
+      case "region":
+        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.region}</p>;
       default:
         return cellValue;
     }
   }, []);
-
-  const onRowsPerPageChange = React.useCallback((e) => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
-  }, []);
-
-  const onSearchChange = React.useCallback((value) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
-
   const bottomContent = React.useMemo(() => {
     return (
       <div className="px-2 flex justify-between items-center mt-auto">
@@ -180,7 +101,6 @@ export default function TAB_EMP({
           isDisabled={hasSearchFilter}
           page={page}
           total={pages}
-          isCompact
           onChange={setPage}
         />
       </div>
@@ -239,7 +159,7 @@ export default function TAB_EMP({
       </TableHeader>
       <TableBody emptyContent={"No datos found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.idSolicitud}>
+          <TableRow key={item.rutEmpresa}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

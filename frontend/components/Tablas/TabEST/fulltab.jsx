@@ -28,7 +28,6 @@ export default function TAB({
   datos,
   statusOptions,
   INITIAL_VISIBLE_COLUMNS,
-  statusColorMap,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -36,7 +35,7 @@ export default function TAB({
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(12);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "fase",
     direction: "ascending",
@@ -178,10 +177,11 @@ export default function TAB({
           <Input
             isClearable
             classNames={{
-              base: "w-full sm:max-w-[44%]",
-              inputWrapper: "border-1",
+              base: "w-full sm:max-w-[44%] text-black",
+              inputWrapper: "border-1 bg-gray-300",
             }}
-            placeholder="Buscar Rut ..."
+            
+            placeholder="Buscar Solicitud..."
             size="sm"
             startContent={<SearchIcon className="text-default-300" />}
             value={filterValue}
@@ -189,33 +189,6 @@ export default function TAB({
             onClear={() => setFilterValue("")}
             onValueChange={onSearchChange}
           />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="l"
-                  variant="flat"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          </div>
           <NextLink href='est/solicitud'>
             <Button
               className="bg-black text-white "
@@ -247,7 +220,7 @@ export default function TAB({
           isDisabled={hasSearchFilter}
           page={page}
           total={pages}
-          isCompact
+          
           onChange={setPage}
         />
       </div>

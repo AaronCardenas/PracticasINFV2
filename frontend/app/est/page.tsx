@@ -44,11 +44,6 @@ export default function Est() {
     { name: "Rut Empresa", uid: "rutEmpresa", sortable: true },
     { name: "Region", uid: "region", sortable: false },
   ];
-  const statusColorMap = {
-    active: "success",
-    paused: "danger",
-    vacation: "warning",
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,24 +63,23 @@ export default function Est() {
     };
     const fetchDataEMP = async () => {
       try {
-        const rawData = await All_EMP(Token);
+        const Data = await All_EMP(Token);
+        const rawData= Data.empresasList;
         const transformedData = rawData.map((item) => ({
           rutEmpresa: item.rutEmpresa,
           razonSocial: item.razonSocial,
           region: item.region
         }));
-        setData(transformedData);
+        setData_emp(transformedData);
       } catch (error) {
         console.error("Error al obtener datos del usuario:", error);
       }
     };
     fetchData();
-    //fetchDataEMP();
+    fetchDataEMP();
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
-
-
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
@@ -127,13 +121,8 @@ export default function Est() {
                 datos={data}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
-                statusColorMap={statusColorMap}
               />
                 </div>
-              </div>
-              <div className={styles.boxe22112}>
-                
-                <div className={styles.boxe221121}> Memorias </div>
               </div>
             </div>
             <div className={styles.boxe2210}>
@@ -143,10 +132,8 @@ export default function Est() {
               <div className={styles.boxe22101}>
               <TAB_EMP
                 columns={columns_emp}
-                datos={data}
-                statusOptions={statusOptions}
+                datos={data_emp}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS_EMP}
-                statusColorMap={statusColorMap}
               />
               </div>
             </div>
