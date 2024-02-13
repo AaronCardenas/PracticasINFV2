@@ -77,18 +77,12 @@ const listarEmpresas = async (req,res) => {
     try{
 
         const empresas = await db.empresa.findAll({
-            attributes: ['razonSocial','rutEmpresa','region']
+            where: { verificado: true }
         });
-
-        const empresasList = empresas.map(empresa => ({
-            razonSocial: empresa.razonSocial,
-            rutEmpresa: empresa.rutEmpresa,
-            region: empresa.region,
-        }));
 
         return res.status(200).json({
             message:"Empresas listadas exitosamente.",
-            empresasList
+            empresas
         });
     } catch(err){
         return res.status(500).json({
@@ -161,12 +155,39 @@ const getEmpresa = async (req,res) => {
     }
 };
 
-const verDatosEmpresa = 
+const verificarEmpresa = async (req,res) => {
+
+    const { rutEmpresa } = req.body;
+
+    try{
+        const empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+        if(!empresa){
+            return res.status(404).json({
+                message:"La empresa no existe."
+            });
+        };
+
+        empresa.verificado = true;
+        await empresa.save();
+
+        return res.status(200).json({
+            message:"Empresa verificada exitosamente.",
+            empresa
+        });
+    }
+    catch(err){
+
+    }
+
+
+
+};
 
 module.exports = {
     validarEmpresa,
     crearEmpresa,
     listarEmpresas,
     buscarEmpresas,
-    getEmpresa
+    getEmpresa,
+    verificarEmpresa
 };
