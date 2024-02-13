@@ -1,6 +1,7 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const jwt = require('jsonwebtoken');
+const tokenfunc = require('../helpers/token.helpers.js');
 const key = require('../config/const.js').JWT_SECRET;
 
 const validarEmpresa = async (req,res,next) => {
@@ -183,11 +184,28 @@ const verificarEmpresa = async (req,res) => {
 
 };
 
+const getEmpresas = async (req,res) => {
+    const {token} = req.body;
+    const response = await tokenfunc.validarToken(token, 4);
+    console.log(response);
+    if(response.Boolean){
+        const empresas = await db.empresa.findAll();
+        return res.status(200).json({
+            message:"Empresas encontradas.",
+            empresas
+        });
+    }else{
+        return res.status(401).json({
+            message: "Usuario no autorizado."
+        });
+    }
+};
 module.exports = {
     validarEmpresa,
     crearEmpresa,
     listarEmpresas,
     buscarEmpresas,
     getEmpresa,
-    verificarEmpresa
+    verificarEmpresa,
+    getEmpresas
 };

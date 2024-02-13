@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { validarEmpresa, crearEmpresa, listarEmpresas, buscarEmpresas, getEmpresa, verificarEmpresa } = require('../controllers/empresa.controller.js');
+const { validarEmpresa, crearEmpresa, listarEmpresas, buscarEmpresas, getEmpresa, verificarEmpresa, getEmpresas} = require('../controllers/empresa.controller.js');
 
 //Ruta de prueba
 router.get("/",(req,res)=>{
@@ -21,5 +21,7 @@ router.get("/buscar", buscarEmpresas)           // ?razonSocial=nombreEmpresa (c
 router.post("/getEmpresa", getEmpresa);        // { idSolicitud }    
 
 router.put("/verificar", verificarEmpresa);    // { correoSupervisor }
+
+router.post("/getEmpresas", getEmpresas); 
 
 module.exports = router;
