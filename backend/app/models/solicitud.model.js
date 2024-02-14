@@ -3,9 +3,7 @@ module.exports = (sequelize, Sequelize) => {
         idSolicitud: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-
-            autoIncrement: true,
-            allowNull: false
+            autoIncrement: true
           },
           rut: {
             type: Sequelize.STRING(12),

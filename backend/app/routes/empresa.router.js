@@ -20,7 +20,7 @@ router.get("/buscar", buscarEmpresas)           // ?razonSocial=nombreEmpresa (c
 
 router.post("/getEmpresa", getEmpresa);        // { idSolicitud }    
 
-router.put("/verificar", verificarEmpresa);    // { correoSupervisor }
+router.put("/verificar", verificarEmpresa);    // { rutEmpresa }
 
 router.post("/getEmpresas", getEmpresas); 
 
