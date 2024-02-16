@@ -120,7 +120,7 @@ export const datosEst = async (token) => {
 
     if (response.ok) {
       const dato = await response.json();
-      const data =dato.usuario;
+      const data = dato.usuario;
       return data;
     } else {
       alert("Error al recibir respuesta.");

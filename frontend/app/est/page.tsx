@@ -80,6 +80,8 @@ export default function Est() {
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+
   return (
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>

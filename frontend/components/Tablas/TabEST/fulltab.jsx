@@ -110,8 +110,6 @@ export default function TAB({
           // Lógica para la opción Aceptar
           break;
         case "Eliminar":
-
-
           // Lógica para la opción Rechazar
           break;
         default:

@@ -153,6 +153,27 @@
     background-color:#e5e5e5;
     border-radius: 2ch;
 }
+.datossup {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 10px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%; 
+    height: 100%; /* Cambiado de "100%" a 100% sin comillas */
+    padding: 16px;
+    color: aliceblue;
+    background-color: transparent;
+    border-radius: 2ch;
+    text-align: center; /* Centra el texto dentro de la columna */
+}
+.datossup> :first-child {
+    grid-column: span 2; 
+    text-align: center;
+    font-size: 45;
+    font-weight: bold;
+}
 
 /*Solicitud*/
 .box{
