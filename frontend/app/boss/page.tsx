@@ -1,12 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Image } from "@nextui-org/react";
-import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
+import { Button, Image } from "@nextui-org/react";// Importa el router de Next.js
 import styles from "../../styles/styleop.module.css";
-import { motion } from "framer-motion";
-import Listar from "../../components/Tablas/tab";
 import NextLink from "next/link";
-import { AllSoli } from "../../api/adm/solicitudes";
+import { AllSoli } from "../../api/boss/solicitudes";
 import TAB from "../../components/Tablas/TabADM/fulltab";
 
 export default function Boss() {
@@ -30,7 +27,6 @@ export default function Boss() {
     "rut",
     "rutEmpresa",
     "numeroPractica",
-    "fase",
     "acciones",
   ];
   const statusColorMap = {
@@ -48,7 +44,6 @@ export default function Boss() {
           rutEmpresa: item.rutEmpresa,
           fechaSolicitud: item.fechaSolicitud,
           numeroPractica: item.numeroPractica,
-          fase: item.fase,
         }));
         setData(transformedData);
       } catch (error) {
@@ -92,12 +87,12 @@ export default function Boss() {
           <div className={styles.boxp220}>Panel de administración</div>
           <div className={styles.boxp221}>
             <div className={styles.boxp2211}>
-              <TAB
+            <TAB
                 columns={columns}
-                datos={data}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
-                statusColorMap={statusColorMap}
+                FASE={2}
+                FuncionDatos={AllSoli}
               />
             </div>
           </div>

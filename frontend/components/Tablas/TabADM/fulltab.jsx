@@ -19,16 +19,17 @@ import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { capitalize } from "./utils";
 import {actualizarFaseSolicitud} from "../../../api/adm/solicitudes"
-import { AllSoli } from "../../../api/adm/solicitudes";
 export default function TAB({
   columns,
   statusOptions,
   INITIAL_VISIBLE_COLUMNS,
+  FASE,
+  FuncionDatos
 }) {
   const [datos, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const rawData = await AllSoli();
+      const rawData = await FuncionDatos();
       const transformedData = rawData.map((item) => ({
         idSolicitud: item.idSolicitud,
         rut: item.rut,
@@ -59,9 +60,7 @@ export default function TAB({
   });
   const [page, setPage] = React.useState(1);
   const pages = Math.ceil(datos.length / rowsPerPage);
-
   const hasSearchFilter = Boolean(filterValue);
-  
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") {
       return columns;
@@ -106,7 +105,7 @@ export default function TAB({
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-
+  const pendientes = [];
   const renderCell = React.useCallback((user, columnKey,datos, setData) => {
     const cellValue = user[columnKey];
     const handleCellClick = () => {
@@ -117,16 +116,15 @@ export default function TAB({
       document.execCommand('copy');
       document.body.removeChild(tempInput);
     };
-
     const handleDropdownSelect = (selectedOption, idSolicitud, datos, setData) => {
       switch (selectedOption) {
         case "Pendiente":
-          console.log("aqui",datos)
-          // Lógica para la opción Pendiente
-          // Suponiendo que "Pendiente" no requiere cambios en el backend
+          pendientes.push(idSolicitud);
+          console.log(pendientes);
           break;
         case "Aceptar":
-          actualizarFaseSolicitud(idSolicitud, 2);
+          console.log("idSolicitud", idSolicitud);
+          actualizarFaseSolicitud(idSolicitud, FASE+1);
           setData(prevData => {
             const index = prevData.findIndex((item) => item.idSolicitud === idSolicitud);
             const newData = [...prevData.slice(0, index), ...prevData.slice(index + 1)];
@@ -134,7 +132,6 @@ export default function TAB({
           });
           break;
         case "Rechazar": // cambiar el color
-          // Lógica para la opción Rechazar
           const rechazo = prompt("Por favor, ingresa la razón del rechazo:");
           if (rechazo) {
             actualizarFaseSolicitud(idSolicitud, 7, rechazo);
@@ -142,17 +139,13 @@ export default function TAB({
               const index = prevData.findIndex((item) => item.idSolicitud === idSolicitud);
               const newData = [...prevData.slice(0, index), ...prevData.slice(index + 1)];
               return newData;
-            }); // Asegúrate de usar el valor correcto para la fase
+            });
           }
           break;
         default:
-          // Otras opciones
           break;
       }
     };
-    const click = () => {
-      alert("cualquier wea.....")
-    } ;
     switch (columnKey) {
       case "idSolicitud":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
@@ -164,12 +157,10 @@ export default function TAB({
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud}</p>;
       case "numeroPractica":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.numeroPractica}</p>;
-      case "fase":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fase}</p>;
       case "acciones":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
+          <div id='action-cell' className="relative flex justify-end items-center gap-2 ">
+            <Dropdown className="border-1 border-default-200">
               <DropdownTrigger>
                 <Button isIconOnly radius="full" size="sm" variant="light">
                   <VerticalDotsIcon className="text-default-400" />
@@ -188,10 +179,6 @@ export default function TAB({
         return cellValue;
     }
   }, []);
-
-
-
-
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
@@ -295,12 +282,7 @@ export default function TAB({
       wrapper: ["max-h-[382px]", "max-w-3xl"],
       th: ["bg-black", "text-white", "border-b", "border-divider", "text-center", "text-md"],
       td: [
-        // ...otras clases para las celdas
-        "group-data-[first=true]:first:before:rounded-none border border-black ", // añade borde negro a la primera celda
-        "group-data-[first=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda de la primera fila
-        "group-data-[middle=true]:before:rounded-none border border-black ", // añade borde negro a las celdas del medio
-        "group-data-[last=true]:first:before:rounded-none border border-black", // añade borde negro a la primera celda de la última fila
-        "group-data-[last=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda
+        "group-data-[first=true]:first:before:rounded-none border border-black ", // añade borde negro
       ],
     }),
     []

@@ -73,6 +73,8 @@ export default function Admin() {
                 columns={columns}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
+                FASE={1}
+                FuncionDatos={AllSoli}
               />
             </div>
           </div>
