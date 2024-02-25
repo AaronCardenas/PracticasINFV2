@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -19,14 +19,33 @@ import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { capitalize } from "./utils";
 import {actualizarFaseSolicitud} from "../../../api/adm/solicitudes"
+import { AllSoli } from "../../../api/adm/solicitudes";
 export default function TAB({
   columns,
-  datos,
   statusOptions,
   INITIAL_VISIBLE_COLUMNS,
-  statusColorMap,
-  setDatos,
 }) {
+  const [datos, setData] = useState([]);
+  const fetchData = async () => {
+    try {
+      const rawData = await AllSoli();
+      const transformedData = rawData.map((item) => ({
+        idSolicitud: item.idSolicitud,
+        rut: item.rut,
+        rutEmpresa: item.rutEmpresa,
+        fechaSolicitud: item.fechaSolicitud,
+        numeroPractica: item.numeroPractica,
+        fase: item.fase,
+      }));
+      setData(transformedData);
+    } catch (error) {
+      console.error("Error al obtener datos del usuario:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }
+  ,[]);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -88,7 +107,7 @@ export default function TAB({
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey,datos) => {
+  const renderCell = React.useCallback((user, columnKey,datos, setData) => {
     const cellValue = user[columnKey];
     const handleCellClick = () => {
       const tempInput = document.createElement('input');
@@ -99,9 +118,7 @@ export default function TAB({
       document.body.removeChild(tempInput);
     };
 
-    const handleDropdownSelect = (selectedOption, idSolicitud, datos) => {
-      console.log("Opción seleccionada:", selectedOption, "ID de Solicitud:", idSolicitud);
-      
+    const handleDropdownSelect = (selectedOption, idSolicitud, datos, setData) => {
       switch (selectedOption) {
         case "Pendiente":
           console.log("aqui",datos)
@@ -110,18 +127,22 @@ export default function TAB({
           break;
         case "Aceptar":
           actualizarFaseSolicitud(idSolicitud, 2);
-          const index = datos.findIndex((item) => item.idSolicitud === idSolicitud);
-          const arreglo = [...datos.slice(0, index), ...datos.slice(index + 1)];
-          console.log("aqui",arreglo);
-          
-          setDatos(arreglo)
-          
+          setData(prevData => {
+            const index = prevData.findIndex((item) => item.idSolicitud === idSolicitud);
+            const newData = [...prevData.slice(0, index), ...prevData.slice(index + 1)];
+            return newData;
+          });
           break;
         case "Rechazar": // cambiar el color
           // Lógica para la opción Rechazar
           const rechazo = prompt("Por favor, ingresa la razón del rechazo:");
           if (rechazo) {
-            actualizarFaseSolicitud(idSolicitud, 7, rechazo); // Asegúrate de usar el valor correcto para la fase
+            actualizarFaseSolicitud(idSolicitud, 7, rechazo);
+            setData(prevData => {
+              const index = prevData.findIndex((item) => item.idSolicitud === idSolicitud);
+              const newData = [...prevData.slice(0, index), ...prevData.slice(index + 1)];
+              return newData;
+            }); // Asegúrate de usar el valor correcto para la fase
           }
           break;
         default:
@@ -132,8 +153,6 @@ export default function TAB({
     const click = () => {
       alert("cualquier wea.....")
     } ;
-
-    
     switch (columnKey) {
       case "idSolicitud":
         return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
@@ -157,10 +176,9 @@ export default function TAB({
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="opciones">
-                <DropdownItem aria-label ="opcion aceptar" onClick={() => handleDropdownSelect("Aceptar", user.idSolicitud, datos)}>Aceptar</DropdownItem>
-                <DropdownItem aria-label ="opcion pendiente" onClick={() => handleDropdownSelect("Pendiente", user.idSolicitud, datos)}>Pendiente</DropdownItem>
-                <DropdownItem aria-label ="opcion rechazar"onClick={() => handleDropdownSelect("Rechazar", user.idSolicitud)}>Rechazar</DropdownItem>
-                
+                <DropdownItem aria-label ="opcion aceptar" onClick={() => handleDropdownSelect("Aceptar", user.idSolicitud, datos,setData)}>Aceptar</DropdownItem>
+                <DropdownItem aria-label ="opcion pendiente" onClick={() => handleDropdownSelect("Pendiente", user.idSolicitud, datos,setData)}>Pendiente</DropdownItem>
+                <DropdownItem aria-label ="opcion rechazar"onClick={() => handleDropdownSelect("Rechazar",user.idSolicitud, datos,setData)}>Rechazar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -317,7 +335,7 @@ export default function TAB({
         {(item) => (
           <TableRow key={item.idSolicitud}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey, datos)}</TableCell>
+              <TableCell>{renderCell(item, columnKey, datos, setData)}</TableCell>
             )}
           </TableRow>
         )}

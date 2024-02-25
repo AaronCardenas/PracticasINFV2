@@ -36,27 +36,6 @@ export default function Admin() {
     paused: "danger",
     vacation: "warning",
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const rawData = await AllSoli();
-        const transformedData = rawData.map((item) => ({
-          idSolicitud: item.idSolicitud,
-          rut: item.rut,
-          rutEmpresa: item.rutEmpresa,
-          fechaSolicitud: item.fechaSolicitud,
-          numeroPractica: item.numeroPractica,
-          fase: item.fase,
-        }));
-        setData(transformedData);
-      } catch (error) {
-        console.error("Error al obtener datos del usuario:", error);
-      }
-    };
-    fetchData();
-    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-    return () => clearInterval(intervalId);
-  }, []);
   return (
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
@@ -92,11 +71,8 @@ export default function Admin() {
             <div className={styles.boxp2211}>
               <TAB
                 columns={columns}
-                datos={data}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
-                statusColorMap={statusColorMap}
-                setDatos={setData}
               />
             </div>
           </div>
