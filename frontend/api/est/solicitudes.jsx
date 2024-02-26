@@ -1,6 +1,4 @@
 import { backendUrl } from "../config";
-export const funcionSoli= async (token) => {
-};
 export const solicitudes = async (token,datos) => {
   const Data = {
     token: token,

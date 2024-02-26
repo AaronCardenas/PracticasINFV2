@@ -95,7 +95,6 @@ const crearUsuario = async (req, res) => {
     });
   }
 };
-
 const validarUsuario = async (req,res) => {             // Para que se usara a comparacion del login?
     const {token,tipoUsuario} = req.body;
     if (token){
@@ -108,7 +107,6 @@ const validarUsuario = async (req,res) => {             // Para que se usara a c
 
     }
 };
-
 const getdata = async (req, res) => {
   const { token } = req.body;
   try {

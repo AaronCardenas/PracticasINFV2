@@ -4,121 +4,53 @@ import {
   Button,
   Image,
 } from "@nextui-org/react";
-import { useRouter } from "next/router"; // Importa el router de Next.js
 import styles from "../../styles/styleop.module.css";
-import { motion } from "framer-motion";
-import Listar from "../../components/Tablas/tab";
 import NextLink from "next/link";
+import { AllSoli } from "../../api/sup/solicitudes";
+import TAB from "../../components/Tablas/TabSUP/fulltab";
 export default function Sup() {
-  //ejemplo de los datos
-  const data = [
-    {
-      id: 1,
-      Rut: '11111111-1',
-      Nombre: 'Juan',
-      Edad: 25,
-      FechaI: '2023-01-01',
-      FechaT: '2023-01-01',
-      Estado: 'Pendiente',
-    },
-    {
-      id: 2,
-      Rut: '22222222-2',
-      Nombre: 'María',
-      Edad: 30,
-      FechaI: '2023-01-02',
-      FechaT: '2023-01-02',
-      Estado: 'Pendiente',
-    },
-    {
-      id: 3,
-      Rut: '33333333-3',
-      Nombre: 'Josería',
-      Edad: 30,
-      FechaI: '2023-01-02',
-      FechaT: '2023-01-02',
-      Estado: 'Pendiente',
-    },
-    {
-      id: 4,
-      Rut: '44444444-4',
-      Nombre: 'BBría',
-      Edad: 30,
-      FechaI: '2023-01-02',
-      FechaT: '2023-01-02',
-      Estado: 'Pendiente',
-    },
-    {
-      id: 5,
-      Rut: '55555555-5',
-      Nombre: 'AAAría',
-      Edad: 30,
-      FechaI: '2023-01-02',
-      FechaT: '2023-01-02',
-      Estado: 'Pendiente',
-    },
+  const [data, setData] = useState([]);
+  const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const rawData = await AllSoli(Token);
+        const transformedData = rawData.map((item) => ({
+          idSolicitud: item.idSolicitud,
+          rut: item.rut,
+          rutEmpresa: item.rutEmpresa,
+          fechaSolicitud: item.fechaSolicitud,
+          numeroPractica: item.numeroPractica,
+        }));
+        setData(transformedData);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+    fetchData();
+    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+  const statusOptions = [
+    { name: "Presentacion", uid: "1" },
+    { name: "Aceptacion", uid: "2" },
   ];
-
-  const columns = {
-    id: 'Rut',
-    Rut: 'Rut',
-    Nombre: 'Nombre',
-    Edad: 'Edad',
-    FechaI: 'Fecha Inicio',
-    FechaT: 'Fecha Termino',
-    Estado: 'Estado',
-  };
-  
-  const initialModifications = data.reduce((acc, item) => {
-    acc[item.id] = 'Pendiente';
-    return acc;
-  }, {});
-  const [modifications, setModifications] = useState(initialModifications);
-
-  const Aprobar = (id) => {
-    const newData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, estado: 'Aprobado' };
-      }
-      return item;
-    });
-    setModifications((prevModifications) => ({
-      ...prevModifications,
-      [id]: 'Aprobado',
-    }));
-  };
-
-  const Rechazar = (id) => {
-    const newData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, estado: 'Rechazado' };
-      }
-      return item;
-    });
-    setModifications((prevModifications) => ({
-      ...prevModifications,
-      [id]: 'Rechazado',
-    }));
-  };
-
-  const Pendiente = (id) => {
-    const newData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, estado: 'Pendiente' };
-      }
-      return item;
-    });
-    setModifications((prevModifications) => ({
-      ...prevModifications,
-      [id]: 'Pendiente',
-    }));
-  };
-  const Guardar = () => {
-    const pendientes = Object.entries(modifications)
-      .filter(([id, estado]) => estado != 'Pendiente')
-      .map(([id]) => id);
-    const datamod = data.filter((item) => pendientes.includes(String(item.id)));
-    console.log("datos a modificar:", datamod);
+  const columns = [
+    { name: "RUT Estudiante", uid: "rut", sortable: true },
+    { name: "Fecha", uid: "fechaSolicitud", sortable: true },
+    { name: "Estado", uid: "fase", sortable: false },
+    { name: "Acciones", uid: "acciones", sortable: false },
+  ];
+  const INITIAL_VISIBLE_COLUMNS = [
+    "rut",
+    "fechaSolicitud",
+    "fase",
+    "acciones",
+  ];
+  const statusColorMap = {
+    active: "success",
+    paused: "danger",
+    vacation: "warning",
   };
   return (
     <div className={styles.AdminDiv}>
@@ -142,7 +74,12 @@ export default function Sup() {
               <p>Boton</p>
             </div>
             <div className={styles.boxp2211}>
-              <Listar columns={columns} data={data} Modificaciones={modifications} Aprobar={Aprobar} Rechazar={Rechazar} Pendiente={Pendiente} Guardar={Guardar}/>
+              <TAB
+                  columns={columns}
+                  statusOptions={statusOptions}
+                  INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
+                  FuncionDatos={AllSoli}
+                />
             </div>
           </div>
         </div>
