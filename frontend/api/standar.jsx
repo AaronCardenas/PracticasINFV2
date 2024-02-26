@@ -1,17 +1,23 @@
 import { backendUrl} from "./config";
 export const funcionlogin = async (rut, password,userType,isValid,setIsLoading,router) => {
-  if (!isValid || !rut.raw || !password) {
-    alert("Rut o contraseña inválidos");
-    return; // Evitar iniciar sesión si el RUT no es válido
+  if(userType === "sup"){
+    const userData = {
+      email: rut,
+      password: password,
+      userType: userType
+    };
   }
-  console.log(rut.raw); // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
-  // Configurar los datos para la solicitud a la API
-  const userData = {
-    rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
-    password: password
-  };
-  // Realiza la solicitud a la API
-
+  else{
+    if (!isValid || !rut.raw || !password) {
+      alert("Rut o contraseña inválidos");
+      return; // Evitar iniciar sesión si el RUT no es válido
+    }
+    const userData = {
+      rut: rut.raw, // rut.raw=(20111111-5);rut.formatted=(20.111.111-5)
+      password: password,
+      userType: userType
+    };
+  }
   try {
     setIsLoading(true);
 
@@ -22,7 +28,6 @@ export const funcionlogin = async (rut, password,userType,isValid,setIsLoading,r
       },
       body: JSON.stringify(userData),
     });
-    // console.log(userData);
     if (response.ok) {
       const data = await response.json();
       const token = data.token;
