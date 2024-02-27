@@ -20,10 +20,15 @@ const logout = async (req,res) => {
 
 const login = async (req, res) => {
     try {
-      const { rut, password } = req.body;
-  
-      const usuario = await db.usuario.findOne({ where: { rut: rut } });
-  
+      const { rut, correoSupervisor, password, tipoUsuario } = req.body;
+
+      if ( tipoUsuario = "supervisor" ) {
+        const usuario = await db.supervisor.findOne({ where: { correoSupervisor: correoSupervisor } });
+      }
+      else if ( tipoUsuario = "alumno" ) {
+        const usuario = await db.alumno.findOne({ where: { rut: rut } });
+      }
+      
       if (!usuario) {
         return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
       }
@@ -36,10 +41,13 @@ const login = async (req, res) => {
           message: "Usuario validado exitosamente.",
           token: token
         });
-      } else {
+      }
+      else {
         return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
       }
-    } catch (error) {
+
+    }
+    catch (error) {
       return res.status(500).json({ message: "Error interno del servidor." });
     }
 };
