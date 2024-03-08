@@ -23,7 +23,7 @@ router.get("/",(req,res)=>{
 
 
 // Ruta de validacion de usuario                                // DATOS JSON:
-router.post("/crear",crearSolicitud);                           // { rut, rutempresa, extension, numeroPractica }
+router.post("/crear",crearSolicitud);                           // { rut, rutempresa, extension, numeroPractica ,}
 router.put("/:id",faseSolicitud);                               // {fase, descripcionRechazo (puede ser nulo)}
 router.post("/listaSolicitudes",verSolicitudesUsuario);         // {rut}
 router.post("/SolicitudesAceptadas",verSolicitudesAceptadasU);  // {rut}

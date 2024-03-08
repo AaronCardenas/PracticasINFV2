@@ -20,26 +20,46 @@ const logout = async (req,res) => {
 
 const login = async (req, res) => {
     try {
-      const { rut, password } = req.body;
-  
-      const usuario = await db.usuario.findOne({ where: { rut: rut } });
-  
-      if (!usuario) {
-        return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
-      }
-  
-      const passwordCorrecto = usuario.password === password;
-  
-      if (passwordCorrecto) {
-        const token = await tokenfunc.generateToken(usuario);
-        return res.status(200).json({
-          message: "Usuario validado exitosamente.",
-          token: token
-        });
-      } else {
-        return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
+      const { rut, password ,userType} = req.body;
+      if (userType !== "sup") {
+        const usuario = await db.usuario.findOne({ where: { rut: rut } });
+        
+        if (!usuario) {
+          return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
+        }
+        
+        const passwordCorrecto = usuario.password === password;
+        
+        if (passwordCorrecto) {
+          const token = await tokenfunc.generateToken(usuario);
+          return res.status(200).json({
+            message: "Usuario validado exitosamente.",
+            token: token
+          });
+        } else {
+          return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
+        }
+      }else{
+        const usuario = await db.usuario.findOne({ where: { email: rut } });
+        
+        if (!usuario) {
+          return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
+        }
+        
+        const passwordCorrecto = usuario.password === password;
+        
+        if (passwordCorrecto) {
+          const token = await tokenfunc.generateToken(usuario);
+          return res.status(200).json({
+            message: "Usuario validado exitosamente.",
+            token: token
+          });
+        } else {
+          return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
+        }
       }
     } catch (error) {
+      console.log(req.body);
       return res.status(500).json({ message: "Error interno del servidor." });
     }
 };

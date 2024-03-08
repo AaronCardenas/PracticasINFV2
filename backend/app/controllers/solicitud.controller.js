@@ -20,24 +20,16 @@ const supXest = async (req, res) => {
       });
   }
 };
-
-
 const crearSolicitud = async (req, res) => {
   const { token, datos } = req.body;
-
   const { rut } = jwt.verify(token, key);
-
   const numeroPractica = datos.numeroPractica;
-
-
   const solicitudCalificada = await db.solicitud.findOne({
     where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
   });
-
   const solicitudAceptada = await db.solicitud.findOne({
     where: { rut, fase: 3, numeroPractica }, // En entero, la fase aceptada es 3
   });
-
   const solicitudPracticaAnteriorNoTerminada = await db.solicitud.findOne({
     where: { rut, fase: { [Op.not]: 5 }, numeroPractica: numeroPractica - 1 }, // Revisar
   });
@@ -76,6 +68,7 @@ const crearSolicitud = async (req, res) => {
     });
   }
 };
+
 
 const faseSolicitud = async (req, res) => {
   const id = req.params.id;

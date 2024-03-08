@@ -34,11 +34,11 @@ module.exports = (sequelize, Sequelize) => {
             /*
             1: Solicitada
             2: Revisada
-            3: Firmada // Carta de aceptacion
-            4: Aceptada // Carta de presentacion
+            3: Firmada // Carta de presentacion
+            4: Aceptada // Carta de aceptacion
             5: Terminada // Lo demas
             6: Calificada // ...
-            7: Rechazada (""""""hipotetico"""""")
+            0: Rechazada (""""""hipotetico"""""")
             */
             allowNull: true
           },
@@ -55,7 +55,11 @@ module.exports = (sequelize, Sequelize) => {
           calificacion: {
             type: Sequelize.FLOAT,
             allowNull: true
-          }        
+          },
+          correoSupervisor: {
+            type: Sequelize.STRING(45),
+            allowNull: true
+          },       
     }, {
       // Opciones adicionales
       tableName: 'solicitud',

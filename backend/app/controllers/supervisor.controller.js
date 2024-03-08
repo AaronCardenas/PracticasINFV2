@@ -8,7 +8,7 @@ const loginSupervisor = async (req,res,next) => {
 	
 	try{
 
-		const { rutEmpresa, password} = req.body;
+		const { rutEmpresa , password} = req.body;
 
 		const supervisor = await db.supervisor.findOne({where:{rutEmpresa:rutEmpresa}}); // Asumiendo que solo hay un supervisor por empresa. Cambiara una vez se implemente el signup y login correspondientes.
 

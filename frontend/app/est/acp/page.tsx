@@ -58,10 +58,6 @@ export default function Acp() {
                   <p>Fecha termino</p>
                   <Date />
               </div>
-              <div className={styles.boxe22001acp}>
-                <p>Tareas de practica</p>
-                <TodoList />
-              </div>
             </div>
             <div className={styles.boxe2201soli}>
               <div className={styles.boxe22010soli}>
@@ -170,23 +166,20 @@ export default function Acp() {
                   </div>
                 </div>
               </div>
+              
             </div>
+            <div className={styles.boxe22001acp}>
+                <p>Tareas de practica</p>
+                <TodoList />
+              </div>
           </div>
           <div className={styles.boxe221soli}>
             <div className={styles.boxe2210soli}>
              <Datosest token={Token}/>
             </div>
-            <NextLink className={styles.boxe2211soli} href="https://informatica.uv.cl/">
-                Universidad de Valparaiso
-              <Image
-                src="https://informatica.uv.cl/templates/yootheme/cache/75/Banner_Web_2023_Informatica_2_1-75ac94f1.webp"
-                width="100%"
-                height="100%"
-                alt="Image"
-                sizes="cover"
-                isZoomed
-              />
-            </NextLink>
+            <div className={styles.boxe2210soli}>
+              
+            </div>
           </div>
         </div>
       </div>
