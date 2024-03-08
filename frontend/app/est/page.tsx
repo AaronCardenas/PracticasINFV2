@@ -86,16 +86,16 @@ export default function Est() {
     <div className={styles.EstDiv}>
       <div className={styles.boxe10}>
         <NextLink href='https://informatica.uv.cl/' className={styles.boxe13}>
-          <Image
+        <Image
+            radius="none"
+            src="../UV.svg"
+            alt="Descripción del SVG"
+            width={"100%"}
+            height={"50%"}
+          />
+        <Image
             radius='none'
             src='../Logo_Practica_Blanco.svg'
-            alt='Descripción del SVG'
-            width={'100%'}
-            height={'50%'}
-          />
-          <Image
-            radius='none'
-            src='../UV.svg'
             alt='Descripción del SVG'
             width={'100%'}
             height={'50%'}
