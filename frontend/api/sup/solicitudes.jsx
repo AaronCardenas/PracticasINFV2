@@ -1,13 +1,16 @@
 import { backendUrl } from "../config";
 
 export const AllSoli = async (Token) => {
+  const Data = {
+    token: Token,
+  };
   try {
     const response = await fetch(`${backendUrl}/solicitud/supXest`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({Token}),
+      body: JSON.stringify(Data),
     });
     if (response.ok) {
       const data = await response.json();

@@ -33,8 +33,6 @@ const loginSupervisor = async (req,res,next) => {
 	};
 
 };
-
-
 const crearSupervisor = async (req,res,next) => {
 	
 	const {correoSupervisor, rutEmpresa, nombre, password, telefono, cargoAdministrativo, titulocargo } = req.body;

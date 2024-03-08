@@ -40,7 +40,7 @@ const login = async (req, res) => {
           return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
         }
       }else{
-        const usuario = await db.usuario.findOne({ where: { email: rut } });
+        const usuario = await db.supervisor.findOne({ where: { correoSupervisor: rut } });
         
         if (!usuario) {
           return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
@@ -49,7 +49,7 @@ const login = async (req, res) => {
         const passwordCorrecto = usuario.password === password;
         
         if (passwordCorrecto) {
-          const token = await tokenfunc.generateToken(usuario);
+          const token = await tokenfunc.generateTokenSup(usuario);
           return res.status(200).json({
             message: "Usuario validado exitosamente.",
             token: token
@@ -59,7 +59,8 @@ const login = async (req, res) => {
         }
       }
     } catch (error) {
-      return res.status(500).json({ message: "Error interno del servidor." });
+      console.error(error);
+      return res.status(500).json({ message: "Error interno del servidor",error:error});
     }
 };
 

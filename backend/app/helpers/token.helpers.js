@@ -18,6 +18,20 @@ async function generateToken(usuario) {
         throw error;
     }   
 };
+async function generateTokenSup(usuario) {
+    try {
+        const token = await jwt.sign({
+            correoSupervisor: usuario.correoSupervisor,
+            tipoUsuario: usuario.tipoUsuario
+        }, key, {
+            expiresIn: '1d'
+        });
+        return token;
+        
+    } catch (error) {
+        throw error;
+    }   
+};
 
 async function blacklist(token) {
     try {
@@ -70,6 +84,7 @@ async function validarToken(token, tipoUsuario) {
 
 module.exports = {
     generateToken,
+    generateTokenSup,
     validarToken,
     blacklist
 };

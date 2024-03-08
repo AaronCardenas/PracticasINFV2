@@ -1,13 +1,13 @@
 const db = require("../models");
-
-
 const key = require('../config/const.js').JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const Op = db.Sequelize.Op;
 const supXest = async (req, res) => {
   try {
-      const {correoSupervisor} = req.body;
-      const supervisor= await db.supervisor.findOne({where:{correoSupervisor}});
+      const { token } = req.body;
+      const usuario = await jwt.verify(token, key);
+      console.log(usuario);
+      const supervisor= await db.supervisor.findOne({where:{correoSupervisor:usuario.correoSupervisor}});
       const empresa= await db.empresa.findOne({where:{rutEmpresa:supervisor.rutEmpresa}});
       const practicantes= await db.solicitud.findAll({where:{rutEmpresa:empresa.rutEmpresa}});
       return res.status(200).json({
@@ -68,8 +68,6 @@ const crearSolicitud = async (req, res) => {
     });
   }
 };
-
-
 const faseSolicitud = async (req, res) => {
   const id = req.params.id;
 
@@ -111,20 +109,12 @@ const faseSolicitud = async (req, res) => {
     });
   }
 };
-
-// Vista usuario
 const verSolicitudesUsuario = async (req, res) => {
   try {
     const { token } = req.body;
     const usuario = await jwt.verify(token, key);
-
+    console.log(usuario);
     const solicitudes = await db.solicitud.findAll({ where: { rut: usuario.rut } });
-    // const solicitudList =  solicitudes.map((solicitud)=>{return {
-    //     idSolicitud:solicitud.idSolicitud,
-    //     rutEmpresa:solicitud.rutEmpresa,
-    //     numeroPractica:solicitud.numeroPractica,
-    //     fase:solicitud.fase};
-    // }); 
     return res.status(200).json({
       message: "Solicitudes listadas exitosamente",
       solicitudes

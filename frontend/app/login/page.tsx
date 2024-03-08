@@ -7,7 +7,7 @@ import { useRut } from "react-rut-formatter";
 import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
 import styles from '../../styles/styleop.module.css';
 import { motion } from "framer-motion";
-import {funcionlogin} from '../../api/standar';
+import {funcionlogin,funcionloginSup} from '../../api/standar';
 export default function Login() {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -28,7 +28,7 @@ export default function Login() {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       if(userType === "sup"){
-        funcionlogin(email, password,userType,isValid,setIsLoading,router);
+        funcionloginSup(email, password,userType,isValid,setIsLoading,router);
       }
       else{
         funcionlogin(rut, password,userType,isValid,setIsLoading,router);
