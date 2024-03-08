@@ -5,11 +5,15 @@ const Op = db.Sequelize.Op;
 const supXest = async (req, res) => {
   try {
       const { token } = req.body;
+      console.log(token);
       const usuario = await jwt.verify(token, key);
       console.log(usuario);
       const supervisor= await db.supervisor.findOne({where:{correoSupervisor:usuario.correoSupervisor}});
+      console.log("sup",supervisor);
       const empresa= await db.empresa.findOne({where:{rutEmpresa:supervisor.rutEmpresa}});
+      console.log("emp",empresa);
       const practicantes= await db.solicitud.findAll({where:{rutEmpresa:empresa.rutEmpresa}});
+      console.log("prac",practicantes);
       return res.status(200).json({
           message: "Solicitudes listadas exitosamente",
           practicantes
