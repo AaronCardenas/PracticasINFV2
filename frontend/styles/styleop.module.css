@@ -780,10 +780,12 @@
     justify-content: center;
     align-items: center;
     margin-top: 15px;
-    padding: px;
-    height: 10%;
+    padding: 3px;
+    gap: 10px;
+    height: 20%;
     width:100%;
     background-color: transparent;
+    background-size: cover;
 }
 .boxe21{
     display: flex;

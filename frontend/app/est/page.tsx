@@ -88,19 +88,17 @@ export default function Est() {
         <NextLink href='https://informatica.uv.cl/' className={styles.boxe13}>
           <Image
             radius='none'
-            src='../UV.svg'
+            src='../Logo_Practica_Blanco.svg'
             alt='Descripción del SVG'
             width={'100%'}
-            height={'100%'}
+            height={'50%'}
           />
-        </NextLink>
-        <NextLink href='https://informatica.uv.cl/' className={styles.boxe11}>
           <Image
             radius='none'
             src='../UV.svg'
             alt='Descripción del SVG'
             width={'100%'}
-            height={'100%'}
+            height={'50%'}
           />
         </NextLink>
         <div className={styles.boxe12}>

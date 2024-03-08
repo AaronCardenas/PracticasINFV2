@@ -40,20 +40,19 @@ export default function Admin() {
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
         <NextLink href="https://informatica.uv.cl/" className={styles.boxc11}>
-          
-          <Image
+        <Image
             radius="none"
             src="../UV.svg"
-            alt="Icono UV"
+            alt="Descripción del SVG"
+            width={"100%"}
             height={"50%"}
           />
           <Image
-            id="logoPracticas"
             radius="none"
-            src="../PracticasUV2.svg"
-            alt="Icono de la plataforma"
+            src="../Logo_Practica_Blanco.svg"
+            alt="Descripción del SVG"
+            width={"100%"}
             height={"50%"}
-            width={"60%"}
           />
         </NextLink>
         <div className={styles.boxe12}>

@@ -1,16 +1,14 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Image,
-} from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
+import { Button, Image } from "@nextui-org/react";
 import styles from "../../styles/styleop.module.css";
 import NextLink from "next/link";
 import { AllSoli } from "../../api/sup/solicitudes";
 import TAB from "../../components/Tablas/TabSUP/fulltab";
 export default function Sup() {
   const [data, setData] = useState([]);
-  const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const Token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,12 +39,7 @@ export default function Sup() {
     { name: "Estado", uid: "fase", sortable: false },
     { name: "Acciones", uid: "acciones", sortable: false },
   ];
-  const INITIAL_VISIBLE_COLUMNS = [
-    "rut",
-    "fechaSolicitud",
-    "fase",
-    "acciones",
-  ];
+  const INITIAL_VISIBLE_COLUMNS = ["rut", "fechaSolicitud", "fase", "acciones"];
   const statusColorMap = {
     active: "success",
     paused: "danger",
@@ -55,7 +48,22 @@ export default function Sup() {
   return (
     <div className={styles.AdminDiv}>
       <div className={styles.boxp10}>
-        <NextLink href="https://informatica.uv.cl/"><Image radius="none" src='../UV.svg' alt="Descripción del SVG" width={'100%'} height={"100%"} /></NextLink>
+        <NextLink href="https://informatica.uv.cl/">
+          <Image
+            radius="none"
+            src="../UV.svg"
+            alt="Descripción del SVG"
+            width={"100%"}
+            height={"50%"}
+          />
+          <Image
+            radius="none"
+            src="../Logo_Practica_Blanco.svg"
+            alt="Descripción del SVG"
+            width={"100%"}
+            height={"50%"}
+          />
+        </NextLink>
         <div className={styles.boxc11}>Icono Plataforma</div>
         <div className={styles.boxe12}>
           <Button className={styles.botones}>boton1</Button>
@@ -75,11 +83,11 @@ export default function Sup() {
             </div>
             <div className={styles.boxp2211}>
               <TAB
-                  columns={columns}
-                  statusOptions={statusOptions}
-                  INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
-                  FuncionDatos={AllSoli}
-                />
+                columns={columns}
+                statusOptions={statusOptions}
+                INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
+                FuncionDatos={AllSoli}
+              />
             </div>
           </div>
         </div>
