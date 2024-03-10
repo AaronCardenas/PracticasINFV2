@@ -52,7 +52,8 @@ const login = async (req, res) => {
           const token = await tokenfunc.generateTokenSup(usuario);
           return res.status(200).json({
             message: "Usuario validado exitosamente.",
-            token: token
+            token: token,
+            validado: usuario.verificadoCheck
           });
         } else {
           return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });

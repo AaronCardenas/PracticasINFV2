@@ -11,7 +11,7 @@ const {
     allSolicitudesSec,
     readyAlumno,
     readySupervisor,
-    actulizarFase,
+    actualizarFase,
     supXest
 } = require('../controllers/solicitud.controller.js');
 
@@ -32,7 +32,7 @@ router.get("/allSolicitudesJefe",allSolicitudesJefe);
 router.get("/allSolicitudesSec",allSolicitudesSec);
 router.post("/readyAlumno", readyAlumno);                        // {idSolicitud}
 router.post("/readySupervisor", readySupervisor); 
-router.put("/actualizar/:id", actulizarFase);               // {idSolicitud, nroFase}
+router.put("/actualizar/:id", actualizarFase);               // {idSolicitud, nroFase}
 router.post("/supXest", supXest);                               // {rutSupervisor, rutEstudiante}
 
 

@@ -306,8 +306,7 @@ const readyAlumno = async (req, res) => {
 };
 
 // aplicar solo usarios con el token de admin pueden usar esta funcion.
-
-const actulizarFase = async (req, res) => {
+const actualizarFase = async (req, res) => {
 
   const { idSolicitud, nroFase, motivoRechazo } = req.body;
 
@@ -341,6 +340,30 @@ const actulizarFase = async (req, res) => {
 }
 };
 
+const agregarSup = async (req, res) => {
+
+  const { token, idSolicitud, correoSupervisor} = req.body;
+  const { usuario } = jwt.verify(token, key);
+
+  const solicitud = await db.solicitud.findOne({ where: { idSolicitud: idSolicitud } });
+
+  if (!solicitud) {
+    return res.status(404).json({
+      message: "Solicitud no encontrada",
+    });
+  };
+  
+  solicitud.correoSupervisor = correoSupervisor;
+
+  await solicitud.save();
+
+  return res.status(200).json({
+    message: "Supervisor agregado correctamente",
+    solicitud
+  });
+
+};
+
 
 module.exports = {
   crearSolicitud,
@@ -352,6 +375,6 @@ module.exports = {
   allSolicitudesSec,
   readyAlumno,
   readySupervisor,
-  actulizarFase,
+  actualizarFase,
   supXest
 };
