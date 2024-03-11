@@ -41,11 +41,16 @@ const supXest = async (req, res) => {
   }
 };
 const crearSolicitud = async (req, res) => {
+
   const { token, datos } = req.body;
   const { rut } = jwt.verify(token, key);
-  const numeroPractica = datos.numeroPractica;
+
+  const numeroPractica = datos.numeroPractica; 
+  
   const solicitudCalificada = await db.solicitud.findOne({
+
     where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
+
   });
   const solicitudAceptada = await db.solicitud.findOne({
     where: { rut, fase: 3, numeroPractica }, // En entero, la fase aceptada es 3
@@ -81,13 +86,50 @@ const crearSolicitud = async (req, res) => {
       message: "Solicitud creada exitosamente",
       solicitud,
     });
-  } catch (error) {
+  }catch (error) {
     console.error('Error al crear solicitud:', error);
     return res.status(500).json({
       message: "Error interno del servidor al crear la solicitud",
     });
   }
 };
+
+const eliminarSolicitud = async (req, res) => {
+
+  const { token, idSolicitud } = req.body;
+
+  try{
+
+    const { rut } = jwt.verify(token, key);
+
+    const solicitud = await db.solicitud.findOne({ where: { idSolicitud: idSolicitud } });
+
+    if (!solicitud) {
+      return res.status(404).json({
+        message: "Solicitud no encontrada",
+      });
+    }
+
+    if(solicitud.rut !== rut){
+      return res.status(409).json({
+        message: "No tienes permisos para eliminar esta solicitud",
+      });
+    }
+
+    await solicitud.destroy();
+    return res.status(200).json({
+      message: "Solicitud eliminada exitosamente",
+    });
+
+  }
+  catch(err){
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      err,
+    });
+  };
+};
+
 const faseSolicitud = async (req, res) => {
   const id = req.params.id;
 
@@ -353,7 +395,9 @@ const agregarSup = async (req, res) => {
 
 };
 module.exports = {
+  supXest,
   crearSolicitud,
+  eliminarSolicitud,
   faseSolicitud,
   verSolicitudesUsuario,
   verSolicitudesAceptadasU,
@@ -362,6 +406,5 @@ module.exports = {
   allSolicitudesSec,
   readyAlumno,
   readySupervisor,
-  actualizarFase,
-  supXest
+  actualizarFase
 };
