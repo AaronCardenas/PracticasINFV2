@@ -254,3 +254,29 @@ export const All_EMP = async () => {
   }
 
 };
+export const DELETEsolicitudes = async (token,idSolicitud) => {
+  const Data = {
+    token: token,
+    idSolicitud: datos,
+  };
+  try {
+    const response = await fetch(`${backendUrl}/solicitud/eliminar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Data),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      // Maneja el caso de credenciales incorrectas
+      alert("Error al eliminar solicitud");
+    }
+  } catch (error) {
+    // Maneja errores de red o de servidor
+    console.error("Error de request", error);
+    alert("Se produjo un error al intentar de nuevo mas tarde");
+  }
+};

@@ -19,7 +19,7 @@ import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
 import NextLink from 'next/link';
-import { PDF } from "../../../api/est/solicitudes.jsx";
+import { PDF,DELETEsolicitudes} from "../../../api/est/solicitudes.jsx";
 export default function TAB({
   columns,
   datos,
@@ -106,7 +106,7 @@ export default function TAB({
           // Lógica para la opción Aceptar
           break;
         case "Eliminar":
-          // Lógica para la opción Rechazar
+          DELETEsolicitudes(Token, user.idSolicitud);
           break;
         default:
           // Otras opciones
