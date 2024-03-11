@@ -27,7 +27,12 @@ module.exports = (sequelize, Sequelize)=> {
     titulocargo: {
       type: Sequelize.STRING(50),
       allowNull: true
-    }
+    },
+    verificadoCheck: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
   }, {
     // Opciones adicionales
     tableName: 'supervisor',

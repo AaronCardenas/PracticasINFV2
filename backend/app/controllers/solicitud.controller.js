@@ -2,28 +2,45 @@ const db = require("../models");
 const key = require('../config/const.js').JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const Op = db.Sequelize.Op;
+
 const supXest = async (req, res) => {
   try {
+
       const { token } = req.body;
-      console.log(token);
       const usuario = await jwt.verify(token, key);
-      console.log(usuario);
-      const supervisor= await db.supervisor.findOne({where:{correoSupervisor:usuario.correoSupervisor}});
-      console.log("sup",supervisor);
-      const empresa= await db.empresa.findOne({where:{rutEmpresa:supervisor.rutEmpresa}});
-      console.log("emp",empresa);
-      const practicantes= await db.solicitud.findAll({where:{rutEmpresa:empresa.rutEmpresa}});
-      console.log("prac",practicantes);
+
+      const supervisor = await db.supervisor.findOne(
+          {where: { correoSupervisor : usuario.correoSupervisor }}
+      );
+      
+      const solicitudes = await db.solicitud.findAll(
+          {where: { correoSupervisor: supervisor.correoSupervisor }}
+      );
+
+      return res.status(200).json({
+          message: "Solicitudes encontradas exitosamente",
+          solicitudes
+      });
+
+      /*
+        const empresa = await db.empresa.findOne(
+          {where: { rutEmpresa : supervisor.rutEmpresa }}
+        );
+      const practicantes = await db.solicitud.findAll(
+          {where: { rutEmpresa:empresa.rutEmpresa }}
+        );
       return res.status(200).json({
           message: "Solicitudes listadas exitosamente",
           practicantes
       });
+      */
   } catch (err) {
       return res.status(500).json({
           err
       });
   }
 };
+
 const crearSolicitud = async (req, res) => {
   const { token, datos } = req.body;
   const { rut } = jwt.verify(token, key);
@@ -72,6 +89,7 @@ const crearSolicitud = async (req, res) => {
     });
   }
 };
+
 const faseSolicitud = async (req, res) => {
   const id = req.params.id;
 
@@ -113,6 +131,7 @@ const faseSolicitud = async (req, res) => {
     });
   }
 };
+
 const verSolicitudesUsuario = async (req, res) => {
   try {
     const { token } = req.body;
@@ -132,6 +151,7 @@ const verSolicitudesUsuario = async (req, res) => {
   }
 
 };
+
 // Vista usuario
 const verSolicitudesAceptadasU = async (req, res) => {
   try {
@@ -286,8 +306,7 @@ const readyAlumno = async (req, res) => {
 };
 
 // aplicar solo usarios con el token de admin pueden usar esta funcion.
-
-const actulizarFase = async (req, res) => {
+const actualizarFase = async (req, res) => {
 
   const { idSolicitud, nroFase, motivoRechazo } = req.body;
 
@@ -321,6 +340,30 @@ const actulizarFase = async (req, res) => {
 }
 };
 
+const agregarSup = async (req, res) => {
+
+  const { token, idSolicitud, correoSupervisor} = req.body;
+  const { usuario } = jwt.verify(token, key);
+
+  const solicitud = await db.solicitud.findOne({ where: { idSolicitud: idSolicitud } });
+
+  if (!solicitud) {
+    return res.status(404).json({
+      message: "Solicitud no encontrada",
+    });
+  };
+  
+  solicitud.correoSupervisor = correoSupervisor;
+
+  await solicitud.save();
+
+  return res.status(200).json({
+    message: "Supervisor agregado correctamente",
+    solicitud
+  });
+
+};
+
 
 module.exports = {
   crearSolicitud,
@@ -332,6 +375,6 @@ module.exports = {
   allSolicitudesSec,
   readyAlumno,
   readySupervisor,
-  actulizarFase,
+  actualizarFase,
   supXest
 };
