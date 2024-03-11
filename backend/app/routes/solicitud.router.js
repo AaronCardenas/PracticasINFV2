@@ -12,7 +12,8 @@ const {
     readyAlumno,
     readySupervisor,
     actualizarFase,
-    supXest
+    supXest,
+    eliminarSolicitud
 } = require('../controllers/solicitud.controller.js');
 
 
@@ -34,6 +35,7 @@ router.post("/readyAlumno", readyAlumno);                        // {idSolicitud
 router.post("/readySupervisor", readySupervisor); 
 router.put("/actualizar/:id", actualizarFase);               // {idSolicitud, nroFase}
 router.post("/supXest", supXest);                               // {rutSupervisor, rutEstudiante}
+router.post("/eliminar", eliminarSolicitud);                     // {idSolicitud}
 
 
 module.exports = router;

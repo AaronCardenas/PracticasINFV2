@@ -32,13 +32,16 @@ module.exports = (sequelize, Sequelize) => {
           fase: {
             type: Sequelize.INTEGER,
             /*
-            1: Solicitada
-            2: Revisada
-            3: Firmada // Carta de presentacion
-            4: Aceptada // Carta de aceptacion
-            5: Terminada // Lo demas
-            6: Calificada // ...
-            0: Rechazada (""""""hipotetico"""""")
+            0. Rechazado
+            1. Solicitado
+            2. Revisado
+            3. Firmado
+            4. Formularios
+            5. Coordinacion
+            6. Iniciada
+            7. Memoria
+            8. Revision evaluación
+            9. Finalizado
             */
             allowNull: true
           },
