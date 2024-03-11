@@ -21,45 +21,23 @@ const logout = async (req,res) => {
 const login = async (req, res) => {
     try {
       const { rut, password ,userType} = req.body;
-      if (userType !== "sup") {
-        const usuario = await db.usuario.findOne({ where: { rut: rut } });
+      const usuario = await db.usuario.findOne({ where: { rut: rut } });
+
+      console.log(usuario);
         
-        if (!usuario) {
-          return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
-        }
-        
-        const passwordCorrecto = usuario.password === password;
-        
-        if (passwordCorrecto) {
-          const token = await tokenfunc.generateToken(usuario);
-          return res.status(200).json({
-            message: "Usuario validado exitosamente.",
-            token: token
-          });
-        } else {
-          return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
-        }
-      }else{
-        const usuario = await db.supervisor.findOne({ where: { correoSupervisor: rut } });
-        
-        if (!usuario) {
-          return res.status(404).json({ message: "Credenciales incorrectas (No existe)." });
-        }
-        
-        const passwordCorrecto = usuario.password === password;
-        
-        if (passwordCorrecto) {
-          const token = await tokenfunc.generateTokenSup(usuario);
-          return res.status(200).json({
-            message: "Usuario validado exitosamente.",
-            token: token,
-            validado: usuario.verificadoCheck
-          });
-        } else {
-          return res.status(404).json({ message: "Credenciales incorrectas (Contraseña incorrecta)." });
-        }
+      if (!usuario || usuario.password !== password || usuario.tipoUsuario !== userType) {
+        return res.status(404).json({ message: "Credenciales incorrectas." });
       }
-    } catch (error) {
+
+      const token = await tokenfunc.generateTokenSup(usuario);
+      return res.status(200).json({
+        message: "Usuario validado exitosamente.",
+        token: token,
+        validado: usuario.verificadoCheck
+      });
+      
+    }
+    catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Error interno del servidor",error:error});
     }
