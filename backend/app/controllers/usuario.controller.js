@@ -29,11 +29,10 @@ const login = async (req, res) => {
         return res.status(404).json({ message: "Credenciales incorrectas." });
       }
 
-      const token = await tokenfunc.generateTokenSup(usuario);
+      const token = await tokenfunc.generateToken(usuario);
       return res.status(200).json({
         message: "Usuario validado exitosamente.",
-        token: token,
-        validado: usuario.verificadoCheck
+        token: token
       });
       
     }
