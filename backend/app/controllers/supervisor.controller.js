@@ -19,7 +19,7 @@ const loginSupervisor = async (req,res,next) => {
 		const passwordCorrecto = supervisor.password === password;
 
 		if (passwordCorrecto) {
-			const token = await tokenfunc.generateToken(supervisor);
+			const token = await tokenfunc.generateTokenSup(supervisor);
 			return res.status(200).json({
 				message: "Usuario validado exitosamente.",
 				token: token
