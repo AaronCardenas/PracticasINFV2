@@ -91,7 +91,6 @@ export default function Soli() {
           direccion: item.direccion,
           rubro: item.rubro,
           ciudad: item.ciudad,
-
         }));
         setdataempresa(transformedData);
       } catch (error) {

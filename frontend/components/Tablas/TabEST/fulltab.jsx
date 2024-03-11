@@ -123,13 +123,15 @@ export default function TAB({
           PDF(Token, user.rutEmpresa, user.numeroPractica);
           break;
         case "Carta Aceptacion":
-          
           if(user.fase>=3){
             localStorage.setItem('idSolicitud',user.idSolicitud );
             router.push('/est/acp');
           }
-          else{
+          else if(user.fase<3){
             alert("La carta de aceptación estara disponible despues de su revision");
+          }
+          else{
+            alert("La carta de aceptación no esta disponible en la fase actual");
           }
           break;
         case "Eliminar":
