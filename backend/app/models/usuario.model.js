@@ -9,6 +9,12 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: true
       },
       tipoUsuario: {
+        /* 
+          1. Estudiante
+          2. Coordinador
+          3. Administracion
+          4. Jefe de Carrera
+        */
         type: Sequelize.INTEGER,
         allowNull: true
       },
