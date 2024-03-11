@@ -9,6 +9,7 @@ exports.unirDatos = async (req,res) => {
     const rutUsuario = jwt.verify(token, key).rut;
     const usuario = await db.usuario.findOne({where:{rut:rutUsuario}});
     const empresa = await db.empresa.findOne({where:{rutEmpresa:rutEmpresa}});
+    
     let numeroP;
     switch (asignatura) {
         case "1":

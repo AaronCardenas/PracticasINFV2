@@ -1,11 +1,9 @@
 const puppeteer = require("puppeteer");
-
 async function convertHTMLtoPDF(html, datos) {
 
     const browser = await puppeteer.launch({headless:'new'});
     const page = await browser.newPage();
     const htmlvar = html
-    
       .replace('{{count}}', datos.count)
       .replace('{{razonsocial}}', datos.razonSocial) // Por ingresar
       .replace('{{direccion}}', datos.direccion)     
@@ -18,7 +16,6 @@ async function convertHTMLtoPDF(html, datos) {
       .replace('{{npractica}}', datos.numeroPractica) // Por ingresar.
       .replace('{{SR nombre1 nombre2 apellido1 apellido2}}', `${datos.nombre1} ${datos.nombre2} ${datos.apellido1} ${datos.apellido2}`)
       .replace('{{NOMAPE}}', `${datos.nombre1} ${datos.apellido1}`);
-  
     await page.setContent(htmlvar , {waitUntil: 'domcontentloaded'});
   
     const pdfConfig = await page.pdf({

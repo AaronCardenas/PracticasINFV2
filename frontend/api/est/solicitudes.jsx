@@ -37,7 +37,7 @@ export const PDF = async (Token, selectedEmpresaId, asignatura) => {
     rutEmpresa: selectedEmpresaId,
     asignatura: asignatura,
   };
-
+  console.log("Data", Data);
   // Realiza la solicitud a la API
   try {
 

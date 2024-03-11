@@ -2,7 +2,10 @@ const db = require("../models");
 const puppeteer = require("puppeteer");
 const convertHTMLtoPDF = require('../helpers/conversion.helpers.js');
 const Op = db.Sequelize.Op;
-
+const { readFileSync } = require('fs');
+const path = require('path');
+const imagePath = path.join(__dirname, '../public/uv.jpg');
+const imageBase64 = readFileSync(imagePath).toString('base64');
 exports.conversion = async (req,res) => {
     const datos = req.body;
     const html = `<html style="display: flex;size:Letter;margin-left:12.5%;width: 612px; height: 792px;justify-content: center;">
@@ -14,7 +17,7 @@ exports.conversion = async (req,res) => {
     </head>
     <body style="display: block;font-family:'Times';font-size:8pt;height: 712;width: 100%;margin: 0;padding: 0;justify-content: center;">
     <header style="background-color:#ffffff00;color:#fff;display: flex;">
-           <img width="190" height="100"src="https://www.redbionova.com/wp-content/uploads/2017/12/logo-uv-1.jpg" alt="Tu imagen de encabezado">
+            <img width="190" height="100"  alt="Tu imagen de encabezado" src="data:image/jpg;base64,${imageBase64}" alt="alt text" />
            <p style="text-align:right;line-height: 1.5;letter-spacing: 1px;text-indent:304.8pt; font-size:8pt">
               <span style="font-family:'Arial Unicode MS'">{{count}}/{{anio actual}}</span>
               <span style="font-family:'Arial Unicode MS'">Valparaíso, {{fecha actual}}</span>

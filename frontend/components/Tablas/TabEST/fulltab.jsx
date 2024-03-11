@@ -39,7 +39,7 @@ export default function TAB({
   });
   const searchParams = useSearchParams(); 
   const router= useRouter();
-  const Token = searchParams.get('token');
+  const Token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const [page, setPage] = React.useState(1);
   const pages = Math.ceil(datos.length / rowsPerPage);
 
@@ -100,7 +100,6 @@ export default function TAB({
       switch (selectedOption) {
 
         case "Carta Presentacion":
-        
           PDF(Token, user.rutEmpresa, user.numeroPractica);
           break;
         case "Carta Aceptacion":
@@ -139,7 +138,7 @@ export default function TAB({
 
               <DropdownMenu aria-label="opciones">
                 <DropdownItem onClick={() => handleDropdownSelect("Carta Presentacion")}>DW Carta Presentación</DropdownItem>
-                <DropdownItem href={`est/acp?idSolicitud=${user.idSolicitud}`}>Carta de Aceptación</DropdownItem>
+                <DropdownItem onClick={() => localStorage.setItem('idSolicitud',user.idSolicitud )} href={`est/acp`}>Carta de Aceptación</DropdownItem>
                 <DropdownItem onClick={() => handleDropdownSelect("Eliminar")}>Eliminar</DropdownItem>
 
               </DropdownMenu>
