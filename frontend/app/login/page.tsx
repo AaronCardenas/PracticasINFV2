@@ -4,9 +4,8 @@ import { EyeFilledIcon } from "../../components/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../../components/EyeSlashFilledIcon";
 import { Input, Button, Spinner } from "@nextui-org/react";
 import { useRut } from "react-rut-formatter";
-import { useRouter, useSearchParams } from "next/navigation"; // Importa el router de Next.js
+import { useRouter} from "next/navigation"; // Importa el router de Next.js
 import styles from '../../styles/styleop.module.css';
-import { motion } from "framer-motion";
 import {funcionlogin,funcionloginSup} from '../../api/standar';
 export default function Login() {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,9 +17,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const router = useRouter();
   // seteo de userType
-  const searchParams = useSearchParams();
-
-  const userType = searchParams.get("userType");
+  const userType = typeof window !== "undefined" ? localStorage.getItem("userType") : null;
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
