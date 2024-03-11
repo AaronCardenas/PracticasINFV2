@@ -40,7 +40,6 @@ const supXest = async (req, res) => {
       });
   }
 };
-
 const crearSolicitud = async (req, res) => {
   const { token, datos } = req.body;
   const { rut } = jwt.verify(token, key);
@@ -89,7 +88,6 @@ const crearSolicitud = async (req, res) => {
     });
   }
 };
-
 const faseSolicitud = async (req, res) => {
   const id = req.params.id;
 
@@ -131,7 +129,6 @@ const faseSolicitud = async (req, res) => {
     });
   }
 };
-
 const verSolicitudesUsuario = async (req, res) => {
   try {
     const { token } = req.body;
@@ -151,7 +148,6 @@ const verSolicitudesUsuario = async (req, res) => {
   }
 
 };
-
 // Vista usuario
 const verSolicitudesAceptadasU = async (req, res) => {
   try {
@@ -176,7 +172,6 @@ const verSolicitudesAceptadasU = async (req, res) => {
     })
   }
 };
-
 // Vista coordinador
 const allSolicitudesCoo = async (req, res) => {
   try {
@@ -192,7 +187,6 @@ const allSolicitudesCoo = async (req, res) => {
     });
   }
 };
-
 // Vista Jefe de Carrera
 const allSolicitudesJefe = async (req, res) => {
   try {
@@ -208,7 +202,6 @@ const allSolicitudesJefe = async (req, res) => {
     });
   }
 };
-
 // Vista Secretaria // No implementada
 const allSolicitudesSec = async (req, res) => {
   try {
@@ -224,7 +217,6 @@ const allSolicitudesSec = async (req, res) => {
     });
   }
 };
-
 const readySupervisor = async (req, res) => {
 
   const { idSolicitud } = req.body;
@@ -266,7 +258,6 @@ const readySupervisor = async (req, res) => {
     });
   }
 };
-
 const readyAlumno = async (req, res) => {
 
   const { idSolicitud } = req.body;
@@ -304,7 +295,6 @@ const readyAlumno = async (req, res) => {
   }
 
 };
-
 // aplicar solo usarios con el token de admin pueden usar esta funcion.
 const actualizarFase = async (req, res) => {
 
@@ -339,7 +329,6 @@ const actualizarFase = async (req, res) => {
   });
 }
 };
-
 const agregarSup = async (req, res) => {
 
   const { token, idSolicitud, correoSupervisor} = req.body;
@@ -363,8 +352,6 @@ const agregarSup = async (req, res) => {
   });
 
 };
-
-
 module.exports = {
   crearSolicitud,
   faseSolicitud,

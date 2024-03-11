@@ -60,7 +60,6 @@ export default function Soli() {
         numeroPractica: parseInt(asignatura),
         fase: 1
     };
-    console.log(datos);
     solicitudes(Token, datos);
     //router.back();
   };
@@ -73,7 +72,6 @@ export default function Soli() {
       direccion: direccion,
       rubro: rubro,
     };
-    console.log(dataToSave);
     funcionSave(dataToSave);
     setSempresa(true);
     setIsInputsDisabled(true);
