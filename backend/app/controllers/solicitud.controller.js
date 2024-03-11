@@ -44,6 +44,7 @@ const crearSolicitud = async (req, res) => {
 
   const { token, datos } = req.body;
   const { rut } = jwt.verify(token, key);
+  console.log("datos de practica",datos);
 
   const numeroPractica = datos.numeroPractica; 
   

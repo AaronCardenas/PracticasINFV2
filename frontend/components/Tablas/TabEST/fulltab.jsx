@@ -123,8 +123,14 @@ export default function TAB({
           PDF(Token, user.rutEmpresa, user.numeroPractica);
           break;
         case "Carta Aceptacion":
-          localStorage.setItem('idSolicitud',user.idSolicitud );
-          router.push('/est/acp');
+          
+          if(user.fase>=3){
+            localStorage.setItem('idSolicitud',user.idSolicitud );
+            router.push('/est/acp');
+          }
+          else{
+            alert("La carta de aceptación estara disponible despues de su revision");
+          }
           break;
         case "Eliminar":
           console.log("user.idSolicitud",user.idSolicitud);

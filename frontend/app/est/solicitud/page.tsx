@@ -82,7 +82,7 @@ export default function Soli() {
   useEffect(() => {
     const fetchDataEMP = async () => {
       try {
-        const Data = await All_EMP(Token);
+        const Data = await All_EMP();
         const rawData= Data.empresas;
         const transformedData = rawData.map((item) => ({
           rutEmpresa: item.rutEmpresa,
