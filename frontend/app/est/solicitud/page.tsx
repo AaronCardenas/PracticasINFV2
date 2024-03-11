@@ -1,5 +1,4 @@
 "use client";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import React, { useState, useEffect } from "react";
 import { Button, Select, SelectItem, Input, Image } from "@nextui-org/react";
@@ -44,7 +43,11 @@ export default function Soli() {
     setRubro(e.target.value);
   };
   const handleAsignaturaChange = (e) => {
-    setAsignatura(e.target.value);
+    const selectedAsignaturaId = e.target.value;
+    const selectedAsignatura = Asignaturas.find(asignatura => asignatura.id === selectedAsignaturaId);
+    if (selectedAsignatura) {
+      setAsignatura(selectedAsignatura);
+    }
   };
 
   const handleSelectionChangeRegion = (e) => {
@@ -57,11 +60,11 @@ export default function Soli() {
   const Solicitar = async () => {
     const datos={
         rutEmpresa: rutEmpresa,
-        numeroPractica: parseInt(asignatura),
+        numeroPractica: parseInt(asignatura.id),
         fase: 1
     };
     solicitudes(Token, datos);
-    //router.back();
+    router.back();
   };
   const Save = async () => {
     const dataToSave = {
@@ -248,9 +251,9 @@ export default function Soli() {
                 >
                   {Asignaturas.map((asignatura) => (
                     <SelectItem
+                      key={asignatura.id}
                       textValue = {asignatura.nombre}
                       className={styles.selectItemSoli}
-                      key={asignatura.id}
                       value={asignatura.id}
                     >
                       {asignatura.nombre}
@@ -272,11 +275,12 @@ export default function Soli() {
                   isDisabled={sempresa}
                   onChange={handleSelectionChangeEmpresa}
                 >
-                  {dataempresa.map((empresa) => (
+                  {dataempresa.map((empresa: any, index: number) => (
                     <SelectItem
+                      key={index}
                       textValue = {empresa.razonSocial}
                       className={styles.selectItemSoli}
-                      key={empresa.id}
+                      
                       value={empresa.id}
                     >
                       {empresa.razonSocial}

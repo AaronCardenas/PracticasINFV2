@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableHeader,
@@ -19,13 +19,34 @@ import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
 import NextLink from 'next/link';
-import { PDF,DELETEsolicitudes} from "../../../api/est/solicitudes.jsx";
+import { PDF,DELETEsolicitudes, AllestSoli} from "../../../api/est/solicitudes.jsx";
+const fetchData = async (Token,setDatos) => {
+  try {
+    const rawData = await AllestSoli(Token);
+    const transformedData = rawData.map((item) => ({
+      idSolicitud: item.idSolicitud,
+      rut: item.rut,
+      rutEmpresa: item.rutEmpresa,
+      fechaSolicitud: item.fechaSolicitud,
+      numeroPractica: item.numeroPractica,
+      fase: item.fase,
+    }));
+    setDatos(transformedData);
+  } catch (error) {
+    console.error("Error al obtener datos del usuario:", error);
+  }
+};
 export default function TAB({
   columns,
-  datos,
   statusOptions,
   INITIAL_VISIBLE_COLUMNS,
 }) {
+  const [datos, setDatos] = useState([]);
+  useEffect(() => {
+    fetchData(Token,setDatos);
+    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -37,7 +58,6 @@ export default function TAB({
     column: "fase",
     direction: "ascending",
   });
-  const searchParams = useSearchParams(); 
   const router= useRouter();
   const Token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const [page, setPage] = React.useState(1);
@@ -103,10 +123,16 @@ export default function TAB({
           PDF(Token, user.rutEmpresa, user.numeroPractica);
           break;
         case "Carta Aceptacion":
-          // Lógica para la opción Aceptar
+          localStorage.setItem('idSolicitud',user.idSolicitud );
+          router.push('/est/acp');
           break;
         case "Eliminar":
-          DELETEsolicitudes(Token, user.idSolicitud);
+          console.log("user.idSolicitud",user.idSolicitud);
+          DELETEsolicitudes(Token, user.idSolicitud).then(() => {
+            fetchData(Token, setDatos);
+          }).catch(error => {
+            console.error("Error al eliminar la solicitud:", error);
+          });
           break;
         default:
           // Otras opciones
@@ -138,7 +164,7 @@ export default function TAB({
 
               <DropdownMenu aria-label="opciones">
                 <DropdownItem onClick={() => handleDropdownSelect("Carta Presentacion")}>DW Carta Presentación</DropdownItem>
-                <DropdownItem onClick={() => localStorage.setItem('idSolicitud',user.idSolicitud )} href={`est/acp`}>Carta de Aceptación</DropdownItem>
+                <DropdownItem onClick={() => handleDropdownSelect("Carta Aceptacion")}>Carta de Aceptación</DropdownItem>
                 <DropdownItem onClick={() => handleDropdownSelect("Eliminar")}>Eliminar</DropdownItem>
 
               </DropdownMenu>
@@ -272,7 +298,7 @@ export default function TAB({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No datos found"} items={sortedItems}>
+      <TableBody emptyContent={"No se han realizado solicitudes"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.idSolicitud}>
             {(columnKey) => (

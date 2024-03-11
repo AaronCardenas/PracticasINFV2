@@ -257,7 +257,7 @@ export const All_EMP = async () => {
 export const DELETEsolicitudes = async (token,idSolicitud) => {
   const Data = {
     token: token,
-    idSolicitud: datos,
+    idSolicitud: idSolicitud,
   };
   try {
     const response = await fetch(`${backendUrl}/solicitud/eliminar`, {

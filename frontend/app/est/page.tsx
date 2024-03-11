@@ -7,12 +7,11 @@ import styles from '../../styles/styleop.module.css';
 import Datosest from '../../components/Tablas/datosest';
 import { useRouter } from 'next/navigation';
 import TAB from '../../components/Tablas/TabEST/fulltab';
-import { AllestSoli,All_EMP } from '../../api/est/solicitudes';
+import {All_EMP } from '../../api/est/solicitudes';
 import TAB_EMP from '../../components/Tablas/TabEMP/fulltab';
 export default function Est() {
   const router= useRouter();
   const Token =typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const [data, setData] = useState([]);
   const [data_emp, setData_emp] = useState([]);
   const statusOptions = [
     { name: "Presentacion", uid: "1" },
@@ -45,22 +44,6 @@ export default function Est() {
     { name: "Region", uid: "region", sortable: false },
   ];
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const rawData = await AllestSoli(Token);
-        const transformedData = rawData.map((item) => ({
-          idSolicitud: item.idSolicitud,
-          rut: item.rut,
-          rutEmpresa: item.rutEmpresa,
-          fechaSolicitud: item.fechaSolicitud,
-          numeroPractica: item.numeroPractica,
-          fase: item.fase,
-        }));
-        setData(transformedData);
-      } catch (error) {
-        console.error("Error al obtener datos del usuario:", error);
-      }
-    };
     const fetchDataEMP = async () => {
       try {
         const Data = await All_EMP(Token);
@@ -75,10 +58,7 @@ export default function Est() {
         console.error("Error al obtener datos del usuario:", error);
       }
     };
-    fetchData();
     fetchDataEMP();
-    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-    return () => clearInterval(intervalId);
   }, []);
 
 
@@ -118,7 +98,6 @@ export default function Est() {
                 <div className={styles.boxe221111}>
                 <TAB
                 columns={columns}
-                datos={data}
                 statusOptions={statusOptions}
                 INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
               />
