@@ -71,14 +71,6 @@ export default function Acp() {
         <div className={styles.boxe21}> iconos notificaciones, usuario</div>
         <div className={styles.boxe22Soli}>
           <div className={styles.boxe220soli}>
-            <div className={styles.boxe2200soli}>
-              <div className={styles.boxe22000acp}>
-                <p>Fecha inicio</p>
-                <Date />
-                <p>Fecha termino</p>
-                <Date />
-              </div>
-            </div>
             <div className={styles.boxe2201soli}>
               <div className={styles.boxe22010soli}>
                 <div className={styles.boxe220110soli}>
@@ -112,23 +104,6 @@ export default function Acp() {
                       isDisabled
                     />
                   </div>
-                </div>
-                <div className={styles.boxe220110soli}>
-                  <div className={styles.boxe2201100soli}>
-                    <Input
-                      id="input-region"
-                      placeholder={datos.region}
-                      radius="sm"
-                      size="lg"
-                      label="Region"
-                      labelPlacement="outside"
-                      classNames={{
-                        inputWrapper: ["bg-default-200/50", "!cursor-text"],
-                        label: ["!text-white"],
-                      }}
-                      isDisabled
-                    />
-                  </div>
                   <div className={styles.boxe2201100soli}>
                     <Input
                       id="input-ciud"
@@ -149,8 +124,7 @@ export default function Acp() {
               <div className={styles.boxe22011soli}>
                 <div className={styles.boxe220110soli}>
                   <div className={styles.boxe2201100soli}>
-                    <Input
-                      id="input-rut"
+                    <Input id="input-rut"
                       placeholder={datos.rutEmpresa}
                       radius="sm"
                       size="lg"
@@ -165,7 +139,21 @@ export default function Acp() {
                   </div>
                   <div className={styles.boxe2201100soli}>
                     <Input
-                      id="input-rub"
+                      id="input-region"
+                      placeholder={datos.region}
+                      radius="sm"
+                      size="lg"
+                      label="Region"
+                      labelPlacement="outside"
+                      classNames={{
+                        inputWrapper: ["bg-default-200/50", "!cursor-text"],
+                        label: ["!text-white"],
+                      }}
+                      isDisabled
+                    />
+                  </div>
+                  <div className={styles.boxe2201100soli}>
+                    <Input id="input-rub"
                       placeholder={datos.rubro}
                       radius="sm"
                       size="lg"
@@ -179,11 +167,15 @@ export default function Acp() {
                     />
                   </div>
                 </div>
-                <div className={styles.boxe220110soli}>
-                  <div className={styles.boxe2201100soli}>
-                    <Button className={styles.buttomSoli}>Guardar</Button>
-                  </div>
-                </div>
+              </div>
+            </div>
+            <div className={styles.boxe2200soli}>
+              <div className={styles.boxe22000acp}>
+                <p>Fecha inicio</p>
+                <Date />
+                <p id="temporal">|</p>
+                <p>Fecha termino</p>
+                <Date />
               </div>
             </div>
             <div className={styles.boxe22001acp}>
@@ -195,7 +187,9 @@ export default function Acp() {
             <div className={styles.boxe2210soli}>
               <Datosest token={Token} />
             </div>
-            <div className={styles.boxe2210soli}></div>
+            <div className={styles.boxe2210soli}>
+              Datos supervisor
+            </div>
           </div>
         </div>
       </div>

@@ -975,7 +975,7 @@
 }
 .boxe2200soli{
     display: flex;
-    height: 30%;
+    height: 20%;
     width:100%;
     justify-content: center;
     align-items: center;
@@ -997,9 +997,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 2ch;
-    height: 70%;
+    height: 40%;
     width:100%;
-    gap: 10px;
+    gap: 15px;
     padding: 10px;
     background-color: #334550;
 }
@@ -1007,7 +1007,7 @@
     display: flex;
     flex-direction: column;
     height:100%;
-    width:70%;
+    width:50%;
     gap: 10px;
     justify-content: center;
     align-items: center;
@@ -1034,7 +1034,7 @@
     display: flex;
     flex-direction: column;
     height:100%;
-    width:30%;
+    width:50%;
     gap: 10px;
     justify-content: center;
     align-items: center;
@@ -1044,6 +1044,7 @@
     flex-direction: column;
     height:50%;
     width:100%;
+    gap :12px;
     justify-content: center;
     align-items: center;
 }
@@ -1122,10 +1123,10 @@
 }
 .boxe22000acp{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
-    width:50%;
-    gap: 20px;
+    width:100%;
+    gap: 10px;
     font-size: x-large;
     justify-content: center;
     align-items: center;
@@ -1135,8 +1136,8 @@
 .boxe22001acp{
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width:50%;
+    height: 40%;
+    width:100%;
     justify-content: center;
     align-items: center;
     border-radius: 2ch;
