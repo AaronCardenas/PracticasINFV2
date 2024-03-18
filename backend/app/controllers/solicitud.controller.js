@@ -6,6 +6,17 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const Op = db.Sequelize.Op;
 
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: MAIL_USER,
+    pass: PASS_USER,
+  },
+});
+
 const supXest = async (req, res) => {
   try {
     const { token } = req.body;
@@ -360,16 +371,7 @@ const actualizarFase = async (req, res) => {
   }
 };
 const agregarSup = async (req, res) => {
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: MAIL_USER,
-      pass: PASS_USER,
-    },
-  });
+  
   const { token, idSolicitud, correoSupervisor } = req.body;
   const { usuario } = jwt.verify(token, key);
 
@@ -407,23 +409,68 @@ const agregarSup = async (req, res) => {
 
 const fechaauto = async (req, res) => {
   const solicitudes = await db.solicitud.findAll({ where: { fase: [6, 7] } });
+  console.log('solicitudes', solicitudes);
   fechahoy = new Date();
   fechahoy2 = new Date(fechahoy.getTime()+(1000 * 60 * 60 * 24 * 20));
   solicitudes.forEach(async (element) => {
-    const carta = await db.carta.findOne({
-      where: { idSolicitud: element.idSolicitud },
-    });
-    if(element.fase == 7 && fechahoy2 >= carta.fechaTermino){
+    try {
+      const carta = await db.carta.findOne({
+        where: { idSolicitud: element.idSolicitud },
+      });
       memoria= await db.memoria.findOne({where: {idSolicitud: element.idSolicitud}});
-      if (memoria == null || memoria.documento == null) {
-        element.fase = 0;
+      usuario = await db.usuario.findOne({where: {rut: element.rut}});
+      empresa= await db.empresa.findOne({where: {rutEmpresa: element.rutEmpresa}});
+      console.log(usuario)
+      if(element.fase == 7 && fechahoy2 >= carta.fechaTermino){
+        if (memoria == null || memoria.documento == null) {
+          element.fase = 0;
+          element.save();
+        };
+      }else if (fechahoy >= carta.fechaTermino) {
+        element.fase = 7;
         element.save();
-      };
-    }else if (fechahoy >= carta.fechaTermino) {
-      element.fase = 7;
-      element.save();
-    } else {
-      console.log('no', element.idSolicitud);
+        const mailOptions = {
+          from: MAIL_USER,
+          to: usuario.correo,
+          subject: `Tu practica profesional en ${empresa.razonSocial} termina hoy`, 
+          text: 'Contenido del correo electrónico.'
+        };
+        transporter.sendMail(mailOptions, function(error, info){
+          console.log(`enviando correo a ${element.rut}`);
+          if (error) {
+            console.error('Error al enviar el correo:', error);
+          } else {
+            console.log('Correo enviado:', info.response);
+          }
+        });
+      } else if(fechahoy >= carta.fechaInicio){
+        const mailOptions = {
+          from: MAIL_USER,
+          to: usuario.correo,
+          subject: `Tu practica profesional en ${empresa.razonSocial} comienza hoy`, 
+          text: 'Contenido del correo electrónico.'
+        };
+        transporter.sendMail(mailOptions, function(error, info){
+          console.log(`enviando correo a ${element.rut}`);
+          if (error) {
+            console.error('Error al enviar el correo:', error);
+          } else {
+            console.log('Correo enviado:', info.response);
+          }
+        });
+        element.fase = 6;
+        element.save();
+      }else {
+        console.log('no', element.idSolicitud);
+      }
+      return res.status(200).json({
+        message: 'Fechas actualizadas correctamente',
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: 'Error interno del servidor',
+        error,
+      });
     }
   });
 };

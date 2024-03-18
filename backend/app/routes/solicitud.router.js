@@ -39,19 +39,23 @@ router.post('/eliminar', eliminarSolicitud); // {idSolicitud}
 router.get('/fechaauto', fechaauto);
 router.post('/addSup', agregarSup); // { token, idSolicitud, correoSupervisor }
 
-module.exports = router;
 async function hacerSolicitud() {
   try {
-    const respuesta = await axios.get('http://localhost:3001/solicitud/fechaauto');
+    console.log('Haciendo solicitud');
+    const respuesta = await axios.get(
+      'http://localhost:3001/solicitud/fechaauto'
+    );
     // console.log('Respuesta:', respuesta.data);
   } catch (error) {
     console.error('Error al hacer la solicitud:', error.message);
   }
 }
 
+const intervalo = 60000; // 24 horas
 async function iniciarApp() {
   try {
     await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
+    console.log('\n\n\nBase de datos sincronizada\n\n\n');
     solicitarAutomaticamente(); // Comienza a realizar solicitudes automáticamente
   } catch (error) {
     console.error('Error al iniciar la aplicación:', error.message);
@@ -60,7 +64,8 @@ async function iniciarApp() {
 
 function solicitarAutomaticamente() {
   hacerSolicitud();
-  setTimeout(solicitarAutomaticamente, intervalo);
+  setInterval(solicitarAutomaticamente, intervalo);
 }
 
 iniciarApp();
+module.exports = router;
