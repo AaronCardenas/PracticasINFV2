@@ -14,6 +14,13 @@ const DB_POOL_ACQUIRE = parseInt(process.env.DB_POOL_ACQUIRE, 10);
 const DB_POOL_IDLE = parseInt(process.env.DB_POOL_IDLE, 10);
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const MAIL_USER = process.env.MAIL_USER;
+const PASS_USER = process.env.PASS_USER;
+const OAUTH_CLIENTID = process.env.OAUTH_CLIENTID;
+const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
+const OAUTH_REFRESH_TOKEN = process.env.OAUTH_REFRESH_TOKEN;
+
+
 
 module.exports = {
     RUN_PORT,
@@ -27,5 +34,10 @@ module.exports = {
     DB_POOL_MIN,
     DB_POOL_ACQUIRE,
     DB_POOL_IDLE,
-    JWT_SECRET
+    JWT_SECRET,
+    MAIL_USER,
+    PASS_USER,
+    OAUTH_CLIENTID,
+    OAUTH_CLIENT_SECRET,
+    OAUTH_REFRESH_TOKEN
 }

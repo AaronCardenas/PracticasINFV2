@@ -13,14 +13,25 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
-} from "@nextui-org/react";
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PlusIcon } from "./PlusIcon";
-import { VerticalDotsIcon } from "./VerticalDotsIcon";
-import { SearchIcon } from "./SearchIcon";
+import { PlusIcon } from './PlusIcon';
+import { VerticalDotsIcon } from './VerticalDotsIcon';
+import { SearchIcon } from './SearchIcon';
 import NextLink from 'next/link';
-import { PDF,DELETEsolicitudes, AllestSoli} from "../../../api/est/solicitudes.jsx";
-const fetchData = async (Token,setDatos) => {
+import {
+  PDF,
+  DELETEsolicitudes,
+  AllestSoli,
+  addSup,
+} from '../../../api/est/solicitudes.jsx';
+const fetchData = async (Token, setDatos) => {
   try {
     const rawData = await AllestSoli(Token);
     const transformedData = rawData.map((item) => ({
@@ -30,11 +41,16 @@ const fetchData = async (Token,setDatos) => {
       fechaSolicitud: item.fechaSolicitud,
       numeroPractica: item.numeroPractica,
       fase: item.fase,
+      correoSupervisor: item.correoSupervisor,
     }));
     setDatos(transformedData);
   } catch (error) {
-    console.error("Error al obtener datos del usuario:", error);
+    console.error('Error al obtener datos del usuario:', error);
   }
+};
+const isEmailValid = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 };
 export default function TAB({
   columns,
@@ -43,30 +59,30 @@ export default function TAB({
 }) {
   const [datos, setDatos] = useState([]);
   useEffect(() => {
-    fetchData(Token,setDatos);
+    fetchData(Token, setDatos);
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [statusFilter, setStatusFilter] = React.useState('all');
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "fase",
-    direction: "ascending",
+    column: 'fase',
+    direction: 'ascending',
   });
-  const router= useRouter();
-  const Token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const router = useRouter();
+  const Token =
+    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const [page, setPage] = React.useState(1);
   const pages = Math.ceil(datos.length / rowsPerPage);
-
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") {
+    if (visibleColumns === 'all') {
       return columns;
     }
     return columns.filter((column) =>
@@ -82,7 +98,7 @@ export default function TAB({
       );
     }
     if (
-      statusFilter !== "all" &&
+      statusFilter !== 'all' &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filtereddatos = filtereddatos.filter((user) =>
@@ -106,41 +122,54 @@ export default function TAB({
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
-    
+
     const handleCellClick = () => {
       // Lógica para cuando se hace click en una celda
     };
     const handleDropdownSelect = (selectedOption) => {
       switch (selectedOption) {
-
-        case "Carta Presentacion":
+        case 'Carta Presentacion':
           PDF(Token, user.rutEmpresa, user.numeroPractica);
           break;
-        case "Carta Aceptacion":
-          if(user.fase>=3){
-            localStorage.setItem('idSolicitud',user.idSolicitud );
+        case 'Carta Aceptacion':
+          if (user.fase >= 3) {
+            if (user.correoSupervisor === null) {
+              let inputValue;
+              do {
+                inputValue = window.prompt('Ingrese el correo del supervisor:');
+                console.log('inputValue', inputValue);
+              } while (inputValue !== null && !isEmailValid(inputValue));
+              if (inputValue !== null) {
+                addSup(Token, user.idSolicitud, inputValue);
+              }
+            }
+            localStorage.setItem('idSolicitud', user.idSolicitud);
             router.push('/est/acp');
-          }
-          else if(user.fase<3){
-            alert("La carta de aceptación estara disponible despues de su revision");
-          }
-          else{
-            alert("La carta de aceptación no esta disponible en la fase actual");
+          } else if (user.fase < 3) {
+            alert(
+              'La carta de aceptación estara disponible despues de su revision'
+            );
+          } else {
+            alert(
+              'La carta de aceptación no esta disponible en la fase actual'
+            );
           }
           break;
-        case "Eliminar":
-          console.log("user.idSolicitud",user.idSolicitud);
-          DELETEsolicitudes(Token, user.idSolicitud).then(() => {
-            fetchData(Token, setDatos);
-          }).catch(error => {
-            console.error("Error al eliminar la solicitud:", error);
-          });
+        case 'Eliminar':
+          console.log('user.idSolicitud', user.idSolicitud);
+          DELETEsolicitudes(Token, user.idSolicitud)
+            .then(() => {
+              fetchData(Token, setDatos);
+            })
+            .catch((error) => {
+              console.error('Error al eliminar la solicitud:', error);
+            });
           break;
         default:
           // Otras opciones
@@ -148,33 +177,90 @@ export default function TAB({
       }
     };
     switch (columnKey) {
-      case "idSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.idSolicitud}</p>;
-      case "rut":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rut}</p>;
-      case "rutEmpresa":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.rutEmpresa}</p>;
-      case "fechaSolicitud":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fechaSolicitud.split('T')[0]}</p>;
-      case "numeroPractica":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.numeroPractica}</p>;
-      case "fase":
-        return <p onClick={handleCellClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}> {user.fase}</p>;
-      case "acciones":
+      case 'idSolicitud':
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
+          <p
+            onClick={handleCellClick}
+            style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}
+          >
+            {' '}
+            {user.idSolicitud}
+          </p>
+        );
+      case 'rut':
+        return (
+          <p
+            onClick={handleCellClick}
+            style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}
+          >
+            {' '}
+            {user.rut}
+          </p>
+        );
+      case 'rutEmpresa':
+        return (
+          <p
+            onClick={handleCellClick}
+            style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}
+          >
+            {' '}
+            {user.rutEmpresa}
+          </p>
+        );
+      case 'fechaSolicitud':
+        return (
+          <p
+            onClick={handleCellClick}
+            style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}
+          >
+            {' '}
+            {user.fechaSolicitud.split('T')[0]}
+          </p>
+        );
+      case 'numeroPractica':
+        return (
+          <p
+            onClick={handleCellClick}
+            style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}
+          >
+            {' '}
+            {user.numeroPractica}
+          </p>
+        );
+      case 'fase':
+        return (
+          <p
+            onClick={handleCellClick}
+            style={{ cursor: 'pointer', textAlign: 'center', fontSize: '20px' }}
+          >
+            {' '}
+            {user.fase}
+          </p>
+        );
+      case 'acciones':
+        return (
+          <div className='relative flex justify-end items-center gap-2'>
+            <Dropdown className='bg-background border-1 border-default-200'>
               <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-400" />
+                <Button isIconOnly radius='full' size='sm' variant='light'>
+                  <VerticalDotsIcon className='text-default-400' />
                 </Button>
               </DropdownTrigger>
 
-              <DropdownMenu aria-label="opciones">
-                <DropdownItem onClick={() => handleDropdownSelect("Carta Presentacion")}>DW Carta Presentación</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect("Carta Aceptacion")}>Carta de Aceptación</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect("Eliminar")}>Eliminar</DropdownItem>
-
+              <DropdownMenu aria-label='opciones'>
+                <DropdownItem
+                  onClick={() => handleDropdownSelect('Carta Presentacion')}
+                >
+                  DW Carta Presentación
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => handleDropdownSelect('Carta Aceptacion')}
+                >
+                  Carta de Aceptación
+                </DropdownItem>
+                <DropdownItem onClick={() => handleDropdownSelect('Eliminar')}>
+                  Eliminar
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -194,34 +280,33 @@ export default function TAB({
       setFilterValue(value);
       setPage(1);
     } else {
-      setFilterValue("");
+      setFilterValue('');
     }
   }, []);
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+      <div className='flex flex-col gap-4'>
+        <div className='flex justify-between gap-3 items-end'>
           <Input
             isClearable
             classNames={{
-              base: "w-full sm:max-w-[44%] text-black",
-              inputWrapper: "border-1 bg-gray-300",
+              base: 'w-full sm:max-w-[44%] text-black',
+              inputWrapper: 'border-1 bg-gray-300',
             }}
-            
-            placeholder="Buscar Solicitud..."
-            size="sm"
-            startContent={<SearchIcon className="text-default-300" />}
+            placeholder='Buscar Solicitud...'
+            size='sm'
+            startContent={<SearchIcon className='text-default-300' />}
             value={filterValue}
-            variant="bordered"
-            onClear={() => setFilterValue("")}
+            variant='bordered'
+            onClear={() => setFilterValue('')}
             onValueChange={onSearchChange}
           />
           <NextLink href='est/solicitud'>
             <Button
-              className="bg-black text-white "
+              className='bg-black text-white '
               endContent={<PlusIcon />}
-              size="l"
+              size='l'
             >
               Nueva solicitud
             </Button>
@@ -241,14 +326,13 @@ export default function TAB({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center mt-auto">
+      <div className='py-2 px-2 flex justify-between items-center mt-auto'>
         <Pagination
           showControls
-          color="secondary"
+          color='secondary'
           isDisabled={hasSearchFilter}
           page={page}
           total={pages}
-          
           onChange={setPage}
         />
       </div>
@@ -258,24 +342,31 @@ export default function TAB({
   const classNames = React.useMemo(
     () => ({
       base: [
-        "w-full",
-        "h-full",
-        "overflow-hidden",
-        "bg-white",
-        "border-3 rounded-lg",
-        "text-black",
-        "padding-[10px]",
-        "gap-10",
+        'w-full',
+        'h-full',
+        'overflow-hidden',
+        'bg-white',
+        'border-3 rounded-lg',
+        'text-black',
+        'padding-[10px]',
+        'gap-10',
       ],
-      wrapper: ["max-h-[382px]", "max-w-3xl"],
-      th: ["bg-black", "text-white", "border-b", "border-divider", "text-center", "text-md"],
+      wrapper: ['max-h-[382px]', 'max-w-3xl'],
+      th: [
+        'bg-black',
+        'text-white',
+        'border-b',
+        'border-divider',
+        'text-center',
+        'text-md',
+      ],
       td: [
         // ...otras clases para las celdas
-        "group-data-[first=true]:first:before:rounded-none border border-black ", // añade borde negro a la primera celda
-        "group-data-[first=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda de la primera fila
-        "group-data-[middle=true]:before:rounded-none border border-black ", // añade borde negro a las celdas del medio
-        "group-data-[last=true]:first:before:rounded-none border border-black", // añade borde negro a la primera celda de la última fila
-        "group-data-[last=true]:last:before:rounded-none border border-black", // añade borde negro a la última celda
+        'group-data-[first=true]:first:before:rounded-none border border-black ', // añade borde negro a la primera celda
+        'group-data-[first=true]:last:before:rounded-none border border-black', // añade borde negro a la última celda de la primera fila
+        'group-data-[middle=true]:before:rounded-none border border-black ', // añade borde negro a las celdas del medio
+        'group-data-[last=true]:first:before:rounded-none border border-black', // añade borde negro a la primera celda de la última fila
+        'group-data-[last=true]:last:before:rounded-none border border-black', // añade borde negro a la última celda
       ],
     }),
     []
@@ -285,13 +376,13 @@ export default function TAB({
     <Table
       isCompact
       removeWrapper
-      aria-label="Tabla"
+      aria-label='Tabla'
       bottomContent={bottomContent}
-      bottomContentPlacement="outside"
+      bottomContentPlacement='outside'
       classNames={classNames}
       sortDescriptor={sortDescriptor}
       topContent={topContent}
-      topContentPlacement="outside"
+      topContentPlacement='outside'
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
     >
@@ -299,14 +390,17 @@ export default function TAB({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "acciones" ? "center" : "start"}
+            align={column.uid === 'acciones' ? 'center' : 'start'}
             allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No se han realizado solicitudes"} items={sortedItems}>
+      <TableBody
+        emptyContent={'No se han realizado solicitudes'}
+        items={sortedItems}
+      >
         {(item) => (
           <TableRow key={item.idSolicitud}>
             {(columnKey) => (

@@ -81,8 +81,27 @@ const updateSupervisor = async (req,res,next) => {
 
 };
 
+const buscarSupervisor = async (req,res,next) => {
+	
+	const { correoSupervisor } = req.body;
+
+	try{
+		const supervisor = await db.supervisor.findOne({where:{correoSupervisor:correoSupervisor}});
+
+		if (!supervisor) {
+			return res.status(404).json({ message: "El supervisor no existe." });
+		}
+
+		return res.status(200).json(supervisor);
+
+	} catch(error) {
+		return res.status(500).json({ message: "Error interno del servidor." });
+	}
+
+};
 module.exports = {
 	loginSupervisor,
 	crearSupervisor,
-	updateSupervisor
+	updateSupervisor,
+	buscarSupervisor
 };

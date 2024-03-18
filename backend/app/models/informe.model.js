@@ -9,8 +9,8 @@ module.exports = (sequelize, Sequelize) =>{
       type: Sequelize.INTEGER,
       allowNull: true,
     },
-    documento: {
-      type: Sequelize.BLOB,
+    formulario: {
+      type: Sequelize.JSON,
       allowNull: true
     },
     fechaEnvio: {
@@ -28,3 +28,29 @@ module.exports = (sequelize, Sequelize) =>{
   });
   return informe;
 };
+
+
+/*
+{
+  secciones:{
+    sec1:{
+      pregunta1:
+      pregunta2:...
+      nota:
+    },
+    sec2:{
+      pregunta1:{
+        opcion:
+        comentario
+      },
+      pregunta2:{
+        opcion:
+        comentario
+      },...
+    },
+    sec3:{
+      comentario:
+    }
+  }
+}
+*/

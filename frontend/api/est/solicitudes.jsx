@@ -1,14 +1,14 @@
-import { backendUrl } from "../config";
-export const solicitudes = async (token,datos) => {
+import { backendUrl } from '../config';
+export const solicitudes = async (token, datos) => {
   const Data = {
     token: token,
     datos: datos,
   };
   try {
     const response = await fetch(`${backendUrl}/solicitud/crear`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
@@ -17,18 +17,18 @@ export const solicitudes = async (token,datos) => {
       return data;
     } else {
       // Maneja el caso de credenciales incorrectas
-      alert("Error al cargar solicitudes");
+      alert('Error al cargar solicitudes');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("Error de request", error);
-    alert("Se produjo un error al intentar de nuevo mas tarde");
+    console.error('Error de request', error);
+    alert('Se produjo un error al intentar de nuevo mas tarde');
   }
 };
 export const PDF = async (Token, selectedEmpresaId, asignatura) => {
   // Configurar los datos para la solicitud a la API
   if (!selectedEmpresaId) {
-    alert("Selecciona una empresa antes de solicitar");
+    alert('Selecciona una empresa antes de solicitar');
     return;
   }
 
@@ -37,15 +37,14 @@ export const PDF = async (Token, selectedEmpresaId, asignatura) => {
     rutEmpresa: selectedEmpresaId,
     asignatura: asignatura,
   };
-  console.log("Data", Data);
+  console.log('Data', Data);
   // Realiza la solicitud a la API
   try {
-
     // console.log("Data", Data);
     const response = await fetch(`${backendUrl}/utils/unirDatos`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
@@ -57,16 +56,16 @@ export const PDF = async (Token, selectedEmpresaId, asignatura) => {
       const blobUrl = URL.createObjectURL(blob);
 
       // Abrir una nueva ventana y realizar la descarga
-      window.open(blobUrl, "_blank");
+      window.open(blobUrl, '_blank');
       // console.log('response', response);
     } else {
       // Maneja el caso de credenciales incorrectas
-      alert("Error al recibir respuesta.");
+      alert('Error al recibir respuesta.');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("No funciono fetch:", error);
-    alert("Error.");
+    console.error('No funciono fetch:', error);
+    alert('Error.');
   }
 };
 export const funcionSave = async (dataToSave) => {
@@ -82,23 +81,23 @@ export const funcionSave = async (dataToSave) => {
   // Realiza la solicitud a la API
   try {
     const response = await fetch(`${backendUrl}/empresa/crear`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
 
     if (response.ok) {
-      alert("Empresa creada correctamente");
+      alert('Empresa creada correctamente');
     } else {
       // Maneja el caso de credenciales incorrectas
-      alert("Error al recibir respuesta.");
+      alert('Error al recibir respuesta.');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("No funciono fetch:", error);
-    alert("Error.");
+    console.error('No funciono fetch:', error);
+    alert('Error.');
   }
 };
 export const datosEst = async (token) => {
@@ -106,12 +105,10 @@ export const datosEst = async (token) => {
     token: token,
   };
   try {
-
     const response = await fetch(`${backendUrl}/usuario/verDatos`, {
-
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
@@ -121,11 +118,11 @@ export const datosEst = async (token) => {
       const data = dato.usuario;
       return data;
     } else {
-      alert("Error al recibir respuesta.");
+      alert('Error al recibir respuesta.');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("No funciono fetch:", error);
+    console.error('No funciono fetch:', error);
     return null;
   }
 };
@@ -134,12 +131,10 @@ export const datosEMP = async (idSolicitud) => {
     idSolicitud: idSolicitud,
   };
   try {
-
     const response = await fetch(`${backendUrl}/empresa/getEmpresa`, {
-
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
@@ -148,20 +143,20 @@ export const datosEMP = async (idSolicitud) => {
       const empresa = await response.json();
       return empresa;
     } else {
-      alert("Error al recibir respuesta.");
+      alert('Error al recibir respuesta.');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("No funciono fetch:", error);
+    console.error('No funciono fetch:', error);
     return null;
   }
 };
 export const actualizarDatosUsuario = async (token, nuevosDatos) => {
   try {
     const response = await fetch(`${backendUrl}/usuario/update`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         token: token,
@@ -173,10 +168,10 @@ export const actualizarDatosUsuario = async (token, nuevosDatos) => {
       const data = await response.json();
       return data; // Puedes devolver la respuesta del servidor si es necesario
     } else {
-      throw new Error("Error al actualizar datos del usuario");
+      throw new Error('Error al actualizar datos del usuario');
     }
   } catch (error) {
-    console.error("Error en la solicitud al servidor:", error);
+    console.error('Error en la solicitud al servidor:', error);
     throw error; // Puedes manejar el error según tus necesidades
   }
 };
@@ -185,12 +180,10 @@ export const AllestSoli = async (token) => {
     token: token,
   };
   try {
-
     const response = await fetch(`${backendUrl}/solicitud/listaSolicitudes`, {
-
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
@@ -199,25 +192,24 @@ export const AllestSoli = async (token) => {
       return data.solicitudes;
     } else {
       // Maneja el caso de credenciales incorrectas
-      alert("Error al cargar solicitudes");
+      alert('Error al cargar solicitudes');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("Error de request", error);
-    alert("Se produjo un error al intentar de nuevo mas tarde");
+    console.error('Error de request', error);
+    alert('Se produjo un error al intentar de nuevo mas tarde');
   }
-
 };
 export const extarerEmpresa = async (token, idSolicitud) => {
   try {
     const response = await fetch(`${backendUrl}/empresa/getEmpresa`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         token: token,
-        idSolicitud: idSolicitud
+        idSolicitud: idSolicitud,
       }),
     });
 
@@ -225,19 +217,19 @@ export const extarerEmpresa = async (token, idSolicitud) => {
       const data = await response.json();
       return data; // Puedes devolver la respuesta del servidor si es necesario
     } else {
-      throw new Error("Error al actualizar datos del usuario");
+      throw new Error('Error al actualizar datos del usuario');
     }
   } catch (error) {
-    console.error("Error en la solicitud al servidor:", error);
+    console.error('Error en la solicitud al servidor:', error);
     throw error; // Puedes manejar el error según tus necesidades
   }
 };
 export const All_EMP = async () => {
   try {
     const response = await fetch(`${backendUrl}/empresa/listar`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
@@ -245,25 +237,24 @@ export const All_EMP = async () => {
       return data;
     } else {
       // Maneja el caso de credenciales incorrectas
-      alert("Error al cargar solicitudes");
+      alert('Error al cargar solicitudes');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("Error de request", error);
-    alert("Se produjo un error al intentar de nuevo mas tarde");
+    console.error('Error de request', error);
+    alert('Se produjo un error al intentar de nuevo mas tarde');
   }
-
 };
-export const DELETEsolicitudes = async (token,idSolicitud) => {
+export const DELETEsolicitudes = async (token, idSolicitud) => {
   const Data = {
     token: token,
     idSolicitud: idSolicitud,
   };
   try {
     const response = await fetch(`${backendUrl}/solicitud/eliminar`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(Data),
     });
@@ -272,11 +263,38 @@ export const DELETEsolicitudes = async (token,idSolicitud) => {
       return data;
     } else {
       // Maneja el caso de credenciales incorrectas
-      alert("Error al eliminar solicitud");
+      alert('Error al eliminar solicitud');
     }
   } catch (error) {
     // Maneja errores de red o de servidor
-    console.error("Error de request", error);
-    alert("Se produjo un error al intentar de nuevo mas tarde");
+    console.error('Error de request', error);
+    alert('Se produjo un error al intentar de nuevo mas tarde');
+  }
+};
+export const addSup = async (token, idSolicitud, correoSupervisor) => {
+  const Data = {
+    token: token,
+    idSolicitud: idSolicitud,
+    correoSupervisor: correoSupervisor,
+  };
+  try {
+    const response = await fetch(`${backendUrl}/solicitud/addSup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Data),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      // Maneja el caso de credenciales incorrectas
+      alert('Error al eliminar solicitud');
+    }
+  } catch (error) {
+    // Maneja errores de red o de servidor
+    console.error('Error de request', error);
+    alert('Se produjo un error al intentar de nuevo mas tarde');
   }
 };

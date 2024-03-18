@@ -1,6 +1,9 @@
 const db = require('../models');
 const key = require('../config/const.js').JWT_SECRET;
+const MAIL_USER = require('../config/const.js').MAIL_USER;
+const PASS_USER = require('../config/const.js').PASS_USER;
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const Op = db.Sequelize.Op;
 
 const supXest = async (req, res) => {
@@ -47,13 +50,13 @@ const crearSolicitud = async (req, res) => {
   const numeroPractica = datos.numeroPractica;
 
   const solicitudCalificada = await db.solicitud.findOne({
-    where: { rut, fase: 5, numeroPractica }, // En entero, la fase calificada es 5
+    where: { rut, fase: 9, numeroPractica }, // En entero, la fase calificada es 5
   });
   const solicitudAceptada = await db.solicitud.findOne({
-    where: { rut, fase: 3, numeroPractica }, // En entero, la fase aceptada es 3
+    where: { rut, fase: 6, numeroPractica }, // En entero, la fase aceptada es 3
   });
   const solicitudPracticaAnteriorNoTerminada = await db.solicitud.findOne({
-    where: { rut, fase: { [Op.not]: 5 }, numeroPractica: numeroPractica - 1 }, // Revisar
+    where: { rut, fase: { [Op.not]: [5,6,7] }, numeroPractica: numeroPractica - 1 }, // Revisar
   });
 
   if (solicitudCalificada) {
@@ -357,6 +360,16 @@ const actualizarFase = async (req, res) => {
   }
 };
 const agregarSup = async (req, res) => {
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: MAIL_USER,
+      pass: PASS_USER,
+    },
+  });
   const { token, idSolicitud, correoSupervisor } = req.body;
   const { usuario } = jwt.verify(token, key);
 
@@ -369,11 +382,23 @@ const agregarSup = async (req, res) => {
       message: 'Solicitud no encontrada',
     });
   }
-
+  console.log(usuario)
   solicitud.correoSupervisor = correoSupervisor;
 
   await solicitud.save();
-
+  const mailOptions = {
+    from: MAIL_USER,
+    to: correoSupervisor,
+    subject: `Practica profesional de ${usuario.nombre1} ${usuario.apellido1} ${usuario.apellido2} `, 
+    text: 'Contenido del correo electrónico.'
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.error('Error al enviar el correo:', error);
+    } else {
+      console.log('Correo enviado:', info.response);
+    }
+  });
   return res.status(200).json({
     message: 'Supervisor agregado correctamente',
     solicitud,
@@ -417,4 +442,5 @@ module.exports = {
   readyAlumno,
   readySupervisor,
   actualizarFase,
+  agregarSup,
 };

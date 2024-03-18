@@ -15,6 +15,7 @@ const {
   supXest,
   fechaauto,
   eliminarSolicitud,
+  agregarSup,
 } = require('../controllers/solicitud.controller.js');
 
 //Ruta de prueba
@@ -36,10 +37,9 @@ router.put('/actualizar/:id', actualizarFase); // {idSolicitud, nroFase}
 router.post('/supXest', supXest); // {rutSupervisor, rutEstudiante}
 router.post('/eliminar', eliminarSolicitud); // {idSolicitud}
 router.get('/fechaauto', fechaauto);
+router.post('/addSup', agregarSup); // { token, idSolicitud, correoSupervisor }
 
 module.exports = router;
-// const app = express();
-const port = 3000;
 async function hacerSolicitud() {
   try {
     const respuesta = await axios.get('http://localhost:3001/solicitud/fechaauto');
@@ -48,9 +48,19 @@ async function hacerSolicitud() {
     console.error('Error al hacer la solicitud:', error.message);
   }
 }
-const intervalo = 3600*12*1000;
+
+async function iniciarApp() {
+  try {
+    await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
+    solicitarAutomaticamente(); // Comienza a realizar solicitudes automáticamente
+  } catch (error) {
+    console.error('Error al iniciar la aplicación:', error.message);
+  }
+}
+
 function solicitarAutomaticamente() {
   hacerSolicitud();
   setTimeout(solicitarAutomaticamente, intervalo);
 }
-solicitarAutomaticamente();
+
+iniciarApp();
