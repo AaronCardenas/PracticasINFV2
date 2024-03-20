@@ -376,8 +376,8 @@ const actualizarFase = async (req, res) => {
 };
 const agregarSup = async (req, res) => {
   const { token, idSolicitud, correoSupervisor } = req.body;
-  const { usuario } = await jwt.verify(token, key);
-
+  const  usuario  = await jwt.verify(token, key);
+  usuario = await db.usuario.findOne({where: {rut: usuario.rut}});
   const solicitud = await db.solicitud.findOne({
     where: { idSolicitud: idSolicitud },
   });
@@ -387,7 +387,7 @@ const agregarSup = async (req, res) => {
       message: 'Solicitud no encontrada',
     });
   }
-  
+
   solicitud.correoSupervisor = correoSupervisor;
 
   await solicitud.save();
