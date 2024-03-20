@@ -13,14 +13,8 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
 } from '@nextui-org/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 import { PlusIcon } from './PlusIcon';
 import { VerticalDotsIcon } from './VerticalDotsIcon';
 import { SearchIcon } from './SearchIcon';
@@ -143,7 +137,6 @@ export default function TAB({
               let inputValue;
               do {
                 inputValue = window.prompt('Ingrese el correo del supervisor:');
-                console.log('inputValue', inputValue);
               } while (inputValue !== null && !isEmailValid(inputValue));
               if (inputValue !== null) {
                 addSup(Token, user.idSolicitud, inputValue);
@@ -170,9 +163,6 @@ export default function TAB({
             .catch((error) => {
               console.error('Error al eliminar la solicitud:', error);
             });
-          break;
-        default:
-          // Otras opciones
           break;
       }
     };

@@ -6,7 +6,6 @@ import { updateSourceFile } from "typescript";
 export default function Datosest({ token }) {
   const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState({});
-  const [newdata, setNewData] = useState({});
   const [selectedPlan, setSelectedPlan] = useState(data.planEstudio);
   const [selectedIngreso, setSelectedIngreso] = useState(data.ingreso);
   const planesDeCarrera = ["Plan A", "Plan B", "Plan C", "Plan D", "Plan E"];
@@ -15,6 +14,7 @@ export default function Datosest({ token }) {
       try {
         const data = await datosEst(token);
         setData(data);
+        console.log("Datos del usuario:", data);
       } catch (error) {
         console.error("Error al obtener datos del usuario:", error);
       }
@@ -124,7 +124,7 @@ export default function Datosest({ token }) {
         placeholder={data.planEstudio}
         value={data.planEstudio}
         onChange={(value) => {
-          setSelectedPlan(value);
+          //setSelectedPlan(value);
           // Agrega la lógica necesaria para manejar el cambio de valor
           console.log("Plan seleccionado:", value);
         }}
