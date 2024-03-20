@@ -51,21 +51,18 @@ async function hacerSolicitud() {
   }
 }
 
-const intervalo = 60000; // 24 horas
-async function iniciarApp() {
+async function hacerSolicitud() {
   try {
-    await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
-    console.log('\n\n\nBase de datos sincronizada\n\n\n');
-    solicitarAutomaticamente(); // Comienza a realizar solicitudes automáticamente
+    const respuesta = await axios.get('http://localhost:3001/solicitud/fechaauto');
+    console.log('\n\n\nRespuesta:', respuesta.data,"\n\n\n");
   } catch (error) {
-    console.error('Error al iniciar la aplicación:', error.message);
+    console.error('\n\n\nError al hacer la solicitud:', error.message,"\n\n\n");
   }
 }
-
+const intervalo = 5*1000;
 function solicitarAutomaticamente() {
   hacerSolicitud();
-  setInterval(solicitarAutomaticamente, intervalo);
+  setTimeout(solicitarAutomaticamente, intervalo);
 }
-
-iniciarApp();
+solicitarAutomaticamente();
 module.exports = router;
