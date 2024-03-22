@@ -16,6 +16,7 @@ const {
   fechaauto,
   eliminarSolicitud,
   agregarSup,
+  buscarFase
 } = require('../controllers/solicitud.controller.js');
 
 //Ruta de prueba
@@ -38,6 +39,7 @@ router.post('/supXest', supXest); // {rutSupervisor, rutEstudiante}
 router.post('/eliminar', eliminarSolicitud); // {idSolicitud}
 router.get('/fechaauto', fechaauto);
 router.post('/addSup', agregarSup); // { token, idSolicitud, correoSupervisor }
+router.post('/searchFase',buscarFase); // {fase}
 
 async function hacerSolicitud() {
   try {

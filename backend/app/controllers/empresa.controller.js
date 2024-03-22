@@ -179,9 +179,6 @@ const verificarEmpresa = async (req,res) => {
     catch(err){
 
     }
-
-
-
 };
 
 const getEmpresas = async (req,res) => {
@@ -200,6 +197,7 @@ const getEmpresas = async (req,res) => {
         });
     }
 };
+
 module.exports = {
     validarEmpresa,
     crearEmpresa,

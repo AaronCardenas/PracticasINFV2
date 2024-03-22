@@ -17,6 +17,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const buscarFase = async (req, res) => {
+    const {fase} = req.body;
+    try {
+        const solicitudes = await db.solicitud.findAll({
+            where: {fase: fase}
+        });
+        return res.status(200).json({
+            message: 'Solicitudes encontradas exitosamente',
+            solicitudes
+        });
+    } catch (err) {
+        return res.status(500).json({
+            err
+        });
+    }
+};
+
 const supXest = async (req, res) => {
   try {
     const { token } = req.body;
@@ -211,7 +228,7 @@ const verSolicitudesAceptadasU = async (req, res) => {
   try {
     const { rut } = req.body;
     const solicitudes = await db.solicitud.findAll({
-      where: { rut: rut, fase: 'Aceptada' },
+      where: { rut: rut, fase: 4 },
     });
     const solicitudList = solicitudes.map((solicitud) => {
       return {
@@ -234,7 +251,7 @@ const verSolicitudesAceptadasU = async (req, res) => {
 // Vista coordinador
 const allSolicitudesCoo = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({ where: { fase: '3' } });
+    const solicitudes = await db.solicitud.findAll({ where: { fase: 3 } });
     return res.status(200).json({
       message: 'Solicitudes listadas exitosamente',
       solicitudes,
@@ -249,7 +266,7 @@ const allSolicitudesCoo = async (req, res) => {
 // Vista Jefe de Carrera
 const allSolicitudesJefe = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({ where: { fase: '2' } });
+    const solicitudes = await db.solicitud.findAll({ where: { fase: 2 } });
     return res.status(200).json({
       message: 'Solicitudes listadas exitosamente',
       solicitudes,
@@ -264,7 +281,7 @@ const allSolicitudesJefe = async (req, res) => {
 // Vista Secretaria // No implementada
 const allSolicitudesSec = async (req, res) => {
   try {
-    const solicitudes = await db.solicitud.findAll({ where: { fase: '1' } });
+    const solicitudes = await db.solicitud.findAll({ where: { fase: 1 } });
     return res.status(200).json({
       message: 'Solicitudes listadas exitosamente',
       solicitudes,
@@ -374,6 +391,7 @@ const actualizarFase = async (req, res) => {
     });
   }
 };
+
 const agregarSup = async (req, res) => {
   const { token, idSolicitud, correoSupervisor } = req.body;
   const  rut  = await jwt.verify(token, key);
@@ -404,69 +422,81 @@ const agregarSup = async (req, res) => {
     solicitud,
   });
 };
-const fechaauto = async (req, res) => {
-  const solicitudes = await db.solicitud.findAll({ where: { fase: [6, 7] } });
-  fechahoy = new Date();
-  fechahoy2 = new Date(fechahoy.getTime()+(1000 * 60 * 60 * 24 * 20));
-  solicitudes.forEach(async (element) => {
-    usuario = await db.usuario.findOne({where: {rut: element.rut}})
-    empresa = await db.empresa.findOne({where: {rutEmpresa: element.rutEmpresa}})
-    const carta = await db.carta.findOne({
-      where: { idSolicitud: element.idSolicitud },
-    });
-    if(element.fase == 7 && fechahoy2 >= carta.fechaTermino){
-      memoria= await db.memoria.findOne({where: {idSolicitud: element.idSolicitud}});
-      if (memoria == null || memoria.documento == null) {
-        const mailOptions = {
-          from: MAIL_USER,
-          to: usuario.correo,
-          subject: `Tu practica en  ${empresa.razonSocial} fue rechazada`,
-          text: 'No se envio memoria',
-        };
-        transporter.sendMail(mailOptions);
-        element.fase = 0;
-        element.save();
-      };
-    }else if (fechahoy >= carta.fechaTermino) {
-      const mailOptions = {
-        from: MAIL_USER,
-        to: usuario.correo,
-        subject: `Tu practica en ${empresa.razonSocial} termina hoy`,
-        text: 'recordatorio enviar memoria en 20 dias habiles',
-      };
-      const mailOptions2 = {
-        from: MAIL_USER,
-        to: carta.correoSupervisor,
-        subject: `La practica de ${usuario.nombre1} ${usuario.apellido1} ${usuario.apellido2} termina hoy`, 
-        text: 'recordatorio enviar evualiacon en 20 dias habiles'
-      };
-      transporter.sendMail(mailOptions);
-      transporter.sendMail(mailOptions2);
-      element.fase = 7;
-      element.save();
-    } else if(fechahoy >= carta.fechaInicio){
-      const mailOptions = {
-        from: MAIL_USER,
-        to: usuario.correo,
-        subject: `Tu practica profesional en ${empresa.razonSocial} comienza hoy`, 
-        text: 'recordatorio empieza practica'
-      };      
-      const mailOptions2 = {
-        from: MAIL_USER,
-        to: carta.correoSupervisor,
-        subject: `La practica de ${usuario.nombre1} ${usuario.apellido1} ${usuario.apellido2} comienza hoy`, 
-        text: 'recordatorio empieza practica de alumno'
-      };
-      transporter.sendMail(mailOptions);
-      transporter.sendMail(mailOptions2);
-      element.fase = 6;
-      element.save();
-    }else {
-      console.log('no');
-    }
 
-  });
-};
+const sendMail = async (to, subject, text) => {
+    const mailOptions = {
+      from: MAIL_USER,
+      to,
+      subject,
+      text,
+    };
+    return transporter.sendMail(mailOptions);
+  };
+  
+const processSolicitud = async (element) => {
+    const usuario = await db.usuario.findOne({ where: { rut: element.rut } });
+    const empresa = await db.empresa.findOne({ where: { rutEmpresa: element.rutEmpresa } });
+    const carta = await db.carta.findOne({ where: { idSolicitud: element.idSolicitud } });
+  
+    const fechahoy = new Date();
+    const fechahoy2 = new Date(fechahoy.getTime() + (1000 * 60 * 60 * 24 * 20));
+  
+    if (element.fase === 7 && fechahoy2 >= carta.fechaTermino) {
+      const memoria = await db.memoria.findOne({ where: { idSolicitud: element.idSolicitud } });
+      if (!memoria || !memoria.documento) {
+        await sendMail(
+          usuario.correo,
+          `Tu práctica en ${empresa.razonSocial} fue rechazada`,
+          'No se envió memoria'
+        );
+        element.fase = 0;
+        await element.save();
+      }
+    } else if (fechahoy >= carta.fechaTermino) {
+      await sendMail(
+        usuario.correo,
+        `Tu práctica en ${empresa.razonSocial} termina hoy`,
+        'recordatorio enviar memoria en 20 días hábiles'
+      );
+      await sendMail(
+        carta.correoSupervisor,
+        `La práctica de ${usuario.nombre1} ${usuario.apellido1} ${usuario.apellido2} termina hoy`,
+        'recordatorio enviar evaluación en 20 días hábiles'
+      );
+      element.fase = 7;
+      await element.save();
+    } else if (fechahoy >= carta.fechaInicio) {
+      await sendMail(
+        usuario.correo,
+        `Tu práctica profesional en ${empresa.razonSocial} comienza hoy`,
+        'recordatorio empieza práctica'
+      );
+      await sendMail(
+        carta.correoSupervisor,
+        `La práctica de ${usuario.nombre1} ${usuario.apellido1} ${usuario.apellido2} comienza hoy`,
+        'recordatorio empieza práctica de alumno'
+      );
+      element.fase = 6;
+      await element.save();
+    } else {
+      console.log('No se realizan acciones');
+    }
+  };
+  
+const fechaauto = async (req, res) => {
+    try {
+      const solicitudes = await db.solicitud.findAll({ where: { fase: [6, 7] } });
+      await Promise.all(solicitudes.map(processSolicitud));
+        return res.status(200).json({
+            message: 'Solicitudes procesadas exitosamente',
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Error interno del servidor',
+            error,
+        });
+    }
+  };
 
 module.exports = {
   fechaauto,
@@ -483,4 +513,5 @@ module.exports = {
   readySupervisor,
   actualizarFase,
   agregarSup,
+  buscarFase,
 };
