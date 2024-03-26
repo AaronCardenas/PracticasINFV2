@@ -61,7 +61,7 @@ async function hacerSolicitud() {
     console.error('\n\n\nError al hacer la solicitud:', error.message,"\n\n\n");
   }
 }
-const intervalo = 5*1000;
+const intervalo = 24*60*60*1000;
 function solicitarAutomaticamente() {
   hacerSolicitud();
   setTimeout(solicitarAutomaticamente, intervalo);

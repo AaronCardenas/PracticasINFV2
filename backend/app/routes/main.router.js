@@ -16,6 +16,8 @@ const supervisorRouter = require('./supervisor.router.js');
 const memoriaRouter = require('./memoria.router.js');
 const informeRouter = require('./informe.router.js');
 
+const statsRouter = require('./stats.router.js');
+
 
 module.exports = app => {
 
@@ -26,5 +28,5 @@ module.exports = app => {
     app.use('/supervisor',supervisorRouter);
     app.use('/memoria',memoriaRouter);
     app.use('/informe',informeRouter);
-
+    app.use('/stats', statsRouter);
 }
