@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Button, Image } from "@nextui-org/react";
-import { useRouter } from "next/router"; // Importa el router de Next.js
-import styles from "../../styles/styleop.module.css";
+import React, { useState, useEffect,useRef} from "react";
+import { Button, Image } from "@nextui-org/react";// Importa el router de Next.js
+import styles from "../../../styles/styleop.module.css";
 import NextLink from "next/link";
-export default function Coor() {
-  //ejemplo de los datos
+import Test from "../../../components/Stats/Test"
+import TestMap from "../../../components/Stats/TestMap"
+export default function Cstats() {
   return (
     <div className={styles.CooDiv}>
       <div className={styles.boxc10}>
@@ -63,7 +63,9 @@ export default function Coor() {
                 <div className={styles.boxc221101}> Iconos cambio tabla2 </div>
                 <div className={styles.boxc221102}> Iconos cambio tabla3 </div>
               </div>
-              <div className={styles.boxc22111}></div>
+              <div className={styles.boxc22111}>
+                <TestMap/>
+              </div>
               <div className={styles.boxc22112}>
                 <div className={styles.boxc221120}> Ultimas notifiaciones </div>
                 <div className={styles.boxc221121}> Ultimas notifiaciones </div>
