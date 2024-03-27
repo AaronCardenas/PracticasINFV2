@@ -6,8 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import styles from '../../../styles/styleop.module.css';
 import Datosest from '@/components/Tablas/datosest';
 import { datosEMP } from '../../../api/est/solicitudes.jsx';
-
-import Date from '../../../components/datepicker';
 import TodoList from '../../../components/tareas';
 export default function Acp() {
   const [datos, setData] = useState({});
@@ -168,10 +166,14 @@ export default function Acp() {
             <div className={styles.boxe2200soli}>
               <div className={styles.boxe22000acp}>
                 <p>Fecha inicio</p>
-                <Date />
+                <Input isDisabled variant="bordered" placeholder='20/10/1999'classNames={{
+                        inputWrapper: ['bg-default-200/50', '!cursor-text'],
+                        label: ['!text-white'],
+                      }}
+                ></Input>
                 <p id='temporal'>|</p>
                 <p>Fecha termino</p>
-                <Date />
+                <Input isDisabled variant="bordered" placeholder='20/10/1999' className=''></Input>
               </div>
             </div>
             <div className={styles.boxe22001acp}>
